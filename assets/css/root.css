@@ -1,0 +1,32 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+:root {
+  --primary: #FF6B6B;        /* Coral-Rot (warm, modern) */
+  --secondary: #4ECDC4;      /* Türkis (frisch) */
+  --accent: #FFD93D;         /* Pokemon-Gelb */
+  --dark: #2C3E50;           /* Dunkles Blau-Grau */
+  --light: #F8F9FA;          /* Fast-Weiß */
+  --gradient: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
+
+  --fire: #FF6B6B;
+--water: #3498DB;
+--grass: #2ECC71;
+--electric: #F1C40F;
+--psychic: #E74C3C;
+--ice: #85C1E9;
+--dragon: #8E44AD;
+--dark: #34495E;
+--fighting: #E67E22;
+--poison: #9B59B6;
+
+
+
+
+
+
+}
