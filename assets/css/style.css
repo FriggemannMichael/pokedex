@@ -1,3 +1,9 @@
+
+body{
+    font-family: var(--font-body);
+    font-weight: 400;
+}
+
 /* ===== HERO SECTION ===== */
 .hero-section {
     background: var(--gradient);
@@ -22,8 +28,9 @@
 }
 
 .pokedex-title {
+    font-family: var(--font-title);
     font-size: 4rem;
-    font-weight: bold;
+    font-weight: 600;
     color: white;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     letter-spacing: 4px;
@@ -52,9 +59,9 @@
     cursor: pointer;
 }
 
-.pokemon-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+.pokemon-card:hover .pokemon-name {
+    font-variation-settings: 'wght' 600;  /* Smooth weight change! */
+    transition: font-variation-settings 0.3s ease;
 }
 
 .pokemon-image-wrapper {
@@ -89,8 +96,9 @@
 }
 
 .pokemon-name {
+    font-family: var(--font-ui); 
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 500;
     color: var(--dark);
     margin-bottom: 0.5rem;
     text-transform: capitalize;
