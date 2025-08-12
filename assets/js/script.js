@@ -29,11 +29,14 @@ function openPokemonDetail(pokemon) {
 }
 
 /**
- * Pokemon Detail Daten laden und anzeigen
+ * Pokemon Detail Daten laden und anzeigen - MIT Card-Typ-Styling
  */
 async function loadPokemonDetailData(pokemon) {
     try {
         setDetailLoadingState(true);
+        
+        // TYP-BASIERTE CARD-STYLING ANWENDEN
+        setPokemonCardType(pokemon.types[0]); // Ersten Typ als Haupt-Typ nehmen
         
         // Basis-Daten setzen
         document.getElementById('detailName').textContent = pokemon.name;
@@ -63,19 +66,36 @@ async function loadPokemonDetailData(pokemon) {
 }
 
 /**
+ * Card mit Pokemon-Typ Klasse versehen (nicht das ganze Modal!)
+ */
+function setPokemonCardType(primaryType) {
+    const card = document.querySelector('.pokemon-detail-card');
+    if (!card) return;
+    
+    // Alle bestehenden Typ-Klassen von der Card entfernen
+    const existingTypeClasses = Array.from(card.classList).filter(cls => cls.startsWith('type-'));
+    existingTypeClasses.forEach(cls => card.classList.remove(cls));
+    
+    // Neue Typ-Klasse zur Card hinzufügen
+    card.classList.add(`type-${primaryType}`);
+    
+    console.log(`Card Style gesetzt auf: type-${primaryType}`);
+}
+
+/**
  * Pokemon Typen anzeigen
  */
 function showPokemonTypes(types) {
     const typesContainer = document.getElementById('detailTypes');
     if (typesContainer) {
         typesContainer.innerHTML = types.map(type => 
-            createTypeBadgeTemplate(type)
+            `<span class="detail-type-badge type-${type}">${type.toUpperCase()}</span>`
         ).join('');
     }
 }
 
 /**
- * Pokemon Stats anzeigen
+ * Pokemon Stats anzeigen - für Grid-Layout
  */
 function showPokemonStats(pokemonDetails) {
     const height = (pokemonDetails.height / 10).toFixed(1);
@@ -84,8 +104,22 @@ function showPokemonStats(pokemonDetails) {
     const statsContainer = document.getElementById('detailStats');
     if (statsContainer) {
         statsContainer.innerHTML = `
-            ${createStatItemTemplate('Größe', `${height} m`)}
-            ${createStatItemTemplate('Gewicht', `${weight} kg`)}
+            <div class="stat-item">
+                <div class="stat-label">Größe</div>
+                <div class="stat-value">${height} m</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Gewicht</div>
+                <div class="stat-value">${weight} kg</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Erfahrung</div>
+                <div class="stat-value">${pokemonDetails.base_experience || '?'}</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">ID</div>
+                <div class="stat-value">#${pokemonDetails.id}</div>
+            </div>
         `;
     }
 }
@@ -157,11 +191,11 @@ async function displayEvolutionChain(evolutions, currentPokemonId) {
     if (!container) return;
     
     if (evolutions.length <= 1) {
-        container.innerHTML = '<p class="description-text">Keine Entwicklungen verfügbar.</p>';
+        container.innerHTML = '<div class="no-evolutions"><p>Keine Entwicklungen verfügbar</p></div>';
         return;
     }
     
-    let html = '';
+    let html = '<div class="evolution-chain">';
     evolutions.forEach((evolution, index) => {
         const isCurrent = evolution.id === currentPokemonId;
         
@@ -171,6 +205,7 @@ async function displayEvolutionChain(evolutions, currentPokemonId) {
             html += createEvolutionArrowTemplate();
         }
     });
+    html += '</div>';
     
     container.innerHTML = html;
     
@@ -206,7 +241,7 @@ function showErrorMessage(message) {
 function showEvolutionError() {
     const container = document.getElementById('detailEvolutions');
     if (container) {
-        container.innerHTML = '<p class="description-text">Entwicklungen konnten nicht geladen werden.</p>';
+        container.innerHTML = '<div class="evolution-error"><p>Entwicklungen konnten nicht geladen werden.</p></div>';
     }
 }
 
@@ -342,14 +377,18 @@ function initializeFilters() {
 function initializeLoadMore() {
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     
-    loadMoreBtn.addEventListener('click', function() {
-        console.log(`Load More für Typ: ${currentType}, Offset: ${currentOffset}`);
-        loadMorePokemon();
-    });
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', function() {
+            console.log(`Load More für Typ: ${currentType}, Offset: ${currentOffset}`);
+            loadMorePokemon();
+        });
+    }
 }
 
 function setLoadMoreState(loading) {
     const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (!loadMoreBtn) return;
+    
     const loadText = loadMoreBtn.querySelector('.load-more-text');
     const loadSpinner = loadMoreBtn.querySelector('.load-more-spinner');
     
