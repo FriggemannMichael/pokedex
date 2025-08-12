@@ -1,19 +1,16 @@
-// ===== POKEMON API KONFIGURATION =====
 const POKEMON_API_CONFIG = {
     baseUrl: 'https://pokeapi.co/api/v2/pokemon',
     pokemonPerPage: 20,
     defaultOffset: 0
 };
 
-// ===== ANWENDUNGSZUSTAND (STATE) =====
 const appState = {
     pokemonList: [],
     isLoading: false,
     selectedType: 'all',
-    nextPageOffset: 0  // ✅ FIXED: Startet bei 0 für Pokemon 1-20
+    nextPageOffset: 0
 };
 
-// ===== DOM ELEMENTE =====
 const domElements = {
     pokemonContainer: document.getElementById('pokemonContainer'),
     loadingSpinner: document.querySelector('.loading-spinner'),
@@ -21,7 +18,6 @@ const domElements = {
     filterButtons: document.querySelectorAll('.filters .btn[data-type]')
 };
 
-// ===== API HELPER FUNKTIONEN =====
 async function fetchFromPokeAPI(url) {
     try {
         const response = await fetch(url);
@@ -48,7 +44,6 @@ function createPokemonData(rawApiPokemon) {
     };
 }
 
-// ===== POKEMON LADEN (ERSTE LADUNG) =====
 async function loadPokemon() {
     if (appState.isLoading) return;
 
@@ -63,7 +58,6 @@ async function loadPokemon() {
         appState.pokemonList = pokemonDetails;
         renderPokemon(pokemonDetails);
         
-        // Offset für nächste Ladung setzen
         appState.nextPageOffset = POKEMON_API_CONFIG.pokemonPerPage;
         
     } catch (error) {
@@ -90,7 +84,6 @@ async function loadPokemonDetails(pokemonUrl) {
     return createPokemonData(rawPokemonData);
 }
 
-// ===== UI STATE MANAGEMENT =====
 function setLoadingState(loading) {
     appState.isLoading = loading;
 
@@ -103,10 +96,8 @@ function setLoadingState(loading) {
 
 function handleError(message, error) {
     console.error(message, error);
-    // TODO: User-freundliche Fehlermeldung anzeigen
 }
 
-// ===== POKEMON RENDERING =====
 function renderPokemon(pokemonList) {
     domElements.pokemonContainer.innerHTML = "";
 
@@ -126,7 +117,6 @@ function createPokemonCard(pokemon) {
     return cardElement;
 }
 
-// ✅ NEUE FUNKTION: Pokemon Card Template
 function getPokemonCardTemplate(pokemon) {
     return `
         <div class="pokemon-card h-100 type-${pokemon.types[0]}" data-pokemon-id="${pokemon.id}">
@@ -144,12 +134,11 @@ function getPokemonCardTemplate(pokemon) {
     `;
 }
 
-// ===== FILTER SYSTEM =====
 function initializeFilters() {
     domElements.filterButtons.forEach(button => {
         button.addEventListener('click', () => {
             appState.selectedType = button.getAttribute('data-type');
-            appState.nextPageOffset = 0; // ✅ FIXED: Reset auf 0, nicht auf 20
+            appState.nextPageOffset = 0;
             
             setActiveFilter(button);
             loadPokemonByType(appState.selectedType);
@@ -170,7 +159,6 @@ async function loadPokemonByType(type) {
 
         appState.pokemonList = pokemonDetails;
         renderPokemon(pokemonDetails);
-        
         
         appState.nextPageOffset = POKEMON_API_CONFIG.pokemonPerPage;
         
@@ -199,14 +187,12 @@ function setActiveFilter(selectedButton) {
     selectedButton.classList.add('active');
 }
 
-// ===== LOAD MORE SYSTEM (FIXED!) =====
 function initializeLoadMore() {
     domElements.loadMoreButton.addEventListener('click', () => {
         loadMorePokemon();
     });
 }
 
-// ✅ FIXED: Load More erweitert jetzt die Liste statt sie zu ersetzen
 async function loadMorePokemon() {
     if (appState.isLoading) return;
     
@@ -224,11 +210,9 @@ async function loadMorePokemon() {
             newPokemonDetails = await fetchMorePokemonByType(appState.selectedType);
         }
         
-        // ✅ HINZUFÜGEN statt ersetzen
         appState.pokemonList = [...appState.pokemonList, ...newPokemonDetails];
         appendNewPokemon(newPokemonDetails);
         
-        // Offset für nächste Ladung erhöhen
         appState.nextPageOffset += POKEMON_API_CONFIG.pokemonPerPage;
         
     } catch (error) {
@@ -238,7 +222,6 @@ async function loadMorePokemon() {
     }
 }
 
-// ✅ NEUE FUNKTION: Mehr Pokemon nach Typ laden
 async function fetchMorePokemonByType(type) {
     const typeApiResponse = await fetchFromPokeAPI(`https://pokeapi.co/api/v2/type/${type}`);
 
@@ -254,7 +237,6 @@ async function fetchMorePokemonByType(type) {
     return await Promise.all(pokemonUrls.map(url => loadPokemonDetails(url)));
 }
 
-
 function appendNewPokemon(pokemonList) {
     pokemonList.forEach(pokemon => {
         const pokemonCard = createPokemonCard(pokemon);
@@ -265,11 +247,9 @@ function appendNewPokemon(pokemonList) {
 function openPokemonDetail(pokemon) {
     console.log('Opening detail for:', pokemon.name);
     
-    // Modal initialisieren und öffnen
     initializePokemonModal();
     openPokemonModal();
     
-    // Pokemon Daten laden und anzeigen
     loadPokemonDetailData(pokemon);
 }
 
@@ -277,19 +257,15 @@ async function loadPokemonDetailData(pokemon) {
     try {
         setDetailLoadingState(true);
         
-        // Card-Typ Styling setzen
         setPokemonModalType(pokemon.types[0]);
         
-        // Basis-Daten setzen
         setDetailBasicData(pokemon);
         
-        // API-Details laden
         const [pokemonDetails, speciesData] = await Promise.all([
             fetchFromPokeAPI(`https://pokeapi.co/api/v2/pokemon/${pokemon.id}`),
             fetchFromPokeAPI(`https://pokeapi.co/api/v2/pokemon-species/${pokemon.id}`)
         ]);
         
-        // Detail-Bereiche füllen
         showPokemonTypes(pokemon.types);
         showPokemonStats(pokemonDetails);
         showPokemonDescription(speciesData);
@@ -303,9 +279,6 @@ async function loadPokemonDetailData(pokemon) {
     }
 }
 
-/**
- * Modal Card Typ-Styling setzen
- */
 function setPokemonModalType(primaryType) {
     const overlay = document.getElementById('pokemonOverlay');
     if (!overlay) return;
@@ -313,17 +286,12 @@ function setPokemonModalType(primaryType) {
     const card = overlay.querySelector('.pokemon-detail-card');
     if (!card) return;
     
-    // Bestehende Typ-Klassen entfernen
     const existingTypeClasses = Array.from(card.classList).filter(cls => cls.startsWith('type-'));
     existingTypeClasses.forEach(cls => card.classList.remove(cls));
     
-    // Neue Typ-Klasse hinzufügen
     card.classList.add(`type-${primaryType}`);
 }
 
-/**
- * Basis Pokemon-Daten setzen
- */
 function setDetailBasicData(pokemon) {
     const nameElement = document.getElementById('detailName');
     const numberElement = document.getElementById('detailNumber');
@@ -337,9 +305,6 @@ function setDetailBasicData(pokemon) {
     }
 }
 
-/**
- * Pokemon Typen anzeigen
- */
 function showPokemonTypes(types) {
     const typesContainer = document.getElementById('detailTypes');
     if (!typesContainer) return;
@@ -349,9 +314,6 @@ function showPokemonTypes(types) {
         .join('');
 }
 
-/**
- * Pokemon Stats anzeigen
- */
 function showPokemonStats(pokemonDetails) {
     const statsContainer = document.getElementById('detailStats');
     if (!statsContainer) return;
@@ -368,9 +330,6 @@ function showPokemonStats(pokemonDetails) {
     `;
 }
 
-/**
- * Pokemon Beschreibung anzeigen
- */
 function showPokemonDescription(speciesData) {
     const descContainer = document.getElementById('detailDescription');
     if (!descContainer) return;
@@ -386,9 +345,6 @@ function showPokemonDescription(speciesData) {
     descContainer.textContent = description;
 }
 
-/**
- * Evolution Chain laden
- */
 async function loadEvolutionChain(evolutionUrl, currentPokemonId) {
     try {
         const evolutionData = await fetchFromPokeAPI(evolutionUrl);
@@ -400,9 +356,6 @@ async function loadEvolutionChain(evolutionUrl, currentPokemonId) {
     }
 }
 
-/**
- * Evolution Chain parsen
- */
 function parseEvolutionChain(chain) {
     const evolutions = [];
     
@@ -427,9 +380,6 @@ function parseEvolutionChain(chain) {
     return evolutions;
 }
 
-/**
- * Evolution Chain anzeigen
- */
 async function displayEvolutionChain(evolutions, currentPokemonId) {
     const container = document.getElementById('detailEvolutions');
     if (!container) return;
@@ -445,7 +395,6 @@ async function displayEvolutionChain(evolutions, currentPokemonId) {
         const isCurrent = evolution.id === currentPokemonId;
         html += createEvolutionItemTemplate(evolution, isCurrent);
         
-        // Pfeil zwischen Evolutionen (außer beim letzten)
         if (index < evolutions.length - 1) {
             html += createEvolutionArrowTemplate();
         }
@@ -454,13 +403,9 @@ async function displayEvolutionChain(evolutions, currentPokemonId) {
     html += '</div>';
     container.innerHTML = html;
     
-    // Click Events für Evolution Items
     setupEvolutionClickEvents(container, currentPokemonId);
 }
 
-/**
- * Click Events für Evolution Items
- */
 function setupEvolutionClickEvents(container, currentPokemonId) {
     const evolutionItems = container.querySelectorAll('.evolution-item');
     
@@ -473,7 +418,6 @@ function setupEvolutionClickEvents(container, currentPokemonId) {
                     const newPokemonData = await fetchFromPokeAPI(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
                     const newPokemon = createPokemonData(newPokemonData);
                     
-                    // Neues Pokemon im Modal laden
                     loadPokemonDetailData(newPokemon);
                     
                 } catch (error) {
@@ -484,11 +428,6 @@ function setupEvolutionClickEvents(container, currentPokemonId) {
     });
 }
 
-// ===== UTILITY FUNKTIONEN =====
-
-/**
- * Detail Loading State
- */
 function setDetailLoadingState(loading) {
     const overlay = document.getElementById('pokemonOverlay');
     if (!overlay) return;
@@ -500,9 +439,6 @@ function setDetailLoadingState(loading) {
     }
 }
 
-/**
- * Detail Error anzeigen
- */
 function showDetailError(message) {
     const descContainer = document.getElementById('detailDescription');
     if (descContainer) {
@@ -510,9 +446,6 @@ function showDetailError(message) {
     }
 }
 
-/**
- * Evolution Error anzeigen
- */
 function showEvolutionError() {
     const container = document.getElementById('detailEvolutions');
     if (container) {
@@ -520,11 +453,10 @@ function showEvolutionError() {
     }
 }
 
-// ===== APP INITIALISIERUNG =====
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Pokédex wird geladen...');
     
-    loadPokemon();           // Erste Pokemon laden
-    initializeFilters();     // Filter-Buttons aktivieren  
-    initializeLoadMore();    // Load More Button aktivieren
+    loadPokemon();
+    initializeFilters();
+    initializeLoadMore();
 });
