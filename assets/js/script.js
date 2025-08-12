@@ -334,20 +334,26 @@ function renderPokemon(pokemonList) {
     });
 }
 
+/**
+ * Pokemon Card erstellen - POKEMON GO STYLE mit Typ-Hintergrund
+ */
 function createPokemonCard(pokemon) {
     const card = document.createElement('div');
     card.className = 'col-md-4 col-lg-3 mb-4';
     
+    // Primären Typ für Card-Styling verwenden
+    const primaryType = pokemon.types[0];
+    
     card.innerHTML = `
-        <div class="pokemon-card h-100" data-pokemon-id="${pokemon.id}">
+        <div class="pokemon-card h-100 type-${primaryType}" data-pokemon-id="${pokemon.id}">
             <div class="pokemon-image-wrapper">
                 <span class="pokemon-number">#${pokemon.id.toString().padStart(3, '0')}</span>
                 <img src="${pokemon.image}" alt="${pokemon.name}" class="pokemon-image">
             </div>
-            <div class="p-3">
+            <div class="pokemon-card-content">
                 <h5 class="pokemon-name">${pokemon.name}</h5>
                 <div class="pokemon-types">
-                    ${pokemon.types.map(type => `<span class="type-badge type-${type}">${type}</span>`).join('')}
+                    ${pokemon.types.map(type => `<span class="type-badge">${type.toUpperCase()}</span>`).join('')}
                 </div>
             </div>
         </div>
