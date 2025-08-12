@@ -1,14 +1,12 @@
 body{
     font-family: var(--font-body);
     font-weight: 400;
-    /* POKEMON GO STYLE HINTERGRUND */
     background: linear-gradient(135deg, #87CEEB 0%, #98E4E8 25%, #A8E6CF 50%, #87CEEB 75%, #B8E6B8 100%);
     background-attachment: fixed;
     min-height: 100vh;
     position: relative;
 }
 
-/* OPTIONAL: Subtiles Muster über dem Gradient */
 body::before {
     content: '';
     position: fixed;
@@ -26,7 +24,6 @@ body::before {
     opacity: 0.3;
 }
 
-/* ===== POKEMON GO STYLE HERO SECTION ===== */
 .hero-section {
     background: var(--gradient);
     position: relative;
@@ -35,7 +32,6 @@ body::before {
     max-height: 30vh;
 }
 
-/* BASIS OVERLAY */
 .hero-section::before {
     content: '';
     position: absolute;
@@ -47,7 +43,6 @@ body::before {
     z-index: 1;
 }
 
-/* MAP-GRID MUSTER (Pokemon GO Style) */
 .hero-section::after {
     content: '';
     position: absolute;
@@ -56,10 +51,8 @@ body::before {
     right: 0;
     bottom: 0;
     background-image: 
-        /* Große Grid-Linien */
         linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-        /* Kleine Grid-Linien */
         linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
@@ -73,7 +66,6 @@ body::before {
     100% { transform: translate(20px, 20px); }
 }
 
-/* ANIMIERTE WOLKEN */
 .hero-section .cloud {
     position: absolute;
     background: rgba(255, 255, 255, 0.1);
@@ -99,7 +91,7 @@ body::before {
     backdrop-filter: blur(2px);
 }
 
-/* Wolke 1 */
+
 .hero-section .cloud-1 {
     width: 120px;
     height: 40px;
@@ -127,7 +119,7 @@ body::before {
     100% { transform: translateX(calc(100vw + 120px)); }
 }
 
-/* Wolke 2 */
+
 .hero-section .cloud-2 {
     width: 80px;
     height: 30px;
@@ -155,7 +147,7 @@ body::before {
     100% { transform: translateX(calc(100vw + 80px)); }
 }
 
-/* Wolke 3 */
+
 .hero-section .cloud-3 {
     width: 100px;
     height: 35px;
@@ -183,7 +175,7 @@ body::before {
     100% { transform: translateX(calc(100vw + 100px)); }
 }
 
-/* PARTIKEL EFFEKTE */
+
 .hero-section .particle {
     position: absolute;
     background: rgba(255, 255, 255, 0.8);
@@ -240,7 +232,7 @@ body::before {
     animation: particleFloat6 11s ease-in-out infinite 4s;
 }
 
-/* PARTIKEL ANIMATIONEN */
+
 @keyframes particleFloat1 {
     0% { transform: translateY(0) rotate(0deg); opacity: 0; }
     10% { opacity: 1; }
@@ -283,7 +275,7 @@ body::before {
     100% { transform: translateY(-100vh) rotate(-270deg); opacity: 0; }
 }
 
-/* HAUPTCONTENT */
+
 .hero-section .container {
     position: relative;
     z-index: 10;
@@ -315,19 +307,17 @@ body::before {
     font-size: 1.1rem;
 }
 
-/* ===== STICKY FILTERS (Pokemon GO Style) ===== */
+
 .filters {
     position: sticky;
     top: 0;
     z-index: 101;
-    /* Pokemon GO Style Filter-Hintergrund - TRANSPARENTER */
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.2) 100%);
     backdrop-filter: blur(20px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* ===== FILTER BUTTONS ===== */
 .filters .btn {
     border-radius: 25px;
     padding: 10px 20px;
@@ -354,7 +344,6 @@ body::before {
     box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
 }
 
-/* ===== POKEMON CARDS (Pokemon GO Style) ===== */
 .pokemon-card {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -373,117 +362,115 @@ body::before {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
-/* ===== TYP-BASIERTE CARD HINTERGRÜNDE (Pokemon GO Style) ===== */
 
-/* FEUER */
+
 .pokemon-card.type-fire {
     background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 70%, #FF6B47 100%);
     color: white;
 }
 
-/* WASSER */
+
 .pokemon-card.type-water {
     background: linear-gradient(135deg, #3498DB 0%, #5DADE2 70%, #2E86C1 100%);
     color: white;
 }
 
-/* PFLANZE */
+
 .pokemon-card.type-grass {
     background: linear-gradient(135deg, #2ECC71 0%, #58D68D 70%, #27AE60 100%);
     color: white;
 }
 
-/* ELEKTRO */
+
 .pokemon-card.type-electric {
     background: linear-gradient(135deg, #F1C40F 0%, #F7DC6F 70%, #D4AC0D 100%);
     color: white;
 }
 
-/* PSYCHO */
+
 .pokemon-card.type-psychic {
     background: linear-gradient(135deg, #E74C3C 0%, #EC7063 70%, #CB4335 100%);
     color: white;
 }
 
-/* EIS */
+
 .pokemon-card.type-ice {
     background: linear-gradient(135deg, #85C1E9 0%, #AED6F1 70%, #5DADE2 100%);
     color: white;
 }
 
-/* DRACHE */
+
 .pokemon-card.type-dragon {
     background: linear-gradient(135deg, #8E44AD 0%, #A569BD 70%, #7D3C98 100%);
     color: white;
 }
 
-/* UNLICHT */
+
 .pokemon-card.type-dark {
     background: linear-gradient(135deg, #34495E 0%, #5D6D7E 70%, #2C3E50 100%);
     color: white;
 }
 
-/* KAMPF */
+
 .pokemon-card.type-fighting {
     background: linear-gradient(135deg, #E67E22 0%, #F0B27A 70%, #D35400 100%);
     color: white;
 }
 
-/* GIFT */
+
 .pokemon-card.type-poison {
     background: linear-gradient(135deg, #9B59B6 0%, #BB8FCE 70%, #8E44AD 100%);
     color: white;
 }
 
-/* NORMAL */
+
 .pokemon-card.type-normal {
     background: linear-gradient(135deg, #A8A878 0%, #C5C5A0 70%, #8A8A5E 100%);
     color: white;
 }
 
-/* FLUG */
+
 .pokemon-card.type-flying {
     background: linear-gradient(135deg, #A890F0 0%, #C8B5F7 70%, #9373E8 100%);
     color: white;
 }
 
-/* BODEN */
 .pokemon-card.type-ground {
     background: linear-gradient(135deg, #E0C068 0%, #E8D084 70%, #C9A352 100%);
     color: white;
 }
 
-/* GESTEIN */
+
 .pokemon-card.type-rock {
     background: linear-gradient(135deg, #B8A038 0%, #C9B65A 70%, #9E8A31 100%);
     color: white;
 }
 
-/* KÄFER */
+
 .pokemon-card.type-bug {
     background: linear-gradient(135deg, #A8B820 0%, #B8C842 70%, #8FA31A 100%);
     color: white;
 }
 
-/* GEIST */
+
 .pokemon-card.type-ghost {
     background: linear-gradient(135deg, #705898 0%, #8A7AAD 70%, #5E4A82 100%);
     color: white;
 }
 
-/* STAHL */
+
 .pokemon-card.type-steel {
     background: linear-gradient(135deg, #B8B8D0 0%, #D0D0E0 70%, #A0A0B8 100%);
     color: white;
 }
 
-/* FEE */
+
 .pokemon-card.type-fairy {
     background: linear-gradient(135deg, #EE99AC 0%, #F4B5C4 70%, #E67E95 100%);
     color: white;
 }
 
-/* ===== POKEMON CARD CONTENT ===== */
+
 .pokemon-image-wrapper {
     position: relative;
     text-align: center;
@@ -569,7 +556,7 @@ body::before {
     background: rgba(255, 255, 255, 1);
 }
 
-/* ===== LOADING SPINNER ===== */
+
 .loading-spinner {
     padding: 4rem 0;
 }
@@ -580,7 +567,7 @@ body::before {
     color: var(--primary);
 }
 
-/* ===== LOAD MORE BUTTON STYLING ===== */
+
 #loadMoreBtn {
     background: rgba(255, 255, 255, 0.9);
     border: 2px solid var(--secondary);
@@ -609,15 +596,15 @@ body::before {
     box-shadow: none;
 }
 
-/* ===== POKEMON GRID (Pokemon GO Style) ===== */
+
 .pokemon-grid {
-    /* Kein eigener Hintergrund mehr - Body-Gradient zeigt durch */
+    
     background: transparent;
     min-height: 60vh;
     position: relative;
 }
 
-/* ===== RESPONSIVE ANIMATIONEN ===== */
+
 @media (max-width: 768px) {
     .hero-section .cloud {
         transform: scale(0.7);

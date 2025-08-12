@@ -1,21 +1,31 @@
-// ===== POKEMON MODAL TEMPLATES (Pokemon GO Style) =====
+// ===== POKEMON MODAL TEMPLATE SYSTEM =====
+
+// ===== HAUPTTEMPLATE FUNKTIONEN =====
 
 /**
- * Erstellt das komplette Pokemon Modal Overlay
+ * Komplettes Pokemon Modal Overlay erstellen
  */
 function createPokemonModalTemplate() {
     return `
-        <div id="pokemonOverlay" class="pokemon-overlay">
+        <div id="pokemonOverlay" class="pokemon-overlay d-none">
             <div class="overlay-background"></div>
             <div class="overlay-content">
-                <div class="overlay-header">
-                    <button class="nav-btn nav-prev" title="Vorheriges Pokémon">‹</button>
-                    <button class="nav-btn nav-close" title="Schließen">✕</button>
-                    <button class="nav-btn nav-next" title="Nächstes Pokémon">›</button>
-                </div>
-                
+                ${createModalHeaderTemplate()}
                 ${createPokemonDetailCardTemplate()}
             </div>
+        </div>
+    `;
+}
+
+/**
+ * Modal Header mit Navigation
+ */
+function createModalHeaderTemplate() {
+    return `
+        <div class="overlay-header">
+            <button class="nav-btn nav-prev" title="Vorheriges Pokémon">‹</button>
+            <button class="nav-btn nav-close" title="Schließen">✕</button>
+            <button class="nav-btn nav-next" title="Nächstes Pokémon">›</button>
         </div>
     `;
 }
@@ -26,18 +36,20 @@ function createPokemonModalTemplate() {
 function createPokemonDetailCardTemplate() {
     return `
         <div class="pokemon-detail-card">
-            ${createHeaderSectionTemplate()}
-            ${createImageSectionTemplate()}
+            ${createDetailHeaderTemplate()}
+            ${createDetailImageTemplate()}
             ${createTabNavigationTemplate()}
             ${createTabContentTemplate()}
         </div>
     `;
 }
 
+// ===== DETAIL CARD BEREICHE =====
+
 /**
  * Header Bereich (Name + Nummer)
  */
-function createHeaderSectionTemplate() {
+function createDetailHeaderTemplate() {
     return `
         <div class="detail-header">
             <h2 id="detailName" class="detail-pokemon-name">-</h2>
@@ -49,7 +61,7 @@ function createHeaderSectionTemplate() {
 /**
  * Bild Bereich
  */
-function createImageSectionTemplate() {
+function createDetailImageTemplate() {
     return `
         <div class="detail-image-section">
             <img id="detailImage" src="" alt="" class="detail-pokemon-image">
@@ -58,7 +70,7 @@ function createImageSectionTemplate() {
 }
 
 /**
- * Tab Navigation (INFO | EVOLUTION | BESCHREIBUNG)
+ * Tab Navigation
  */
 function createTabNavigationTemplate() {
     return `
@@ -71,50 +83,73 @@ function createTabNavigationTemplate() {
 }
 
 /**
- * Tab Content Container mit allen 3 Panels
+ * Tab Content Container
  */
 function createTabContentTemplate() {
     return `
         <div class="tab-content">
-            <!-- INFO TAB -->
-            <div class="tab-panel active" id="tab-info">
-                <div id="detailTypes" class="pokemon-types-display">
-                    <!-- Typen werden hier eingefügt -->
-                </div>
-                
-                <div class="pokemon-stats">
-                    <div id="detailStats" class="stats-grid">
-                        <!-- Stats werden hier eingefügt -->
-                    </div>
-                </div>
+            ${createInfoTabTemplate()}
+            ${createEvolutionTabTemplate()}
+            ${createDescriptionTabTemplate()}
+        </div>
+    `;
+}
+
+// ===== TAB TEMPLATES =====
+
+/**
+ * Info Tab mit Typen und Stats
+ */
+function createInfoTabTemplate() {
+    return `
+        <div class="tab-panel active" id="tab-info">
+            <div id="detailTypes" class="pokemon-types-display">
+                <!-- Typen werden hier eingefügt -->
             </div>
             
-            <!-- EVOLUTION TAB -->
-            <div class="tab-panel" id="tab-evolution">
-                <div id="detailEvolutions" class="evolution-display">
-                    <!-- Evolution chain wird hier eingefügt -->
-                </div>
-            </div>
-            
-            <!-- BESCHREIBUNG TAB -->
-            <div class="tab-panel" id="tab-beschreibung">
-                <div class="description-container">
-                    <p id="detailDescription" class="pokemon-description">
-                        Beschreibung wird geladen...
-                    </p>
+            <div class="pokemon-stats">
+                <div id="detailStats" class="stats-grid">
+                    <!-- Stats werden hier eingefügt -->
                 </div>
             </div>
         </div>
     `;
 }
 
-// ===== MODAL UTILITY FUNKTIONEN =====
+/**
+ * Evolution Tab
+ */
+function createEvolutionTabTemplate() {
+    return `
+        <div class="tab-panel" id="tab-evolution">
+            <div id="detailEvolutions" class="evolution-display">
+                <!-- Evolution chain wird hier eingefügt -->
+            </div>
+        </div>
+    `;
+}
 
 /**
- * Modal in DOM einfügen
+ * Beschreibung Tab
+ */
+function createDescriptionTabTemplate() {
+    return `
+        <div class="tab-panel" id="tab-beschreibung">
+            <div class="description-container">
+                <p id="detailDescription" class="pokemon-description">
+                    Beschreibung wird geladen...
+                </p>
+            </div>
+        </div>
+    `;
+}
+
+// ===== MODAL MANAGEMENT FUNKTIONEN =====
+
+/**
+ * Modal initialisieren (falls noch nicht vorhanden)
  */
 function initializePokemonModal() {
-    // Prüfen ob Modal bereits existiert
     const existingModal = document.getElementById('pokemonOverlay');
     if (existingModal) {
         console.log('Modal bereits vorhanden');
@@ -123,23 +158,109 @@ function initializePokemonModal() {
     
     console.log('Modal wird erstellt...');
     
-    // Modal HTML erstellen und einfügen
     const modalHTML = createPokemonModalTemplate();
     document.body.insertAdjacentHTML('beforeend', modalHTML);
     
-    // Prüfen ob es erfolgreich hinzugefügt wurde
-    const newModal = document.getElementById('pokemonOverlay');
-    if (newModal) {
-        console.log('Modal erfolgreich erstellt!');
-        // Event Listeners hinzufügen
-        setupModalEventListeners();
-    } else {
-        console.error('Modal konnte nicht erstellt werden!');
+    setupModalEventListeners();
+}
+
+/**
+ * Modal Event Listeners hinzufügen
+ */
+function setupModalEventListeners() {
+    const overlay = document.getElementById('pokemonOverlay');
+    if (!overlay) return;
+    
+    const background = overlay.querySelector('.overlay-background');
+    const closeBtn = overlay.querySelector('.nav-close');
+    const prevBtn = overlay.querySelector('.nav-prev');
+    const nextBtn = overlay.querySelector('.nav-next');
+    
+    // Modal schließen
+    background.addEventListener('click', closePokemonModal);
+    closeBtn.addEventListener('click', closePokemonModal);
+    
+    // Navigation (später implementieren)
+    prevBtn.addEventListener('click', () => navigatePokemon(-1));
+    nextBtn.addEventListener('click', () => navigatePokemon(1));
+    
+    // ✅ FIXED: ESC Event Listener sicher hinzufügen
+    addEscapeListener();
+}
+
+/**
+ * ESC Taste Handler
+ */
+function handleEscapeKey(event) {
+    if (event.key === 'Escape') {
+        const overlay = document.getElementById('pokemonOverlay');
+        if (overlay && overlay.classList.contains('show')) {
+            closePokemonModal();
+        }
     }
 }
 
 /**
- * Tab-System initialisieren
+ * Modal öffnen
+ */
+function openPokemonModal() {
+    const overlay = document.getElementById('pokemonOverlay');
+    if (!overlay) {
+        console.error('Modal nicht gefunden!');
+        return;
+    }
+    
+    // Modal anzeigen
+    overlay.classList.remove('d-none');
+    
+    // Animation starten
+    setTimeout(() => {
+        overlay.classList.add('show');
+    }, 10);
+    
+    // Body Scroll verhindern
+    document.body.style.overflow = 'hidden';
+    
+    // Tabs initialisieren
+    setTimeout(initializeTabs, 100);
+}
+
+/**
+ * Modal schließen
+ */
+function closePokemonModal() {
+    const overlay = document.getElementById('pokemonOverlay');
+    if (!overlay) return;
+    
+    // Animation
+    overlay.classList.remove('show');
+    
+    setTimeout(() => {
+        overlay.classList.add('d-none');
+        document.body.style.overflow = 'auto';
+        resetModalCard();
+    }, 300);
+}
+
+/**
+ * Modal Card auf Standard zurücksetzen
+ */
+function resetModalCard() {
+    const overlay = document.getElementById('pokemonOverlay');
+    if (!overlay) return;
+    
+    const card = overlay.querySelector('.pokemon-detail-card');
+    if (card) {
+        // Typ-Klassen entfernen
+        const typeClasses = Array.from(card.classList).filter(cls => cls.startsWith('type-'));
+        typeClasses.forEach(cls => card.classList.remove(cls));
+    }
+}
+
+// ===== TAB SYSTEM =====
+
+/**
+ * Tab System initialisieren
  */
 function initializeTabs() {
     const tabButtons = document.querySelectorAll('.tab-btn');
@@ -157,130 +278,29 @@ function initializeTabs() {
  * Zu bestimmtem Tab wechseln
  */
 function switchToTab(targetTab, tabButtons, tabPanels) {
-    // Alle Buttons deaktivieren
+    // Alle Buttons und Panels deaktivieren
     tabButtons.forEach(btn => btn.classList.remove('active'));
-    
-    // Alle Panels verstecken
     tabPanels.forEach(panel => panel.classList.remove('active'));
     
-    // Aktiven Button markieren
+    // Aktiven Button und Panel aktivieren
     const activeButton = document.querySelector(`[data-tab="${targetTab}"]`);
-    if (activeButton) {
-        activeButton.classList.add('active');
-    }
-    
-    // Aktives Panel anzeigen
     const activePanel = document.getElementById(`tab-${targetTab}`);
-    if (activePanel) {
-        activePanel.classList.add('active');
-    }
+    
+    if (activeButton) activeButton.classList.add('active');
+    if (activePanel) activePanel.classList.add('active');
 }
 
-/**
- * Modal Event Listeners
- */
-function setupModalEventListeners() {
-    const overlay = document.getElementById('pokemonOverlay');
-    const background = overlay.querySelector('.overlay-background');
-    const closeBtn = overlay.querySelector('.nav-close');
-    const prevBtn = overlay.querySelector('.nav-prev');
-    const nextBtn = overlay.querySelector('.nav-next');
-    
-    // Schließen bei Klick auf Background
-    background.addEventListener('click', closePokemonModal);
-    
-    // Schließen bei Close Button
-    closeBtn.addEventListener('click', closePokemonModal);
-    
-    // Navigation (später implementieren)
-    prevBtn.addEventListener('click', () => navigatePokemon(-1));
-    nextBtn.addEventListener('click', () => navigatePokemon(1));
-    
-    // ESC Taste
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !overlay.classList.contains('d-none')) {
-            closePokemonModal();
-        }
-    });
-}
+// ===== DETAIL TEMPLATE FUNKTIONEN =====
 
 /**
- * Modal öffnen
- */
-function openPokemonModal() {
-    const overlay = document.getElementById('pokemonOverlay');
-    
-    if (!overlay) {
-        console.error('Pokemon Overlay nicht gefunden! Modal wird neu erstellt...');
-        initializePokemonModal();
-        
-        // Nochmal versuchen
-        const retryOverlay = document.getElementById('pokemonOverlay');
-        if (!retryOverlay) {
-            console.error('Modal konnte nicht erstellt werden!');
-            return;
-        }
-        return openPokemonModal(); // Rekursiv nochmal versuchen
-    }
-    
-    overlay.classList.remove('d-none');
-    
-    // Animation
-    setTimeout(() => {
-        overlay.classList.add('show');
-    }, 10);
-    
-    // Body Scroll verhindern
-    document.body.style.overflow = 'hidden';
-    
-    // Tabs nach dem Öffnen initialisieren
-    setTimeout(() => {
-        initializeTabs();
-    }, 100);
-}
-
-/**
- * Modal schließen - MIT Card-Typ Reset
- */
-function closePokemonModal() {
-    const overlay = document.getElementById('pokemonOverlay');
-    if (!overlay) return;
-    
-    overlay.classList.remove('show');
-    
-    setTimeout(() => {
-        overlay.classList.add('d-none');
-        document.body.style.overflow = 'auto';
-        
-        // Card Typ-Klassen zurücksetzen
-        const card = overlay.querySelector('.pokemon-detail-card');
-        if (card) {
-            const existingTypeClasses = Array.from(card.classList).filter(cls => cls.startsWith('type-'));
-            existingTypeClasses.forEach(cls => card.classList.remove(cls));
-            console.log('Card Typ-Klassen zurückgesetzt');
-        }
-    }, 300);
-}
-
-/**
- * Navigation zwischen Pokémon (Platzhalter)
- */
-function navigatePokemon(direction) {
-    console.log(`Navigate: ${direction > 0 ? 'Next' : 'Previous'} Pokemon`);
-    // Wird später implementiert
-}
-
-// ===== TEMPLATE HILFSFUNKTIONEN =====
-
-/**
- * Template für Pokemon-Typen
+ * Pokemon Typ Badge Template
  */
 function createTypeBadgeTemplate(type) {
     return `<span class="detail-type-badge type-${type}">${type.toUpperCase()}</span>`;
 }
 
 /**
- * Template für Stats-Item
+ * Stats Item Template
  */
 function createStatItemTemplate(label, value) {
     return `
@@ -292,7 +312,7 @@ function createStatItemTemplate(label, value) {
 }
 
 /**
- * Template für Evolution Item
+ * Evolution Item Template
  */
 function createEvolutionItemTemplate(pokemon, isCurrent = false) {
     return `
@@ -304,14 +324,24 @@ function createEvolutionItemTemplate(pokemon, isCurrent = false) {
 }
 
 /**
- * Template für Evolution Arrow
+ * Evolution Arrow Template
  */
 function createEvolutionArrowTemplate() {
     return `<div class="evolution-arrow">→</div>`;
 }
 
+// ===== UTILITY FUNKTIONEN =====
+
 /**
- * Template für Loading State
+ * Pokemon Navigation (Platzhalter)
+ */
+function navigatePokemon(direction) {
+    console.log(`Navigate: ${direction > 0 ? 'Next' : 'Previous'} Pokemon`);
+    // TODO: Navigation zwischen Pokemon implementieren
+}
+
+/**
+ * Loading Template
  */
 function createLoadingTemplate(message = 'Wird geladen...') {
     return `
@@ -325,7 +355,7 @@ function createLoadingTemplate(message = 'Wird geladen...') {
 }
 
 /**
- * Template für Fehler-Anzeige
+ * Error Template
  */
 function createErrorTemplate(message = 'Fehler beim Laden') {
     return `
@@ -334,4 +364,18 @@ function createErrorTemplate(message = 'Fehler beim Laden') {
             <p>Bitte versuche es erneut.</p>
         </div>
     `;
+}
+
+// ===== ESC EVENT LISTENER MANAGEMENT =====
+let escapeListenerAdded = false;
+
+/**
+ * ESC Event Listener einmalig hinzufügen
+ */
+function addEscapeListener() {
+    if (!escapeListenerAdded) {
+        document.addEventListener('keydown', handleEscapeKey);
+        escapeListenerAdded = true;
+        console.log('ESC Event Listener hinzugefügt');
+    }
 }
