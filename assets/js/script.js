@@ -98,6 +98,23 @@ function handleError(message, error) {
     console.error(message, error);
 }
 
+function setLoadMoreButtonState(loading) {
+    if (!domElements.loadMoreButton) return;
+    
+    const loadText = domElements.loadMoreButton.querySelector('.load-more-text');
+    const loadSpinner = domElements.loadMoreButton.querySelector('.load-more-spinner');
+    
+    if (loading) {
+        domElements.loadMoreButton.disabled = true;
+        loadText.classList.add('d-none');
+        loadSpinner.classList.remove('d-none');
+    } else {
+        domElements.loadMoreButton.disabled = false;
+        loadText.classList.remove('d-none');
+        loadSpinner.classList.add('d-none');
+    }
+}
+
 function renderPokemon(pokemonList) {
     domElements.pokemonContainer.innerHTML = "";
 
@@ -153,9 +170,8 @@ async function loadPokemonByType(type) {
     domElements.pokemonContainer.innerHTML = '';
 
     try {
-
         clearSearchMode();
-        
+
         const pokemonDetails = (type === 'all')   
             ? await fetchPokemonData(0, POKEMON_API_CONFIG.pokemonPerPage)
             : await fetchPokemonByTypeData(type);
@@ -185,7 +201,6 @@ function clearSearchMode() {
     const searchButton = document.getElementById('searchBtn');
     if (searchInput) {
         searchInput.value = '';
-        // updateSearchButtonState wird von search.js bereitgestellt
         if (typeof updateSearchButtonState === 'function') {
             updateSearchButtonState(searchButton, false);
         }
@@ -210,39 +225,59 @@ function setActiveFilter(selectedButton) {
     selectedButton.classList.add('active');
 }
 
-function initializeLoadMore() {
-    domElements.loadMoreButton.addEventListener('click', () => {
-        loadMorePokemon();
-    });
-}
-
 async function loadMorePokemon() {
     if (appState.isLoading) return;
     
     setLoadingState(true);
+    setLoadMoreButtonState(true);
     
     try {
-        let newPokemonDetails;
+        const newPokemonDetails = await fetchNewPokemonDetails();
         
-        if (appState.selectedType === 'all') {
-            newPokemonDetails = await fetchPokemonData(
-                appState.nextPageOffset, 
-                POKEMON_API_CONFIG.pokemonPerPage
-            );
-        } else {
-            newPokemonDetails = await fetchMorePokemonByType(appState.selectedType);
+        if (!newPokemonDetails || newPokemonDetails.length === 0) {
+            console.log('Keine weiteren Pokemon verfügbar');
+            return;
         }
         
-        appState.pokemonList = [...appState.pokemonList, ...newPokemonDetails];
-        appendNewPokemon(newPokemonDetails);
-        
-        appState.nextPageOffset += POKEMON_API_CONFIG.pokemonPerPage;
+        updatePokemonList(newPokemonDetails);
         
     } catch (error) {
         handleError('Fehler beim Nachladen', error);
     } finally {
-        setLoadingState(false);
+        resetLoadingState();
     }
+}
+
+async function fetchNewPokemonDetails() {
+    switch (appState.selectedType) {
+        case 'all':
+            return await fetchPokemonData(
+                appState.nextPageOffset, 
+                POKEMON_API_CONFIG.pokemonPerPage
+            );
+        case 'search':
+            console.log('Load More im Search-Modus nicht möglich');
+            return [];
+        default:
+            return await fetchMorePokemonByType(appState.selectedType);
+    }
+}
+
+function updatePokemonList(newPokemonDetails) {
+    appState.pokemonList = [...appState.pokemonList, ...newPokemonDetails];
+    appendNewPokemon(newPokemonDetails);
+    appState.nextPageOffset += POKEMON_API_CONFIG.pokemonPerPage;
+}
+
+function resetLoadingState() {
+    setLoadingState(false);
+    setLoadMoreButtonState(false);
+}
+
+function initializeLoadMore() {
+    domElements.loadMoreButton.addEventListener('click', () => {
+        loadMorePokemon();
+    });
 }
 
 async function fetchMorePokemonByType(type) {
