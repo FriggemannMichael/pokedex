@@ -153,6 +153,9 @@ async function loadPokemonByType(type) {
     domElements.pokemonContainer.innerHTML = '';
 
     try {
+
+        clearSearchMode();
+        
         const pokemonDetails = (type === 'all')   
             ? await fetchPokemonData(0, POKEMON_API_CONFIG.pokemonPerPage)
             : await fetchPokemonByTypeData(type);
@@ -166,6 +169,26 @@ async function loadPokemonByType(type) {
         handleError('Fehler beim Laden nach Typ', error);
     } finally {
         setLoadingState(false);
+    }
+}
+
+function clearSearchMode() {
+    appState.selectedType = 'all';
+    appState.nextPageOffset = 0;
+    
+    const allButton = document.querySelector('[data-type="all"]');
+    if (allButton && allButton.textContent !== 'Alle') {
+        allButton.textContent = 'Alle';
+    }
+    
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchBtn');
+    if (searchInput) {
+        searchInput.value = '';
+        // updateSearchButtonState wird von search.js bereitgestellt
+        if (typeof updateSearchButtonState === 'function') {
+            updateSearchButtonState(searchButton, false);
+        }
     }
 }
 
@@ -459,4 +482,5 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPokemon();
     initializeFilters();
     initializeLoadMore();
+    initializeSearch();
 });

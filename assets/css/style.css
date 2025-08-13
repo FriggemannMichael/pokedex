@@ -677,3 +677,58 @@ body::before {
         background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
     }
 }
+
+/* ===== SEARCH RESULTS STYLING ===== */
+.no-results, .search-error {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 3rem 2rem;
+    margin: 2rem auto;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.no-results h3, .search-error h3 {
+    color: var(--dark);
+    font-family: var(--font-title);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.no-results p, .search-error p {
+    color: var(--dark);
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin-bottom: 2rem;
+}
+
+.no-results .btn, .search-error .btn {
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.no-results .btn:hover, .search-error .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+#searchBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+#searchBtn:disabled:hover {
+    transform: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+#searchInput:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+}
