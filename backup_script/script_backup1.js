@@ -12,6 +12,7 @@ let nextPageOffset = 20;
 const pokemonContainer = document.getElementById("pokemonContainer");
 const loadingSpinner = document.querySelector(".loading-spinner");
 
+// Öffnet das Pokemon-Detail Modal
 function openPokemonDetail(pokemon) {
   console.log("Opening detail for:", pokemon.name);
   initializePokemonModal();
@@ -20,7 +21,7 @@ function openPokemonDetail(pokemon) {
   loadPokemonDetailData(pokemon);
 }
 
-
+// Lädt alle Daten für die Pokemon-Detail Ansicht (PROBLEM: ZU LANG - 30+ ZEILEN!)
 async function loadPokemonDetailData(pokemon) {
   try {
     setDetailLoadingState(true);
@@ -60,6 +61,7 @@ async function loadPokemonDetailData(pokemon) {
   }
 }
 
+// Setzt die Hintergrundfarbe des Modals basierend auf Pokemon-Typ
 function setPokemonCardType(primaryType) {
   const card = document.querySelector(".pokemon-detail-card");
   if (!card) return;
@@ -76,9 +78,7 @@ function setPokemonCardType(primaryType) {
   console.log(`Card Style gesetzt auf: type-${primaryType}`);
 }
 
-/**
- * Pokemon Typen anzeigen
- */
+// Zeigt die Pokemon-Typen als Badges an
 function showPokemonTypes(types) {
   const typesContainer = document.getElementById("detailTypes");
   if (typesContainer) {
@@ -91,9 +91,7 @@ function showPokemonTypes(types) {
   }
 }
 
-/**
- * Pokemon Stats anzeigen - für Grid-Layout
- */
+// Zeigt Pokemon-Statistiken wie Größe, Gewicht etc. an (PROBLEM: ZU LANG - 18+ ZEILEN!)
 function showPokemonStats(pokemonDetails) {
   const height = (pokemonDetails.height / 10).toFixed(1);
   const weight = (pokemonDetails.weight / 10).toFixed(1);
@@ -123,9 +121,7 @@ function showPokemonStats(pokemonDetails) {
   }
 }
 
-/**
- * Pokemon Beschreibung anzeigen
- */
+// Zeigt die deutsche Beschreibung des Pokemon an
 function showPokemonDescription(speciesData) {
   const germanEntry = speciesData.flavor_text_entries.find(
     (entry) => entry.language.name === "de"
@@ -141,9 +137,7 @@ function showPokemonDescription(speciesData) {
   }
 }
 
-/**
- * Evolution Chain laden
- */
+// Lädt die Evolution-Kette von der API
 async function loadEvolutionChain(evolutionUrl, currentPokemonId) {
   try {
     const evolutionData = await fetch(evolutionUrl).then((r) => r.json());
@@ -155,6 +149,7 @@ async function loadEvolutionChain(evolutionUrl, currentPokemonId) {
   }
 }
 
+// Wandelt die komplexe Evolution-API-Struktur in einfaches Array um
 function parseEvolutionChain(chain) {
   const evolutions = [];
 
@@ -179,9 +174,7 @@ function parseEvolutionChain(chain) {
   return evolutions;
 }
 
-/**
- * Evolution Chain anzeigen
- */
+// Zeigt die Evolution-Kette im Modal an (PROBLEM: ZU LANG - 30+ ZEILEN!)
 async function displayEvolutionChain(evolutions, currentPokemonId) {
   const container = document.getElementById("detailEvolutions");
   if (!container) return;
@@ -222,6 +215,7 @@ async function displayEvolutionChain(evolutions, currentPokemonId) {
 
 // === UTILITY FUNKTIONEN ===
 
+// Zeigt/versteckt Loading-Animation im Modal
 function setDetailLoadingState(loading) {
   const card = document.querySelector(".pokemon-detail-card");
   if (card) {
@@ -230,6 +224,7 @@ function setDetailLoadingState(loading) {
   }
 }
 
+// Zeigt Fehlermeldung im Modal an
 function showErrorMessage(message) {
   const descContainer = document.getElementById("detailDescription");
   if (descContainer) {
@@ -237,6 +232,7 @@ function showErrorMessage(message) {
   }
 }
 
+// Zeigt Fehler bei Evolution-Chain an
 function showEvolutionError() {
   const container = document.getElementById("detailEvolutions");
   if (container) {
@@ -247,14 +243,17 @@ function showEvolutionError() {
 
 // ===== POKEMON API FUNKTIONEN =====
 
+// Zeigt den Haupt-Loading-Spinner an
 function showLoadingSpinner() {
   loadingSpinner.classList.remove("d-none");
 }
 
+// Versteckt den Haupt-Loading-Spinner
 function hideLoadingSpinner() {
   loadingSpinner.classList.add("d-none");
 }
 
+// Lädt die ersten 20 Pokemon von der API
 async function loadPokemon(offset = 0, limit = POKEMON_PER_PAGE) {
   if (isLoading) return;
 
@@ -282,6 +281,7 @@ async function loadPokemon(offset = 0, limit = POKEMON_PER_PAGE) {
   }
 }
 
+// Lädt Pokemon gefiltert nach Typ (Feuer, Wasser, etc.)
 async function loadPokemonByType(type) {
   if (isLoading) return;
 
@@ -324,6 +324,7 @@ async function loadPokemonByType(type) {
   }
 }
 
+// Lädt Details für ein einzelnes Pokemon von der API
 async function loadPokemonDetails(url) {
   const response = await fetch(url);
   const pokemon = await response.json();
@@ -336,6 +337,7 @@ async function loadPokemonDetails(url) {
   };
 }
 
+// Zeigt alle Pokemon-Karten auf der Seite an
 function renderPokemon(pokemonList) {
   pokemonList.forEach((pokemon) => {
     const pokemonCard = createPokemonCard(pokemon);
@@ -343,9 +345,7 @@ function renderPokemon(pokemonList) {
   });
 }
 
-/**
- * Pokemon Card erstellen - POKEMON GO STYLE mit Typ-Hintergrund
- */
+// Erstellt eine einzelne Pokemon-Karte mit Pokemon GO Style
 function createPokemonCard(pokemon) {
   const card = document.createElement("div");
   card.className = "col-md-4 col-lg-3 mb-4";
@@ -386,8 +386,9 @@ function createPokemonCard(pokemon) {
   return card;
 }
 
-// ===== FILTER & LOAD MORE FUNKTIONEN =====
+// === FILTER & LOAD MORE FUNKTIONEN ===
 
+// Initialisiert die Typ-Filter Buttons
 function initializeFilters() {
   const filterButtons = document.querySelectorAll(".filters .btn[data-type]");
 
@@ -400,6 +401,7 @@ function initializeFilters() {
   });
 }
 
+// Initialisiert den Load More Button
 function initializeLoadMore() {
   const loadMoreBtn = document.getElementById("loadMoreBtn");
 
@@ -413,6 +415,7 @@ function initializeLoadMore() {
   }
 }
 
+// Zeigt/versteckt Loading-Animation beim Load More Button
 function setLoadMoreState(loading) {
   const loadMoreBtn = document.getElementById("loadMoreBtn");
   if (!loadMoreBtn) return;
@@ -431,6 +434,7 @@ function setLoadMoreState(loading) {
   }
 }
 
+// Lädt weitere 20 Pokemon (Pagination)
 async function loadMorePokemon() {
   if (isLoading) return;
 
@@ -451,6 +455,7 @@ async function loadMorePokemon() {
   }
 }
 
+// Lädt weitere gemischte Pokemon (alle Typen)
 async function loadMoreMixedPokemon() {
   const response = await fetch(
     `${POKEMON_API_BASE}?offset=${currentOffset}&limit=${POKEMON_PER_PAGE}`
@@ -469,6 +474,7 @@ async function loadMoreMixedPokemon() {
   currentOffset += POKEMON_PER_PAGE;
 }
 
+// Lädt weitere Pokemon von einem bestimmten Typ
 async function loadMoreByType(type) {
   const response = await fetch(`https://pokeapi.co/api/v2/type/${type}`);
   const typeData = await response.json();
@@ -480,7 +486,7 @@ async function loadMoreByType(type) {
     .map((p) => p.pokemon.url);
 
   if (pokemonUrls.length === 0) {
-    console.log("Keine weiteren Pokémon verfügbar!");
+    console.log("Keine weiteren Pokemon verfügbar!");
     return;
   }
 
@@ -494,6 +500,7 @@ async function loadMoreByType(type) {
   currentOffset += pokemonDetails.length;
 }
 
+// Markiert den aktiven Filter-Button
 function setActiveFilter(activeButton) {
   document.querySelectorAll(".filters .btn[data-type]").forEach((btn) => {
     btn.classList.remove("active");
@@ -505,8 +512,9 @@ function setActiveFilter(activeButton) {
   currentOffset = 20;
 }
 
-// ===== APP INITIALISIERUNG =====
+// === APP INITIALISIERUNG ===
 
+// Startet die App wenn Seite geladen ist
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Pokédex wird geladen...");
   loadPokemon(0, 20);
