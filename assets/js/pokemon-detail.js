@@ -263,3 +263,91 @@ function showEvolutionError() {
         container.innerHTML = '<div class="evolution-error"><p>Entwicklungen konnten nicht geladen werden.</p></div>';
     }
 }
+
+// Erweitere deine bestehende displayPokemonDetails Funktion
+function displayPokemonDetails(pokemon, pokemonDetails, speciesData) {
+    showPokemonTypes(pokemon.types);
+    showPokemonStats(pokemonDetails);  // Basis-Stats (bleibt)
+    showPokemonBaseStats(pokemonDetails);  // NEU: Kampf-Stats
+    showBreedingInfo(speciesData);     // NEU: Zucht-Info
+    showPokemonMoves(pokemonDetails);  // NEU: Moves
+    showPokemonDescription(speciesData);
+}
+
+// NEU: Basis-Kampfwerte mit Progress Bars
+function showPokemonBaseStats(pokemonDetails) {
+    const statsContainer = document.getElementById('detailBaseStats');
+    if (!statsContainer) return;
+    
+    const baseStats = pokemonDetails.stats.map(stat => ({
+        name: translateStatName(stat.stat.name),
+        value: stat.base_stat,
+        maxValue: 255  // Pokemon-Stats gehen meist bis 255
+    }));
+    
+    statsContainer.innerHTML = `
+        <div class="base-stats-grid">
+            ${baseStats.map(stat => createProgressStatTemplate(stat)).join('')}
+        </div>
+    `;
+}
+
+// NEU: Zucht-Informationen
+function showBreedingInfo(speciesData) {
+    const breedingContainer = document.getElementById('detailBreeding');
+    if (!breedingContainer) return;
+    
+    const genderInfo = calculateGenderInfo(speciesData.gender_rate);
+    const eggGroups = speciesData.egg_groups.map(g => g.name).join(', ');
+    
+    breedingContainer.innerHTML = `
+        <div class="breeding-grid">
+            ${createStatItemTemplate('Geschlecht', genderInfo)}
+            ${createStatItemTemplate('Ei-Gruppen', eggGroups)}
+            ${createStatItemTemplate('Brutzyklen', speciesData.hatch_counter || '?')}
+            ${createStatItemTemplate('Fangrate', speciesData.capture_rate)}
+        </div>
+    `;
+}
+
+// NEU: Pokemon Moves
+function showPokemonMoves(pokemonDetails) {
+    const movesContainer = document.getElementById('detailMoves');
+    if (!movesContainer) return;
+    
+    // Erste 20 Moves (sonst wird's zu lang)
+    const limitedMoves = pokemonDetails.moves.slice(0, 20);
+    
+    movesContainer.innerHTML = `
+        <div class="moves-grid">
+            ${limitedMoves.map(moveData => 
+                createMoveBadgeTemplate(moveData.move.name)
+            ).join('')}
+        </div>
+    `;
+}
+
+// Stat-Namen übersetzen
+function translateStatName(statName) {
+    const translations = {
+        'hp': 'KP',
+        'attack': 'Angriff', 
+        'defense': 'Verteidigung',
+        'special-attack': 'Spez. Angriff',
+        'special-defense': 'Spez. Verteidigung',
+        'speed': 'Initiative'
+    };
+    return translations[statName] || statName;
+}
+
+// Gender-Info berechnen
+function calculateGenderInfo(genderRate) {
+    if (genderRate === -1) {
+        return 'Geschlechtslos';
+    }
+    
+    const malePercent = ((8 - genderRate) / 8 * 100).toFixed(1);
+    const femalePercent = (genderRate / 8 * 100).toFixed(1);
+    
+    return `♂ ${malePercent}% ♀ ${femalePercent}%`;
+}

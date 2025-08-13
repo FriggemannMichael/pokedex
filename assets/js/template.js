@@ -52,6 +52,9 @@ function createTabNavigationTemplate() {
     return `
         <div class="pokemon-tabs">
             <button class="tab-btn active" data-tab="info">INFO</button>
+            <button class="tab-btn" data-tab="stats">STATS</button>
+            <button class="tab-btn" data-tab="breeding">ZUCHT</button>
+            <button class="tab-btn" data-tab="moves">MOVES</button>
             <button class="tab-btn" data-tab="evolution">EVOLUTION</button>
             <button class="tab-btn" data-tab="beschreibung">BESCHREIBUNG</button>
         </div>
@@ -62,8 +65,41 @@ function createTabContentTemplate() {
     return `
         <div class="tab-content">
             ${createInfoTabTemplate()}
+            ${createStatsTabTemplate()}
+            ${createBreedingTabTemplate()}
+            ${createMovesTabTemplate()}
             ${createEvolutionTabTemplate()}
             ${createDescriptionTabTemplate()}
+        </div>
+    `;
+}
+
+// NEU: Stats Tab mit Progress Bars
+function createStatsTabTemplate() {
+    return `
+        <div class="tab-panel" id="tab-stats">
+            <div id="detailBaseStats" class="base-stats-container">
+            </div>
+        </div>
+    `;
+}
+
+// NEU: Breeding Tab
+function createBreedingTabTemplate() {
+    return `
+        <div class="tab-panel" id="tab-breeding">
+            <div id="detailBreeding" class="breeding-info">
+            </div>
+        </div>
+    `;
+}
+
+// NEU: Moves Tab
+function createMovesTabTemplate() {
+    return `
+        <div class="tab-panel" id="tab-moves">
+            <div id="detailMoves" class="moves-container">
+            </div>
         </div>
     `;
 }
@@ -268,4 +304,27 @@ function addEscapeListener() {
         escapeListenerAdded = true;
         console.log('ESC Event Listener hinzugefügt');
     }
+}
+
+// NEU: Progress Bar Template
+function createProgressStatTemplate(stat) {
+    const percentage = Math.min((stat.value / stat.maxValue) * 100, 100);
+    
+    return `
+        <div class="progress-stat-item">
+            <div class="progress-header">
+                <span class="progress-label">${stat.name}</span>
+                <span class="progress-value">${stat.value}</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: ${percentage}%"></div>
+            </div>
+        </div>
+    `;
+}
+
+// NEU: Move Badge Template
+function createMoveBadgeTemplate(moveName) {
+    const cleanName = moveName.replace('-', ' ');
+    return `<span class="move-badge">${cleanName}</span>`;
 }
