@@ -35,13 +35,13 @@ function updateSearchButtonState(button, isEnabled) {
     button.disabled = !isEnabled;
     button.classList.toggle('btn-primary', isEnabled);
     button.classList.toggle('btn-light', !isEnabled);
-    button.title = isEnabled ? 'Pokemon suchen' : 'Mindestens 3 Buchstaben eingeben';
+    button.title = isEnabled ? 'Search Pokemon' : 'Enter at least 3 letters';
 }
 
 async function performSearch(searchQuery) {
     if (appState.isLoading) return;
 
-    console.log(`Suche nach: "${searchQuery}"`);
+    console.log(`Search for: "${searchQuery}"`);
     setLoadingState(true);
     clearPokemonContainer();
 
@@ -49,7 +49,7 @@ async function performSearch(searchQuery) {
         const searchResults = await searchPokemonByName(searchQuery);
         handleSearchResults(searchResults, searchQuery);
     } catch (error) {
-        handleError('Fehler bei der Suche', error);
+        handleError('Search error', error);
         showSearchError();
     } finally {
         setLoadingState(false);
@@ -71,15 +71,21 @@ function findPokemonLocally(query) {
 
 async function fetchPokemonFromAPI(query) {
     try {
-        const searchResponse = await fetchFromPokeAPI(`${POKEMON_API_CONFIG.baseUrl}?offset=0&limit=200`);
+        console.log(`🌐 API search for: "${query}"`);
+        
+        // Extended: Load 1000 Pokemon (almost all)
+        const searchResponse = await fetchFromPokeAPI(`${POKEMON_API_CONFIG.baseUrl}?offset=0&limit=1000`);
+        
         const matchingPokemon = searchResponse.results.filter(pokemon =>
             pokemon.name.toLowerCase().includes(query.toLowerCase())
         );
 
+        console.log(`✅ ${matchingPokemon.length} Pokemon found in API:`, matchingPokemon.map(p => p.name));
+
         const limitedMatches = matchingPokemon.slice(0, 50);
         return await loadPokemonDetailsForUrls(limitedMatches.map(p => p.url));
     } catch (error) {
-        console.error('Erweiterte Suche fehlgeschlagen:', error);
+        console.error('Extended search failed:', error);
         return [];
     }
 }
@@ -108,9 +114,9 @@ function showNoSearchResults(searchQuery) {
     domElements.pokemonContainer.innerHTML = `
         <div class="col-12">
             <div class="no-results text-center py-5">
-                <h3>🔍 Keine Ergebnisse</h3>
-                <p>Für "${searchQuery}" wurden keine Pokemon gefunden.</p>
-                <button class="btn btn-primary" onclick="clearSearch()">Zurück zur Übersicht</button>
+                <h3>🔍 No Results</h3>
+                <p>No Pokemon found for "${searchQuery}".</p>
+                <button class="btn btn-primary" onclick="clearSearch()">Back to Overview</button>
             </div>
         </div>
     `;
@@ -120,9 +126,9 @@ function showSearchError() {
     domElements.pokemonContainer.innerHTML = `
         <div class="col-12">
             <div class="search-error text-center py-5">
-                <h3>⚠️ Suchfehler</h3>
-                <p>Bei der Suche ist ein Fehler aufgetreten.</p>
-                <button class="btn btn-primary" onclick="clearSearch()">Zurück zur Übersicht</button>
+                <h3>⚠️ Search Error</h3>
+                <p>An error occurred during the search.</p>
+                <button class="btn btn-primary" onclick="clearSearch()">Back to Overview</button>
             </div>
         </div>
     `;
@@ -136,7 +142,7 @@ function updateFilterButtonsForSearch() {
     const allButton = document.querySelector('[data-type="all"]');
     if (allButton) {
         allButton.classList.add('active');
-        allButton.textContent = '🔍 Suche';
+        allButton.textContent = '🔍 Search';
     }
 }
 
@@ -159,7 +165,7 @@ function resetToAllFilter() {
 
     const allButton = document.querySelector('[data-type="all"]');
     if (allButton) {
-        allButton.textContent = 'Alle';
+        allButton.textContent = 'All';
     }
 }
 

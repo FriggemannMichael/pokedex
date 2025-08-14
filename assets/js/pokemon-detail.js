@@ -1,9 +1,23 @@
+// Global navigation variables
+let currentPokemonIndex = 0;
+let availablePokemonList = [];
+
 function openPokemonDetail(pokemon) {
     console.log('Opening detail for:', pokemon.name);
+    
+    // Set navigation data
+    setNavigationData(pokemon);
     
     initializePokemonModal();
     openPokemonModal();
     loadPokemonDetailData(pokemon);
+}
+
+function setNavigationData(selectedPokemon) {
+    availablePokemonList = appState.pokemonList;
+    currentPokemonIndex = availablePokemonList.findIndex(p => p.id === selectedPokemon.id);
+    
+    console.log(`Navigation: ${currentPokemonIndex + 1} of ${availablePokemonList.length}`);
 }
 
 async function loadPokemonDetailData(pokemon) {
@@ -13,12 +27,38 @@ async function loadPokemonDetailData(pokemon) {
         setDetailBasicData(pokemon);
         
         await loadDetailApiData(pokemon);
+        updateNavigationButtons();
         
     } catch (error) {
-        console.error('Fehler beim Laden der Pokemon-Details:', error);
-        showDetailError('Fehler beim Laden der Details');
+        console.error('Error loading Pokemon details:', error);
+        showDetailError('Error loading details');
     } finally {
         setDetailLoadingState(false);
+    }
+}
+
+function updateNavigationButtons() {
+    const prevBtn = document.querySelector('.nav-prev');
+    const nextBtn = document.querySelector('.nav-next');
+    
+    if (!prevBtn || !nextBtn) return;
+    
+    // First Pokemon -> Disable Prev
+    if (currentPokemonIndex <= 0) {
+        prevBtn.style.opacity = '0.5';
+        prevBtn.disabled = true;
+    } else {
+        prevBtn.style.opacity = '1';
+        prevBtn.disabled = false;
+    }
+    
+    // Last Pokemon -> Disable Next  
+    if (currentPokemonIndex >= availablePokemonList.length - 1) {
+        nextBtn.style.opacity = '0.5';
+        nextBtn.disabled = true;
+    } else {
+        nextBtn.style.opacity = '1';
+        nextBtn.disabled = false;
     }
 }
 
@@ -35,6 +75,9 @@ async function loadDetailApiData(pokemon) {
 function displayPokemonDetails(pokemon, pokemonDetails, speciesData) {
     showPokemonTypes(pokemon.types);
     showPokemonStats(pokemonDetails);
+    showPokemonBaseStats(pokemonDetails);
+    showBreedingInfo(speciesData);
+    showPokemonMoves(pokemonDetails);
     showPokemonDescription(speciesData);
 }
 
@@ -100,9 +143,9 @@ function calculateStatsData(pokemonDetails) {
 
 function createStatsHTML(statsData) {
     return `
-        ${createStatItemTemplate('Größe', `${statsData.height} m`)}
-        ${createStatItemTemplate('Gewicht', `${statsData.weight} kg`)}
-        ${createStatItemTemplate('Erfahrung', statsData.experience)}
+        ${createStatItemTemplate('Height', `${statsData.height} m`)}
+        ${createStatItemTemplate('Weight', `${statsData.weight} kg`)}
+        ${createStatItemTemplate('Experience', statsData.experience)}
         ${createStatItemTemplate('ID', `#${statsData.id}`)}
     `;
 }
@@ -111,17 +154,17 @@ function showPokemonDescription(speciesData) {
     const descContainer = document.getElementById('detailDescription');
     if (!descContainer) return;
     
-    const description = extractGermanDescription(speciesData);
+    const description = extractEnglishDescription(speciesData);
     descContainer.textContent = description;
 }
 
-function extractGermanDescription(speciesData) {
-    const germanEntry = speciesData.flavor_text_entries
-        .find(entry => entry.language.name === 'de');
+function extractEnglishDescription(speciesData) {
+    const englishEntry = speciesData.flavor_text_entries
+        .find(entry => entry.language.name === 'en');
     
-    return germanEntry 
-        ? cleanDescriptionText(germanEntry.flavor_text)
-        : 'Keine deutsche Beschreibung verfügbar.';
+    return englishEntry 
+        ? cleanDescriptionText(englishEntry.flavor_text)
+        : 'No English description available.';
 }
 
 function cleanDescriptionText(text) {
@@ -134,7 +177,7 @@ async function loadEvolutionChain(evolutionUrl, currentPokemonId) {
         const evolutionChain = parseEvolutionChain(evolutionData.chain);
         await displayEvolutionChain(evolutionChain, currentPokemonId);
     } catch (error) {
-        console.error('Fehler beim Laden der Evolution Chain:', error);
+        console.error('Error loading evolution chain:', error);
         showEvolutionError();
     }
 }
@@ -188,7 +231,7 @@ async function displayEvolutionChain(evolutions, currentPokemonId) {
 }
 
 function showNoEvolutions(container) {
-    container.innerHTML = '<div class="no-evolutions"><p>Keine Entwicklungen verfügbar</p></div>';
+    container.innerHTML = '<div class="no-evolutions"><p>No evolutions available</p></div>';
 }
 
 function renderEvolutionChain(container, evolutions, currentPokemonId) {
@@ -225,7 +268,7 @@ async function handleEvolutionClick(item, currentPokemonId) {
             const newPokemon = await loadNewEvolutionPokemon(pokemonId);
             loadPokemonDetailData(newPokemon);
         } catch (error) {
-            console.error('Fehler beim Laden des Evolution-Pokemon:', error);
+            console.error('Error loading evolution Pokemon:', error);
         }
     }
 }
@@ -260,21 +303,11 @@ function showDetailError(message) {
 function showEvolutionError() {
     const container = document.getElementById('detailEvolutions');
     if (container) {
-        container.innerHTML = '<div class="evolution-error"><p>Entwicklungen konnten nicht geladen werden.</p></div>';
+        container.innerHTML = '<div class="evolution-error"><p>Evolutions could not be loaded.</p></div>';
     }
 }
 
-// Erweitere deine bestehende displayPokemonDetails Funktion
-function displayPokemonDetails(pokemon, pokemonDetails, speciesData) {
-    showPokemonTypes(pokemon.types);
-    showPokemonStats(pokemonDetails);  // Basis-Stats (bleibt)
-    showPokemonBaseStats(pokemonDetails);  // NEU: Kampf-Stats
-    showBreedingInfo(speciesData);     // NEU: Zucht-Info
-    showPokemonMoves(pokemonDetails);  // NEU: Moves
-    showPokemonDescription(speciesData);
-}
-
-// NEU: Basis-Kampfwerte mit Progress Bars
+// Base Stats with Progress Bars
 function showPokemonBaseStats(pokemonDetails) {
     const statsContainer = document.getElementById('detailBaseStats');
     if (!statsContainer) return;
@@ -282,7 +315,7 @@ function showPokemonBaseStats(pokemonDetails) {
     const baseStats = pokemonDetails.stats.map(stat => ({
         name: translateStatName(stat.stat.name),
         value: stat.base_stat,
-        maxValue: 255  // Pokemon-Stats gehen meist bis 255
+        maxValue: 255
     }));
     
     statsContainer.innerHTML = `
@@ -292,7 +325,7 @@ function showPokemonBaseStats(pokemonDetails) {
     `;
 }
 
-// NEU: Zucht-Informationen
+// Breeding Information
 function showBreedingInfo(speciesData) {
     const breedingContainer = document.getElementById('detailBreeding');
     if (!breedingContainer) return;
@@ -302,20 +335,20 @@ function showBreedingInfo(speciesData) {
     
     breedingContainer.innerHTML = `
         <div class="breeding-grid">
-            ${createStatItemTemplate('Geschlecht', genderInfo)}
-            ${createStatItemTemplate('Ei-Gruppen', eggGroups)}
-            ${createStatItemTemplate('Brutzyklen', speciesData.hatch_counter || '?')}
-            ${createStatItemTemplate('Fangrate', speciesData.capture_rate)}
+            ${createStatItemTemplate('Gender', genderInfo)}
+            ${createStatItemTemplate('Egg Groups', eggGroups)}
+            ${createStatItemTemplate('Hatch Cycles', speciesData.hatch_counter || '?')}
+            ${createStatItemTemplate('Catch Rate', speciesData.capture_rate)}
         </div>
     `;
 }
 
-// NEU: Pokemon Moves
+// Pokemon Moves
 function showPokemonMoves(pokemonDetails) {
     const movesContainer = document.getElementById('detailMoves');
     if (!movesContainer) return;
     
-    // Erste 20 Moves (sonst wird's zu lang)
+    // First 20 moves (otherwise too long)
     const limitedMoves = pokemonDetails.moves.slice(0, 20);
     
     movesContainer.innerHTML = `
@@ -327,27 +360,53 @@ function showPokemonMoves(pokemonDetails) {
     `;
 }
 
-// Stat-Namen übersetzen
+// Translate stat names
 function translateStatName(statName) {
     const translations = {
-        'hp': 'KP',
-        'attack': 'Angriff', 
-        'defense': 'Verteidigung',
-        'special-attack': 'Spez. Angriff',
-        'special-defense': 'Spez. Verteidigung',
-        'speed': 'Initiative'
+        'hp': 'HP',
+        'attack': 'Attack', 
+        'defense': 'Defense',
+        'special-attack': 'Sp. Attack',
+        'special-defense': 'Sp. Defense',
+        'speed': 'Speed'
     };
     return translations[statName] || statName;
 }
 
-// Gender-Info berechnen
+// Calculate gender info
 function calculateGenderInfo(genderRate) {
     if (genderRate === -1) {
-        return 'Geschlechtslos';
+        return 'Genderless';
     }
     
     const malePercent = ((8 - genderRate) / 8 * 100).toFixed(1);
     const femalePercent = (genderRate / 8 * 100).toFixed(1);
     
     return `♂ ${malePercent}% ♀ ${femalePercent}%`;
+}
+
+// Navigation function
+function navigatePokemon(direction) {
+    if (!availablePokemonList || availablePokemonList.length === 0) {
+        console.log('No Pokemon available for navigation');
+        return;
+    }
+    
+    // Calculate new index
+    const newIndex = currentPokemonIndex + direction;
+    
+    // Check boundaries
+    if (newIndex < 0 || newIndex >= availablePokemonList.length) {
+        console.log('Navigation boundary reached');
+        return;
+    }
+    
+    // Switch to new Pokemon
+    currentPokemonIndex = newIndex;
+    const newPokemon = availablePokemonList[currentPokemonIndex];
+    
+    console.log(`Navigate to: ${newPokemon.name} (${currentPokemonIndex + 1}/${availablePokemonList.length})`);
+    
+    // Load Pokemon details
+    loadPokemonDetailData(newPokemon);
 }

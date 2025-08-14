@@ -11,22 +11,27 @@ function createPokemonModalTemplate() {
 }
 
 function createModalHeaderTemplate() {
-    return `
-        <div class="overlay-header">
-            <button class="nav-btn nav-prev" title="Vorheriges Pokémon">‹</button>
-            <button class="nav-btn nav-close" title="Schließen">✕</button>
-            <button class="nav-btn nav-next" title="Nächstes Pokémon">›</button>
-        </div>
-    `;
+    return `<!-- Navigation is now in the card -->`;
 }
 
 function createPokemonDetailCardTemplate() {
     return `
         <div class="pokemon-detail-card">
+            ${createCardNavigationTemplate()}
             ${createDetailHeaderTemplate()}
             ${createDetailImageTemplate()}
             ${createTabNavigationTemplate()}
             ${createTabContentTemplate()}
+        </div>
+    `;
+}
+
+function createCardNavigationTemplate() {
+    return `
+        <div class="card-navigation">
+            <button class="nav-btn nav-prev" title="Previous Pokémon">‹</button>
+            <button class="nav-btn nav-close" title="Close">✕</button>
+            <button class="nav-btn nav-next" title="Next Pokémon">›</button>
         </div>
     `;
 }
@@ -53,10 +58,10 @@ function createTabNavigationTemplate() {
         <div class="pokemon-tabs">
             <button class="tab-btn active" data-tab="info">INFO</button>
             <button class="tab-btn" data-tab="stats">STATS</button>
-            <button class="tab-btn" data-tab="breeding">ZUCHT</button>
+            <button class="tab-btn" data-tab="breeding">BREEDING</button>
             <button class="tab-btn" data-tab="moves">MOVES</button>
             <button class="tab-btn" data-tab="evolution">EVOLUTION</button>
-            <button class="tab-btn" data-tab="beschreibung">BESCHREIBUNG</button>
+            <button class="tab-btn" data-tab="description">DESCRIPTION</button>
         </div>
     `;
 }
@@ -74,7 +79,6 @@ function createTabContentTemplate() {
     `;
 }
 
-// NEU: Stats Tab mit Progress Bars
 function createStatsTabTemplate() {
     return `
         <div class="tab-panel" id="tab-stats">
@@ -84,7 +88,6 @@ function createStatsTabTemplate() {
     `;
 }
 
-// NEU: Breeding Tab
 function createBreedingTabTemplate() {
     return `
         <div class="tab-panel" id="tab-breeding">
@@ -94,7 +97,6 @@ function createBreedingTabTemplate() {
     `;
 }
 
-// NEU: Moves Tab
 function createMovesTabTemplate() {
     return `
         <div class="tab-panel" id="tab-moves">
@@ -129,10 +131,10 @@ function createEvolutionTabTemplate() {
 
 function createDescriptionTabTemplate() {
     return `
-        <div class="tab-panel" id="tab-beschreibung">
+        <div class="tab-panel" id="tab-description">
             <div class="description-container">
                 <p id="detailDescription" class="pokemon-description">
-                    Beschreibung wird geladen...
+                    Loading description...
                 </p>
             </div>
         </div>
@@ -142,11 +144,11 @@ function createDescriptionTabTemplate() {
 function initializePokemonModal() {
     const existingModal = document.getElementById('pokemonOverlay');
     if (existingModal) {
-        console.log('Modal bereits vorhanden');
+        console.log('Modal already exists');
         return;
     }
     
-    console.log('Modal wird erstellt...');
+    console.log('Creating modal...');
     
     const modalHTML = createPokemonModalTemplate();
     document.body.insertAdjacentHTML('beforeend', modalHTML);
@@ -184,7 +186,7 @@ function handleEscapeKey(event) {
 function openPokemonModal() {
     const overlay = document.getElementById('pokemonOverlay');
     if (!overlay) {
-        console.error('Modal nicht gefunden!');
+        console.error('Modal not found!');
         return;
     }
     
@@ -274,9 +276,10 @@ function createEvolutionArrowTemplate() {
 
 function navigatePokemon(direction) {
     console.log(`Navigate: ${direction > 0 ? 'Next' : 'Previous'} Pokemon`);
+    // Navigation logic is now in pokemon-detail.js
 }
 
-function createLoadingTemplate(message = 'Wird geladen...') {
+function createLoadingTemplate(message = 'Loading...') {
     return `
         <div class="detail-loading text-center">
             <div class="spinner-border text-primary" role="status">
@@ -287,11 +290,11 @@ function createLoadingTemplate(message = 'Wird geladen...') {
     `;
 }
 
-function createErrorTemplate(message = 'Fehler beim Laden') {
+function createErrorTemplate(message = 'Error loading') {
     return `
         <div class="detail-error text-center">
             <h6>⚠️ ${message}</h6>
-            <p>Bitte versuche es erneut.</p>
+            <p>Please try again.</p>
         </div>
     `;
 }
@@ -302,11 +305,10 @@ function addEscapeListener() {
     if (!escapeListenerAdded) {
         document.addEventListener('keydown', handleEscapeKey);
         escapeListenerAdded = true;
-        console.log('ESC Event Listener hinzugefügt');
+        console.log('ESC Event Listener added');
     }
 }
 
-// NEU: Progress Bar Template
 function createProgressStatTemplate(stat) {
     const percentage = Math.min((stat.value / stat.maxValue) * 100, 100);
     
@@ -323,7 +325,6 @@ function createProgressStatTemplate(stat) {
     `;
 }
 
-// NEU: Move Badge Template
 function createMoveBadgeTemplate(moveName) {
     const cleanName = moveName.replace('-', ' ');
     return `<span class="move-badge">${cleanName}</span>`;

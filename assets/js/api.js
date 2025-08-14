@@ -9,13 +9,13 @@ async function fetchFromPokeAPI(url) {
         const response = await fetch(url);
         
         if (!response.ok) {
-            throw new Error(`PokeAPI Fehler: ${response.status} - ${response.statusText}`);
+            throw new Error(`PokeAPI Error: ${response.status} - ${response.statusText}`);
         }
         
         return await response.json();
         
     } catch (error) {
-        console.error('API Request fehlgeschlagen:', error.message);
+        console.error('API Request failed:', error.message);
         throw error;
     }
 }
@@ -64,7 +64,7 @@ async function fetchMorePokemonByType(type, offset) {
         .map(pokemonData => pokemonData.pokemon.url);
 
     if (pokemonUrls.length === 0) {
-        console.log('Keine weiteren Pokémon verfügbar!');
+        console.log('No more Pokémon available!');
         return [];
     }
 

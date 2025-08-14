@@ -27,7 +27,7 @@ async function loadPokemon() {
         renderPokemon(pokemonDetails);
         
     } catch (error) {
-        handleError('Fehler beim Laden der Pokemon', error);
+        handleError('Error loading Pokemon', error);
     } finally {
         setLoadingState(false);
     }
@@ -68,7 +68,7 @@ async function loadPokemonByType(type) {
         renderPokemon(pokemonDetails);
         
     } catch (error) {
-        handleError('Fehler beim Laden nach Typ', error);
+        handleError('Error loading by type', error);
     } finally {
         setLoadingState(false);
     }
@@ -99,8 +99,8 @@ function clearSearchMode() {
 
 function resetAllButtonText() {
     const allButton = document.querySelector('[data-type="all"]');
-    if (allButton && allButton.textContent !== 'Alle') {
-        allButton.textContent = 'Alle';
+    if (allButton && allButton.textContent !== 'All') {
+        allButton.textContent = 'All';
     }
 }
 
@@ -205,11 +205,11 @@ async function loadMorePokemon() {
         if (hasNewPokemonData(newPokemonDetails)) {
             updatePokemonList(newPokemonDetails);
         } else {
-            console.log('Keine weiteren Pokemon verfügbar');
+            console.log('No more Pokemon available');
         }
         
     } catch (error) {
-        handleError('Fehler beim Nachladen', error);
+        handleError('Error loading more', error);
     } finally {
         resetLoadingState();
     }
@@ -223,7 +223,7 @@ async function fetchNewPokemonDetails() {
                 POKEMON_API_CONFIG.pokemonPerPage
             );
         case 'search':
-            console.log('Load More im Search-Modus nicht möglich');
+            console.log('Load More not possible in search mode');
             return [];
         default:
             return await fetchMorePokemonByType(
@@ -285,7 +285,7 @@ function initializeLoadMore() {
 }
 
 function initializeApp() {
-    console.log('Pokédex wird geladen...');
+    console.log('Pokédex is loading...');
     
     loadPokemon();
     initializeFilters();
