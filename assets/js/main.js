@@ -53,7 +53,7 @@ function toggleLoadingSpinner(loading) {
 }
 
 function handleError(message, error) {
-    console.error(message, error);
+    throw error;
 }
 
 async function loadPokemonByType(type) {
@@ -197,17 +197,17 @@ async function loadMorePokemon() {
     
     try {
         const newPokemonDetails = await fetchNewPokemonDetails();
-        
-        if (hasNewPokemonData(newPokemonDetails)) {
-            updatePokemonList(newPokemonDetails);
-        } else {
-            console.log('No more Pokemon available');
-        }
-        
+        processNewPokemonData(newPokemonDetails);
     } catch (error) {
         handleError('Error loading more', error);
     } finally {
         resetLoadingState();
+    }
+}
+
+function processNewPokemonData(newPokemonDetails) {
+    if (hasNewPokemonData(newPokemonDetails)) {
+        updatePokemonList(newPokemonDetails);
     }
 }
 
@@ -219,7 +219,6 @@ async function fetchNewPokemonDetails() {
                 POKEMON_API_CONFIG.pokemonPerPage
             );
         case 'search':
-            console.log('Load More not possible in search mode');
             return [];
         default:
             return await fetchMorePokemonByType(
@@ -235,7 +234,7 @@ function hasNewPokemonData(newPokemonDetails) {
 
 function updatePokemonList(newPokemonDetails) {
     appState.pokemonList = newPokemonDetails;
-    renderPokemon(newPokemonDetails);  // Macht alles in einem Zug
+    renderPokemon(newPokemonDetails);
     appState.nextPageOffset += POKEMON_API_CONFIG.pokemonPerPage;
 }
 
@@ -350,8 +349,6 @@ function initializeLoadMore() {
 }
 
 function initializeApp() {
-    console.log('Pokédex is loading...');
-    
     loadPokemon();
     initializeFilters();
     initializeLoadMore();

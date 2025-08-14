@@ -1,13 +1,8 @@
-
 let currentPokemonIndex = 0;
 let availablePokemonList = [];
 
 function openPokemonDetail(pokemon) {
-    console.log('Opening detail for:', pokemon.name);
-    
-    
     setNavigationData(pokemon);
-    
     initializePokemonModal();
     openPokemonModal();
     loadPokemonDetailData(pokemon);
@@ -16,25 +11,24 @@ function openPokemonDetail(pokemon) {
 function setNavigationData(selectedPokemon) {
     availablePokemonList = appState.pokemonList;
     currentPokemonIndex = availablePokemonList.findIndex(p => p.id === selectedPokemon.id);
-    
-    console.log(`Navigation: ${currentPokemonIndex + 1} of ${availablePokemonList.length}`);
 }
 
 async function loadPokemonDetailData(pokemon) {
     try {
         setDetailLoadingState(true);
-        setPokemonModalType(pokemon.types[0]);
-        setDetailBasicData(pokemon);
-        
-        await loadDetailApiData(pokemon);
+        await initializePokemonData(pokemon);
         updateNavigationButtons();
-        
     } catch (error) {
-        console.error('Error loading Pokemon details:', error);
         showDetailError('Error loading details');
     } finally {
         setDetailLoadingState(false);
     }
+}
+
+async function initializePokemonData(pokemon) {
+    setPokemonModalType(pokemon.types[0]);
+    setDetailBasicData(pokemon);
+    await loadDetailApiData(pokemon);
 }
 
 function updateNavigationButtons() {
@@ -43,7 +37,11 @@ function updateNavigationButtons() {
     
     if (!prevBtn || !nextBtn) return;
     
-    
+    updatePreviousButton(prevBtn);
+    updateNextButton(nextBtn);
+}
+
+function updatePreviousButton(prevBtn) {
     if (currentPokemonIndex <= 0) {
         prevBtn.style.opacity = '0.5';
         prevBtn.disabled = true;
@@ -51,8 +49,9 @@ function updateNavigationButtons() {
         prevBtn.style.opacity = '1';
         prevBtn.disabled = false;
     }
-    
-     
+}
+
+function updateNextButton(nextBtn) {
     if (currentPokemonIndex >= availablePokemonList.length - 1) {
         nextBtn.style.opacity = '0.5';
         nextBtn.disabled = true;
@@ -177,7 +176,6 @@ async function loadEvolutionChain(evolutionUrl, currentPokemonId) {
         const evolutionChain = parseEvolutionChain(evolutionData.chain);
         await displayEvolutionChain(evolutionChain, currentPokemonId);
     } catch (error) {
-        console.error('Error loading evolution chain:', error);
         showEvolutionError();
     }
 }
@@ -235,6 +233,11 @@ function showNoEvolutions(container) {
 }
 
 function renderEvolutionChain(container, evolutions, currentPokemonId) {
+    const html = createEvolutionHTML(evolutions, currentPokemonId);
+    container.innerHTML = html;
+}
+
+function createEvolutionHTML(evolutions, currentPokemonId) {
     let html = '<div class="evolution-chain">';
     
     evolutions.forEach((evolution, index) => {
@@ -247,7 +250,7 @@ function renderEvolutionChain(container, evolutions, currentPokemonId) {
     });
     
     html += '</div>';
-    container.innerHTML = html;
+    return html;
 }
 
 function setupEvolutionClickEvents(container, currentPokemonId) {
@@ -268,7 +271,7 @@ async function handleEvolutionClick(item, currentPokemonId) {
             const newPokemon = await loadNewEvolutionPokemon(pokemonId);
             loadPokemonDetailData(newPokemon);
         } catch (error) {
-            console.error('Error loading evolution Pokemon:', error);
+            showDetailError('Error loading evolution Pokemon');
         }
     }
 }
@@ -307,47 +310,64 @@ function showEvolutionError() {
     }
 }
 
-
 function showPokemonBaseStats(pokemonDetails) {
     const statsContainer = document.getElementById('detailBaseStats');
     if (!statsContainer) return;
     
-    const baseStats = pokemonDetails.stats.map(stat => ({
+    const baseStats = createBaseStatsArray(pokemonDetails);
+    statsContainer.innerHTML = createBaseStatsHTML(baseStats);
+}
+
+function createBaseStatsArray(pokemonDetails) {
+    return pokemonDetails.stats.map(stat => ({
         name: translateStatName(stat.stat.name),
         value: stat.base_stat,
         maxValue: 255
     }));
-    
-    statsContainer.innerHTML = `
+}
+
+function createBaseStatsHTML(baseStats) {
+    return `
         <div class="base-stats-grid">
             ${baseStats.map(stat => createProgressStatTemplate(stat)).join('')}
         </div>
     `;
 }
 
-
 function showBreedingInfo(speciesData) {
     const breedingContainer = document.getElementById('detailBreeding');
     if (!breedingContainer) return;
     
+    const breedingData = createBreedingData(speciesData);
+    breedingContainer.innerHTML = createBreedingHTML(breedingData);
+}
+
+function createBreedingData(speciesData) {
     const genderInfo = calculateGenderInfo(speciesData.gender_rate);
     const eggGroups = speciesData.egg_groups.map(g => g.name).join(', ');
     
-    breedingContainer.innerHTML = `
+    return {
+        gender: genderInfo,
+        eggGroups: eggGroups,
+        hatchCycles: speciesData.hatch_counter || '?',
+        catchRate: speciesData.capture_rate
+    };
+}
+
+function createBreedingHTML(breedingData) {
+    return `
         <div class="breeding-grid">
-            ${createStatItemTemplate('Gender', genderInfo)}
-            ${createStatItemTemplate('Egg Groups', eggGroups)}
-            ${createStatItemTemplate('Hatch Cycles', speciesData.hatch_counter || '?')}
-            ${createStatItemTemplate('Catch Rate', speciesData.capture_rate)}
+            ${createStatItemTemplate('Gender', breedingData.gender)}
+            ${createStatItemTemplate('Egg Groups', breedingData.eggGroups)}
+            ${createStatItemTemplate('Hatch Cycles', breedingData.hatchCycles)}
+            ${createStatItemTemplate('Catch Rate', breedingData.catchRate)}
         </div>
     `;
 }
 
-
 function showPokemonMoves(pokemonDetails) {
     const movesContainer = document.getElementById('detailMoves');
     if (!movesContainer) return;
-    
     
     const limitedMoves = pokemonDetails.moves.slice(0, 10);
     
@@ -360,7 +380,6 @@ function showPokemonMoves(pokemonDetails) {
     `;
 }
 
-// Translate stat names
 function translateStatName(statName) {
     const translations = {
         'hp': 'HP',
@@ -373,7 +392,6 @@ function translateStatName(statName) {
     return translations[statName] || statName;
 }
 
-// Calculate gender info
 function calculateGenderInfo(genderRate) {
     if (genderRate === -1) {
         return 'Genderless';
@@ -385,28 +403,14 @@ function calculateGenderInfo(genderRate) {
     return `♂ ${malePercent}% ♀ ${femalePercent}%`;
 }
 
-// Navigation function
 function navigatePokemon(direction) {
-    if (!availablePokemonList || availablePokemonList.length === 0) {
-        console.log('No Pokemon available for navigation');
-        return;
-    }
+    if (!canNavigate()) return;
     
-    // Calculate new index
-    const newIndex = currentPokemonIndex + direction;
-    
-    // Check boundaries
-    if (newIndex < 0 || newIndex >= availablePokemonList.length) {
-        console.log('Navigation boundary reached');
-        return;
-    }
-    
-    // Switch to new Pokemon
-    currentPokemonIndex = newIndex;
+    currentPokemonIndex += direction;
     const newPokemon = availablePokemonList[currentPokemonIndex];
-    
-    console.log(`Navigate to: ${newPokemon.name} (${currentPokemonIndex + 1}/${availablePokemonList.length})`);
-    
-    // Load Pokemon details
     loadPokemonDetailData(newPokemon);
+}
+
+function canNavigate() {
+    return availablePokemonList && availablePokemonList.length > 0;
 }

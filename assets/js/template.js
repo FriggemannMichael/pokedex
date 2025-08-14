@@ -11,7 +11,7 @@ function createPokemonModalTemplate() {
 }
 
 function createModalHeaderTemplate() {
-    return `<!-- Navigation is now in the card -->`;
+    return ``;
 }
 
 function createPokemonDetailCardTemplate() {
@@ -143,35 +143,40 @@ function createDescriptionTabTemplate() {
 
 function initializePokemonModal() {
     const existingModal = document.getElementById('pokemonOverlay');
-    if (existingModal) {
-        console.log('Modal already exists');
-        return;
-    }
+    if (existingModal) return;
     
-    console.log('Creating modal...');
-    
+    createModal();
+    setupModalEventListeners();
+}
+
+function createModal() {
     const modalHTML = createPokemonModalTemplate();
     document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
-    setupModalEventListeners();
 }
 
 function setupModalEventListeners() {
     const overlay = document.getElementById('pokemonOverlay');
     if (!overlay) return;
     
+    setupBackgroundListener(overlay);
+    setupNavigationListeners(overlay);
+    addEscapeListener();
+}
+
+function setupBackgroundListener(overlay) {
     const background = overlay.querySelector('.overlay-background');
     const closeBtn = overlay.querySelector('.nav-close');
-    const prevBtn = overlay.querySelector('.nav-prev');
-    const nextBtn = overlay.querySelector('.nav-next');
     
     background.addEventListener('click', closePokemonModal);
     closeBtn.addEventListener('click', closePokemonModal);
+}
+
+function setupNavigationListeners(overlay) {
+    const prevBtn = overlay.querySelector('.nav-prev');
+    const nextBtn = overlay.querySelector('.nav-next');
     
     prevBtn.addEventListener('click', () => navigatePokemon(-1));
     nextBtn.addEventListener('click', () => navigatePokemon(1));
-    
-    addEscapeListener();
 }
 
 function handleEscapeKey(event) {
@@ -185,19 +190,23 @@ function handleEscapeKey(event) {
 
 function openPokemonModal() {
     const overlay = document.getElementById('pokemonOverlay');
-    if (!overlay) {
-        console.error('Modal not found!');
-        return;
-    }
+    if (!overlay) return;
     
+    showModal(overlay);
+    disableBodyScroll();
+    initializeTabsDelayed();
+}
+
+function showModal(overlay) {
     overlay.classList.remove('d-none');
-    
-    setTimeout(() => {
-        overlay.classList.add('show');
-    }, 10);
-    
+    setTimeout(() => overlay.classList.add('show'), 10);
+}
+
+function disableBodyScroll() {
     document.body.style.overflow = 'hidden';
-    
+}
+
+function initializeTabsDelayed() {
     setTimeout(initializeTabs, 100);
 }
 
@@ -205,8 +214,15 @@ function closePokemonModal() {
     const overlay = document.getElementById('pokemonOverlay');
     if (!overlay) return;
     
+    hideModal(overlay);
+    scheduleModalCleanup(overlay);
+}
+
+function hideModal(overlay) {
     overlay.classList.remove('show');
-    
+}
+
+function scheduleModalCleanup(overlay) {
     setTimeout(() => {
         overlay.classList.add('d-none');
         document.body.style.overflow = 'auto';
@@ -220,9 +236,13 @@ function resetModalCard() {
     
     const card = overlay.querySelector('.pokemon-detail-card');
     if (card) {
-        const typeClasses = Array.from(card.classList).filter(cls => cls.startsWith('type-'));
-        typeClasses.forEach(cls => card.classList.remove(cls));
+        removeTypeClasses(card);
     }
+}
+
+function removeTypeClasses(card) {
+    const typeClasses = Array.from(card.classList).filter(cls => cls.startsWith('type-'));
+    typeClasses.forEach(cls => card.classList.remove(cls));
 }
 
 function initializeTabs() {
@@ -238,9 +258,16 @@ function initializeTabs() {
 }
 
 function switchToTab(targetTab, tabButtons, tabPanels) {
+    deactivateAllTabs(tabButtons, tabPanels);
+    activateSelectedTab(targetTab);
+}
+
+function deactivateAllTabs(tabButtons, tabPanels) {
     tabButtons.forEach(btn => btn.classList.remove('active'));
     tabPanels.forEach(panel => panel.classList.remove('active'));
-    
+}
+
+function activateSelectedTab(targetTab) {
     const activeButton = document.querySelector(`[data-tab="${targetTab}"]`);
     const activePanel = document.getElementById(`tab-${targetTab}`);
     
@@ -274,11 +301,6 @@ function createEvolutionArrowTemplate() {
     return `<div class="evolution-arrow">→</div>`;
 }
 
-function navigatePokemon(direction) {
-    console.log(`Navigate: ${direction > 0 ? 'Next' : 'Previous'} Pokemon`);
-    
-}
-
 function createLoadingTemplate(message = 'Loading...') {
     return `
         <div class="detail-loading text-center">
@@ -299,19 +321,16 @@ function createErrorTemplate(message = 'Error loading') {
     `;
 }
 
-let escapeListenerAdded = false;
-
-function addEscapeListener() {
-    if (!escapeListenerAdded) {
-        document.addEventListener('keydown', handleEscapeKey);
-        escapeListenerAdded = true;
-        console.log('ESC Event Listener added');
-    }
+function createProgressStatTemplate(stat) {
+    const percentage = calculateStatPercentage(stat);
+    return createProgressStatHTML(stat, percentage);
 }
 
-function createProgressStatTemplate(stat) {
-    const percentage = Math.min((stat.value / stat.maxValue) * 100, 100);
-    
+function calculateStatPercentage(stat) {
+    return Math.min((stat.value / stat.maxValue) * 100, 100);
+}
+
+function createProgressStatHTML(stat, percentage) {
     return `
         <div class="progress-stat-item">
             <div class="progress-header">
@@ -328,4 +347,13 @@ function createProgressStatTemplate(stat) {
 function createMoveBadgeTemplate(moveName) {
     const cleanName = moveName.replace('-', ' ');
     return `<span class="move-badge">${cleanName}</span>`;
+}
+
+let isEscapeListenerActive = false;
+
+function addEscapeListener() {
+    if (!isEscapeListenerActive) {
+        document.addEventListener('keydown', handleEscapeKey);
+        isEscapeListenerActive = true;
+    }
 }

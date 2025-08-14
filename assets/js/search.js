@@ -41,7 +41,6 @@ function updateSearchButtonState(button, isEnabled) {
 async function performSearch(searchQuery) {
     if (appState.isLoading) return;
 
-    console.log(`Search for: "${searchQuery}"`);
     setLoadingState(true);
     clearPokemonContainer();
 
@@ -71,23 +70,23 @@ function findPokemonLocally(query) {
 
 async function fetchPokemonFromAPI(query) {
     try {
-        console.log(`🌐 API search for: "${query}"`);
-        
-        
         const searchResponse = await fetchFromPokeAPI(`${POKEMON_API_CONFIG.baseUrl}?offset=0&limit=1000`);
-        
-        const matchingPokemon = searchResponse.results.filter(pokemon =>
-            pokemon.name.toLowerCase().includes(query.toLowerCase())
-        );
-
-        console.log(`✅ ${matchingPokemon.length} Pokemon found in API:`, matchingPokemon.map(p => p.name));
-
-        const limitedMatches = matchingPokemon.slice(0, 50);
-        return await loadPokemonDetailsForUrls(limitedMatches.map(p => p.url));
+        const matchingPokemon = filterMatchingPokemon(searchResponse, query);
+        return await loadLimitedPokemonDetails(matchingPokemon);
     } catch (error) {
-        console.error('Extended search failed:', error);
         return [];
     }
+}
+
+function filterMatchingPokemon(searchResponse, query) {
+    return searchResponse.results.filter(pokemon =>
+        pokemon.name.toLowerCase().includes(query.toLowerCase())
+    );
+}
+
+async function loadLimitedPokemonDetails(matchingPokemon) {
+    const limitedMatches = matchingPokemon.slice(0, 50);
+    return await loadPokemonDetailsForUrls(limitedMatches.map(p => p.url));
 }
 
 async function loadPokemonDetailsForUrls(urls) {
@@ -100,9 +99,13 @@ function handleSearchResults(results, searchQuery) {
         return;
     }
 
+    updateSearchResults(results);
+    activateSearchMode();
+}
+
+function updateSearchResults(results) {
     appState.pokemonList = results;
     renderPokemon(results);
-    activateSearchMode();
 }
 
 function activateSearchMode() {
@@ -135,10 +138,17 @@ function showSearchError() {
 }
 
 function updateFilterButtonsForSearch() {
+    resetFilterButtons();
+    updateAllButtonForSearch();
+}
+
+function resetFilterButtons() {
     domElements.filterButtons.forEach(button => {
         button.classList.remove('active');
     });
+}
 
+function updateAllButtonForSearch() {
     const allButton = document.querySelector('[data-type="all"]');
     if (allButton) {
         allButton.classList.add('active');
@@ -147,6 +157,12 @@ function updateFilterButtonsForSearch() {
 }
 
 function clearSearch() {
+    resetSearchInput();
+    resetToAllFilter();
+    loadPokemon();
+}
+
+function resetSearchInput() {
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchBtn');
 
@@ -154,15 +170,15 @@ function clearSearch() {
         searchInput.value = '';
         updateSearchButtonState(searchButton, false);
     }
-
-    resetToAllFilter();
-    loadPokemon();
 }
 
 function resetToAllFilter() {
     appState.selectedType = 'all';
     appState.nextPageOffset = 0;
+    resetAllButtonText();
+}
 
+function resetAllButtonText() {
     const allButton = document.querySelector('[data-type="all"]');
     if (allButton) {
         allButton.textContent = 'All';
