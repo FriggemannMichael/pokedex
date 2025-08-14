@@ -1,7 +1,3 @@
-/* ===== TYP-BASIERTE BODY BACKGROUNDS ===== */
-/* Neue Datei: assets/css/dynamic-backgrounds.css */
-
-/* Standard Background bleibt als Fallback */
 body {
     font-family: var(--font-body);
     font-weight: 400;
@@ -12,128 +8,104 @@ body {
     transition: background 0.8s ease;
 }
 
-/* ===== TYP-BASIERTE BODY BACKGROUNDS ===== */
-
-/* Fire Type */
 body.type-fire {
     background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 25%, #FFB366 50%, #FF6B47 75%, #E55353 100%);
     background-attachment: fixed;
 }
 
-/* Water Type */
 body.type-water {
     background: linear-gradient(135deg, #3498DB 0%, #5DADE2 25%, #85C1E9 50%, #2E86C1 75%, #2471A3 100%);
     background-attachment: fixed;
 }
 
-/* Grass Type */
 body.type-grass {
     background: linear-gradient(135deg, #2ECC71 0%, #58D68D 25%, #82E0AA 50%, #27AE60 75%, #239B56 100%);
     background-attachment: fixed;
 }
 
-/* Electric Type */
 body.type-electric {
     background: linear-gradient(135deg, #F1C40F 0%, #F7DC6F 25%, #FCF3CF 50%, #D4AC0D 75%, #B7950B 100%);
     background-attachment: fixed;
 }
 
-/* Psychic Type */
 body.type-psychic {
     background: linear-gradient(135deg, #E74C3C 0%, #EC7063 25%, #F1948A 50%, #CB4335 75%, #A93226 100%);
     background-attachment: fixed;
 }
 
-/* Ice Type */
 body.type-ice {
     background: linear-gradient(135deg, #85C1E9 0%, #AED6F1 25%, #D6EAF8 50%, #5DADE2 75%, #3498DB 100%);
     background-attachment: fixed;
 }
 
-/* Normal Type */
 body.type-normal {
     background: linear-gradient(135deg, #A8A878 0%, #C5C5A0 25%, #E8E8D0 50%, #8A8A5E 75%, #6E6E4A 100%);
     background-attachment: fixed;
 }
 
-/* Dragon Type */
 body.type-dragon {
     background: linear-gradient(135deg, #8E44AD 0%, #A569BD 25%, #BB8FCE 50%, #7D3C98 75%, #6C3483 100%);
     background-attachment: fixed;
 }
 
-/* Dark Type */
 body.type-dark {
     background: linear-gradient(135deg, #34495E 0%, #5D6D7E 25%, #85929E 50%, #2C3E50 75%, #1B2631 100%);
     background-attachment: fixed;
 }
 
-/* Fighting Type */
 body.type-fighting {
     background: linear-gradient(135deg, #E67E22 0%, #F0B27A 25%, #F8C471 50%, #D35400 75%, #A04000 100%);
     background-attachment: fixed;
 }
 
-/* Poison Type */
 body.type-poison {
     background: linear-gradient(135deg, #9B59B6 0%, #BB8FCE 25%, #D7BDE2 50%, #8E44AD 75%, #7D3C98 100%);
     background-attachment: fixed;
 }
 
-/* Ground Type */
 body.type-ground {
     background: linear-gradient(135deg, #E0C068 0%, #E8D084 25%, #F4E6A1 50%, #C9A352 75%, #A0843D 100%);
     background-attachment: fixed;
 }
 
-/* Flying Type */
 body.type-flying {
     background: linear-gradient(135deg, #A890F0 0%, #C8B5F7 25%, #E8D5FF 50%, #9373E8 75%, #7A5BD1 100%);
     background-attachment: fixed;
 }
 
-/* Bug Type */
 body.type-bug {
     background: linear-gradient(135deg, #A8B820 0%, #B8C842 25%, #D4E85A 50%, #8FA31A 75%, #6B7A12 100%);
     background-attachment: fixed;
 }
 
-/* Rock Type */
 body.type-rock {
     background: linear-gradient(135deg, #B8A038 0%, #C9B65A 25%, #E0D277 50%, #9E8A31 75%, #7A6825 100%);
     background-attachment: fixed;
 }
 
-/* Ghost Type */
 body.type-ghost {
     background: linear-gradient(135deg, #705898 0%, #8A7AAD 25%, #A89FC2 50%, #5E4A82 75%, #4A3A6B 100%);
     background-attachment: fixed;
 }
 
-/* Steel Type */
 body.type-steel {
     background: linear-gradient(135deg, #B8B8D0 0%, #D0D0E0 25%, #E8E8F0 50%, #A0A0B8 75%, #8888A0 100%);
     background-attachment: fixed;
 }
 
-/* Fairy Type */
 body.type-fairy {
     background: linear-gradient(135deg, #EE99AC 0%, #F4B5C4 25%, #FAD1DC 50%, #E67E95 75%, #D06B82 100%);
     background-attachment: fixed;
 }
 
-/* ===== HEADER & FOOTER BLEIBEN VISUELL UNVERÄNDERT ===== */
-
-/* Hero Section - behält sein eigenes Styling */
 .hero-section {
-    background: var(--gradient) !important;  /* Überschreibt Body-Background */
+    background: var(--gradient) !important;
     position: relative;
     overflow: hidden;
     min-height: 25vh;
     max-height: 30vh;
 }
 
-/* Footer - behält sein eigenes Styling */
 .pokemon-footer {
     background: linear-gradient(135deg, var(--dark) 0%, #34495E 50%, var(--dark) 100%) !important;
     color: white;
@@ -144,9 +116,6 @@ body.type-fairy {
     border-top: 3px solid var(--primary);
 }
 
-/* ===== OPTIONAL: SUBTILE POKEBALL IM HAUPTBEREICH ===== */
-
-/* Nur ein dezenter Pokeball im Pokemon-Grid */
 .pokemon-grid::before {
     content: '';
     position: absolute;

@@ -1,4 +1,3 @@
-/* ===== POKEMON MODAL OVERLAY (Normal) ===== */
 .pokemon-overlay {
     position: fixed;
     top: 0;
@@ -46,7 +45,6 @@
     transform: scale(1);
 }
 
-/* ===== NAVIGATION HEADER ===== */
 .overlay-header {
     display: flex;
     justify-content: space-between;
@@ -90,7 +88,6 @@
     color: white;
 }
 
-/* ===== DETAIL CARD (Standard Weiß) ===== */
 .pokemon-detail-card {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
@@ -101,119 +98,97 @@
     position: relative;
     overflow: hidden;
     transition: all 0.5s ease;
-    max-height: 90vh;         /* 90% der Bildschirmhöhe */
+    max-height: 90vh;
     overflow-y: auto;
 }
 
 .description-container {
-    padding: 1rem;            /* Weniger padding - war 1.5rem */
-    margin: 0 -0.5rem;        /* Negativer margin für mehr Platz */
+    padding: 1rem;
+    margin: 0 -0.5rem;
 }
 
 .tab-content {
     min-height: 300px;
-    max-height: 400px;        /* NEU */
-    overflow-y: auto;         /* NEU */
+    max-height: 400px;
+    overflow-y: auto;
 }
+
 .pokemon-description {
-    /* Deine bestehenden Styles... */
-    max-height: 150px;        /* Kleiner - war 200px */
-    /* Rest bleibt gleich */
+    max-height: 150px;
 }
 
-/* ===== TYP-BASIERTE CARD HINTERGRÜNDE (Pokemon GO Style) ===== */
-
-/* FEUER */
 .pokemon-detail-card.type-fire {
     background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 50%, #FF6B47 100%);
 }
 
-/* WASSER */
 .pokemon-detail-card.type-water {
     background: linear-gradient(135deg, #3498DB 0%, #5DADE2 50%, #2E86C1 100%);
 }
 
-/* PFLANZE */
 .pokemon-detail-card.type-grass {
     background: linear-gradient(135deg, #2ECC71 0%, #58D68D 50%, #27AE60 100%);
 }
 
-/* ELEKTRO */
 .pokemon-detail-card.type-electric {
     background: linear-gradient(135deg, #F1C40F 0%, #F7DC6F 50%, #D4AC0D 100%);
 }
 
-/* PSYCHO */
 .pokemon-detail-card.type-psychic {
     background: linear-gradient(135deg, #E74C3C 0%, #EC7063 50%, #CB4335 100%);
 }
 
-/* EIS */
 .pokemon-detail-card.type-ice {
     background: linear-gradient(135deg, #85C1E9 0%, #AED6F1 50%, #5DADE2 100%);
 }
 
-/* DRACHE */
 .pokemon-detail-card.type-dragon {
     background: linear-gradient(135deg, #8E44AD 0%, #A569BD 50%, #7D3C98 100%);
 }
 
-/* UNLICHT */
 .pokemon-detail-card.type-dark {
     background: linear-gradient(135deg, #34495E 0%, #5D6D7E 50%, #2C3E50 100%);
 }
 
-/* KAMPF */
 .pokemon-detail-card.type-fighting {
     background: linear-gradient(135deg, #E67E22 0%, #F0B27A 50%, #D35400 100%);
 }
 
-/* GIFT */
 .pokemon-detail-card.type-poison {
     background: linear-gradient(135deg, #9B59B6 0%, #BB8FCE 50%, #8E44AD 100%);
 }
 
-/* NORMAL */
 .pokemon-detail-card.type-normal {
     background: linear-gradient(135deg, #A8A878 0%, #C5C5A0 50%, #8A8A5E 100%);
 }
 
-/* FLUG */
 .pokemon-detail-card.type-flying {
     background: linear-gradient(135deg, #A890F0 0%, #C8B5F7 50%, #9373E8 100%);
 }
 
-/* BODEN */
 .pokemon-detail-card.type-ground {
     background: linear-gradient(135deg, #E0C068 0%, #E8D084 50%, #C9A352 100%);
 }
 
-/* GESTEIN */
 .pokemon-detail-card.type-rock {
     background: linear-gradient(135deg, #B8A038 0%, #C9B65A 50%, #9E8A31 100%);
 }
 
-/* KÄFER */
 .pokemon-detail-card.type-bug {
     background: linear-gradient(135deg, #A8B820 0%, #B8C842 50%, #8FA31A 100%);
 }
 
-/* GEIST */
 .pokemon-detail-card.type-ghost {
     background: linear-gradient(135deg, #705898 0%, #8A7AAD 50%, #5E4A82 100%);
 }
 
-/* STAHL */
 .pokemon-detail-card.type-steel {
     background: linear-gradient(135deg, #B8B8D0 0%, #D0D0E0 50%, #A0A0B8 100%);
 }
 
-/* FEE */
 .pokemon-detail-card.type-fairy {
     background: linear-gradient(135deg, #EE99AC 0%, #F4B5C4 50%, #E67E95 100%);
 }
 
-/* ===== TEXT-FARBEN FÜR TYP-BASIERTE CARDS ===== */
 .pokemon-detail-card.type-fire,
 .pokemon-detail-card.type-water,
 .pokemon-detail-card.type-grass,
@@ -278,7 +253,6 @@
     color: rgba(255, 255, 255, 0.8);
 }
 
-/* ===== HEADER SECTION ===== */
 .detail-header {
     text-align: center;
     margin-bottom: 2rem;
@@ -303,7 +277,6 @@
     opacity: 0.8;
 }
 
-/* ===== IMAGE SECTION ===== */
 .detail-image-section {
     text-align: center;
     margin-bottom: 2rem;
@@ -322,7 +295,6 @@
     transform: scale(1.05);
 }
 
-/* ===== POKEMON TABS ===== */
 .pokemon-tabs {
     display: flex;
     justify-content: center;
@@ -331,24 +303,24 @@
     border-radius: 25px;
     padding: 5px;
     backdrop-filter: blur(10px);
-    flex-wrap: wrap;           /* NEU: Tabs können umbrechen */
-    gap: 3px;                  /* NEU: Kleiner Abstand zwischen Tabs */
+    flex-wrap: wrap;
+    gap: 3px;
 }
 
 .tab-btn {
-    flex: 0 1 auto;           /* NEU: Nicht mehr flex: 1 */
-    min-width: 70px;          /* NEU: Mindestbreite */
-    max-width: 120px;         /* NEU: Maximalbreite */
-    padding: 8px 12px;        /* NEU: Kleinere Buttons */
+    flex: 0 1 auto;
+    min-width: 70px;
+    max-width: 120px;
+    padding: 8px 12px;
     border: none;
     background: transparent;
     color: rgba(255, 255, 255, 0.8);
     font-family: var(--font-ui);
     font-weight: 600;
-    font-size: 0.7rem;        /* NEU: Kleinere Schrift */
+    font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;    /* NEU: Weniger Abstand */
-    border-radius: 15px;      /* NEU: Kleinerer Radius */
+    letter-spacing: 0.5px;
+    border-radius: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -365,7 +337,6 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Für weiße Cards (Standard) - andere Tab-Farben */
 .pokemon-detail-card:not([class*="type-"]) .tab-btn {
     color: var(--dark);
     opacity: 0.7;
@@ -380,7 +351,6 @@
     background: rgba(248, 249, 250, 0.6);
 }
 
-/* ===== TAB CONTENT ===== */
 .tab-content {
     min-height: 300px;
 }
@@ -399,7 +369,6 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== POKEMON TYPES DISPLAY ===== */
 .pokemon-types-display {
     display: flex;
     justify-content: center;
@@ -418,7 +387,6 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* ===== STATS GRID ===== */
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -459,7 +427,6 @@
     color: var(--dark);
 }
 
-/* ===== BESCHREIBUNG ===== */
 .description-container {
     padding: 1.5rem;
 }
@@ -476,14 +443,12 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     margin: 0;
     
-    /* NEU - Diese Eigenschaften hinzufügen: */
-    max-height: 200px;           /* Maximale Höhe */
-    overflow-y: auto;            /* Scrollen bei langem Text */
-    word-wrap: break-word;       /* Lange Wörter umbrechen */
-    overflow-wrap: break-word;   /* Moderne Alternative */
-    text-align: justify;         /* Schöner Blocksatz */
+    max-height: 200px;
+    overflow-y: auto;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-align: justify;
     
-    /* Schönere Scrollbar */
     scrollbar-width: thin;
     scrollbar-color: var(--primary) rgba(255, 255, 255, 0.3);
 }
@@ -506,7 +471,6 @@
     background: var(--secondary);
 }
 
-/* ===== EVOLUTION DISPLAY ===== */
 .evolution-display {
     padding: 1rem;
 }
@@ -565,7 +529,6 @@
     font-weight: bold;
 }
 
-/* ===== ERROR & EMPTY STATES ===== */
 .no-evolutions, .evolution-error {
     text-align: center;
     padding: 2rem;
@@ -576,49 +539,6 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-    .pokemon-detail-card {
-        padding: 1.5rem;
-    }
-    
-    .detail-pokemon-name {
-        font-size: 2.2rem;
-    }
-    
-    .detail-pokemon-image {
-        height: 200px;
-    }
-    
-    .pokemon-tabs {
-        margin: 1rem 0;
-    }
-    
-    .tab-btn {
-        padding: 10px 15px;
-        font-size: 0.8rem;
-    }
-    
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .evolution-chain {
-        flex-direction: column;
-    }
-    
-    .evolution-arrow {
-        transform: rotate(90deg);
-    }
-    
-    .nav-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 1.5rem;
-    }
-}
-
-/* ===== SMOOTH SCROLLBAR ===== */
 .overlay-content::-webkit-scrollbar {
     width: 8px;
 }
@@ -637,7 +557,6 @@
     background: var(--secondary);
 }
 
-/* ===== BASE STATS MIT PROGRESS BARS ===== */
 .base-stats-container {
     padding: 1.5rem;
 }
@@ -685,7 +604,6 @@
     font-size: 1.1rem;
 }
 
-/* Progress Bar Styling */
 .progress-bar-container {
     width: 100%;
     height: 8px;
@@ -703,7 +621,6 @@
     position: relative;
 }
 
-/* Glow-Effekt für hohe Werte */
 .progress-bar-fill::after {
     content: '';
     position: absolute;
@@ -720,7 +637,6 @@
     100% { transform: translateX(100%); }
 }
 
-/* ===== BREEDING INFO GRID ===== */
 .breeding-info {
     padding: 1.5rem;
 }
@@ -765,16 +681,6 @@
     line-height: 1.3;
 }
 
-/* Spezielle Styling für Geschlechter-Icons */
-.breeding-grid .stat-value:has-text("♂") {
-    color: #6890f0;
-}
-
-.breeding-grid .stat-value:has-text("♀") {
-    color: #f06890;
-}
-
-/* ===== MOVES CONTAINER ===== */
 .moves-container {
     padding: 1.5rem;
 }
@@ -815,7 +721,6 @@
     box-shadow: 0 4px 15px rgba(255, 217, 61, 0.3);
 }
 
-/* Scrollbar für Moves */
 .moves-grid::-webkit-scrollbar {
     width: 6px;
 }
@@ -834,7 +739,6 @@
     background: var(--secondary);
 }
 
-/* ===== ERWEITERTE TAB NAVIGATION ===== */
 .pokemon-tabs {
     display: flex;
     justify-content: center;
@@ -843,68 +747,13 @@
     border-radius: 25px;
     padding: 5px;
     backdrop-filter: blur(10px);
-    flex-wrap: wrap; /* Wichtig für mehr Tabs */
+    flex-wrap: wrap;
     gap: 2px;
 }
 
-
-
-/* ===== RESPONSIVE FÜR NEUE ELEMENTE ===== */
-@media (max-width: 768px) {
-    .breeding-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .moves-grid {
-        max-height: 200px;
-    }
-    
-    .pokemon-tabs {
-        padding: 3px;
-    }
-    
-    .tab-btn {
-        padding: 8px 12px;
-        font-size: 0.7rem;
-        min-width: 60px;
-    }
-    
-    .progress-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.2rem;
-    }
-    
-    .progress-value {
-        align-self: flex-end;
-    }
-}
-
-@media (max-width: 576px) {
-    .pokemon-tabs {
-        flex-direction: column;
-        gap: 5px;
-    }
-    
-    .tab-btn {
-        min-width: auto;
-        width: 100%;
-    }
-    
-    .moves-grid {
-        gap: 0.3rem;
-    }
-    
-    .move-badge {
-        font-size: 0.7rem;
-        padding: 4px 8px;
-    }
-}
-
-/* Navigation innerhalb der Card */
 .card-navigation {
     display: grid;
-    grid-template-columns: 1fr auto auto;  /* Links flexibel, rechts 2 Buttons */
+    grid-template-columns: 1fr auto auto;
     gap: 10px;
     align-items: flex-start;
     position: absolute;

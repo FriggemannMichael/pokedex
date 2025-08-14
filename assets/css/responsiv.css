@@ -58,6 +58,110 @@
     .pokemon-name {
         font-size: 1.4rem;
     }
+
+    .pokemon-footer {
+        padding: 2rem 0 1rem;
+        text-align: center;
+    }
+    
+    .footer-creator {
+        text-align: center !important;
+        margin-top: 1rem;
+    }
+    
+    .footer-pokemon {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .footer-creator-name {
+        font-size: 1.2rem;
+    }
+    
+    .footer-heading {
+        font-size: 1rem;
+    }
+    
+    .load-more-section #loadMoreBtn {
+        padding: 12px 25px;
+        font-size: 1rem;
+        border-radius: 18px;
+    }
+    
+    .load-more-section #loadMoreBtn:hover {
+        border-radius: 22px;
+    }
+    
+    .footer-sources {
+        margin-top: 1rem;
+    }
+
+    .pokemon-detail-card {
+        padding: 1.5rem;
+    }
+    
+    .detail-pokemon-name {
+        font-size: 2.2rem;
+    }
+    
+    .detail-pokemon-image {
+        height: 200px;
+    }
+    
+    .pokemon-tabs {
+        margin: 1rem 0;
+    }
+    
+    .tab-btn {
+        padding: 10px 15px;
+        font-size: 0.8rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .evolution-chain {
+        flex-direction: column;
+    }
+    
+    .evolution-arrow {
+        transform: rotate(90deg);
+    }
+    
+    .nav-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.5rem;
+    }
+
+    .breeding-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .moves-grid {
+        max-height: 200px;
+    }
+    
+    .pokemon-tabs {
+        padding: 3px;
+    }
+    
+    .tab-btn {
+        padding: 8px 12px;
+        font-size: 0.7rem;
+        min-width: 60px;
+    }
+    
+    .progress-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+    }
+    
+    .progress-value {
+        align-self: flex-end;
+    }
 }
 
 @media (max-width: 576px) {
@@ -115,5 +219,63 @@
     
     .pokemon-card-content {
         padding: 1rem;
+    }
+
+    .pokemon-footer {
+        padding: 1.5rem 0 1rem;
+    }
+    
+    .footer-pokemon {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .footer-text {
+        font-size: 0.85rem;
+    }
+    
+    .footer-copyright {
+        font-size: 0.75rem;
+        padding: 0 1rem;
+    }
+    
+    .load-more-section #loadMoreBtn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        border-radius: 16px;
+    }
+    
+    .load-more-section #loadMoreBtn:hover {
+        border-radius: 20px;
+        transform: perspective(1000px) translateZ(5px) scale(1.02);
+    }
+    
+    .footer-creator-name::before {
+        display: none;
+    }
+    
+    .source-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.3rem;
+    }
+
+    .pokemon-tabs {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .tab-btn {
+        min-width: auto;
+        width: 100%;
+    }
+    
+    .moves-grid {
+        gap: 0.3rem;
+    }
+    
+    .move-badge {
+        font-size: 0.7rem;
+        padding: 4px 8px;
     }
 }
