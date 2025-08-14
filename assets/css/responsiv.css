@@ -1,0 +1,119 @@
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .header-logo {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .hero-section .cloud {
+        transform: scale(0.7);
+    }
+    
+    .hero-section .particle {
+        transform: scale(0.8);
+    }
+    
+    .pokedex-title {
+        font-size: 2.5rem;
+        letter-spacing: 2px;
+    }
+    
+    .pokemon-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .filter-row {
+        gap: 0.25rem;
+    }
+    
+    .btn-filter {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+        min-width: 70px;
+    }
+    
+    .type-icon {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .filter-text {
+        display: none;
+    }
+    
+    .search-container .form-control,
+    .search-container .btn {
+        font-size: 1rem;
+        padding: 10px 16px;
+    }
+    
+    .pokemon-image {
+        height: 140px;
+    }
+    
+    .pokemon-name {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .header-content {
+        gap: 0.5rem;
+    }
+    
+    .header-logo {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .hero-section .cloud {
+        transform: scale(0.5);
+    }
+    
+    .hero-section .particle {
+        transform: scale(0.6);
+    }
+    
+    .hero-section::after {
+        background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+    }
+    
+    .pokedex-title {
+        font-size: 2rem;
+        letter-spacing: 1px;
+    }
+    
+    .popular-types {
+        justify-content: center;
+    }
+    
+    .btn-filter {
+        min-width: 50px;
+        padding: 8px;
+    }
+    
+    .type-icon {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .pokemon-image {
+        height: 120px;
+    }
+    
+    .pokemon-name {
+        font-size: 1.3rem;
+    }
+    
+    .pokemon-card:hover {
+        transform: translateY(-4px) scale(1.01);
+    }
+    
+    .pokemon-card-content {
+        padding: 1rem;
+    }
+}

@@ -73,7 +73,7 @@ async function fetchPokemonFromAPI(query) {
     try {
         console.log(`🌐 API search for: "${query}"`);
         
-        // Extended: Load 1000 Pokemon (almost all)
+        
         const searchResponse = await fetchFromPokeAPI(`${POKEMON_API_CONFIG.baseUrl}?offset=0&limit=1000`);
         
         const matchingPokemon = searchResponse.results.filter(pokemon =>

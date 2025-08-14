@@ -1,11 +1,11 @@
-// Global navigation variables
+
 let currentPokemonIndex = 0;
 let availablePokemonList = [];
 
 function openPokemonDetail(pokemon) {
     console.log('Opening detail for:', pokemon.name);
     
-    // Set navigation data
+    
     setNavigationData(pokemon);
     
     initializePokemonModal();
@@ -43,7 +43,7 @@ function updateNavigationButtons() {
     
     if (!prevBtn || !nextBtn) return;
     
-    // First Pokemon -> Disable Prev
+    
     if (currentPokemonIndex <= 0) {
         prevBtn.style.opacity = '0.5';
         prevBtn.disabled = true;
@@ -52,7 +52,7 @@ function updateNavigationButtons() {
         prevBtn.disabled = false;
     }
     
-    // Last Pokemon -> Disable Next  
+     
     if (currentPokemonIndex >= availablePokemonList.length - 1) {
         nextBtn.style.opacity = '0.5';
         nextBtn.disabled = true;
@@ -307,7 +307,7 @@ function showEvolutionError() {
     }
 }
 
-// Base Stats with Progress Bars
+
 function showPokemonBaseStats(pokemonDetails) {
     const statsContainer = document.getElementById('detailBaseStats');
     if (!statsContainer) return;
@@ -325,7 +325,7 @@ function showPokemonBaseStats(pokemonDetails) {
     `;
 }
 
-// Breeding Information
+
 function showBreedingInfo(speciesData) {
     const breedingContainer = document.getElementById('detailBreeding');
     if (!breedingContainer) return;
@@ -343,13 +343,13 @@ function showBreedingInfo(speciesData) {
     `;
 }
 
-// Pokemon Moves
+
 function showPokemonMoves(pokemonDetails) {
     const movesContainer = document.getElementById('detailMoves');
     if (!movesContainer) return;
     
-    // First 20 moves (otherwise too long)
-    const limitedMoves = pokemonDetails.moves.slice(0, 20);
+    
+    const limitedMoves = pokemonDetails.moves.slice(0, 10);
     
     movesContainer.innerHTML = `
         <div class="moves-grid">

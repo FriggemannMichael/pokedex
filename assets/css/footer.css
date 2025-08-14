@@ -1,0 +1,517 @@
+/* ===== LOAD MORE BUTTON - REPOSITIONED ===== */
+.load-more-section {
+    background: transparent;
+    backdrop-filter: none;
+    margin-top: 2rem;
+    padding: 2rem 0;
+    position: relative;
+}
+
+/* ===== LIQUID GLASS LOAD MORE BUTTON ===== */
+.load-more-section #loadMoreBtn {
+    /* Base Glassmorphism */
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.25) 0%, 
+        rgba(255, 255, 255, 0.15) 50%, 
+        rgba(255, 255, 255, 0.1) 100%);
+    
+    /* Liquid Glass Effects */
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    
+    /* Typography */
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    font-size: 1.1rem;
+    font-family: var(--font-ui);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    /* Spacing */
+    padding: 15px 30px;
+    
+    /* Shadows & Glow */
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        0 4px 16px rgba(0, 0, 0, 0.05),
+        inset 0 1px 2px rgba(255, 255, 255, 0.4),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+    
+    /* Smooth Transitions */
+    transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+    
+    /* Remove default button styles */
+    border: none;
+    cursor: pointer;
+    outline: none;
+    
+    /* 3D Effect Preparation */
+    transform: perspective(1000px) translateZ(0);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Liquid Hover Animation */
+.load-more-section #loadMoreBtn:hover {
+    /* Morphing Shape */
+    border-radius: 25px;
+    transform: perspective(1000px) translateZ(10px) scale(1.05);
+    
+    /* Enhanced Glassmorphism */
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.35) 0%, 
+        rgba(255, 255, 255, 0.25) 50%, 
+        rgba(255, 255, 255, 0.15) 100%);
+    
+    backdrop-filter: blur(25px) saturate(200%) brightness(1.1);
+    
+    /* Enhanced Glow */
+    box-shadow: 
+        0 15px 45px rgba(0, 0, 0, 0.15),
+        0 8px 25px rgba(255, 255, 255, 0.1),
+        inset 0 2px 4px rgba(255, 255, 255, 0.5),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.15),
+        0 0 20px rgba(255, 255, 255, 0.2);
+    
+    /* Text Enhancement */
+    color: rgba(255, 255, 255, 1);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Active/Click State */
+.load-more-section #loadMoreBtn:active {
+    transform: perspective(1000px) translateZ(5px) scale(0.98);
+    box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.2),
+        inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Liquid Shine Effect */
+.load-more-section #loadMoreBtn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.4) 50%, 
+        transparent 100%);
+    transition: left 0.6s ease;
+    z-index: 1;
+}
+
+.load-more-section #loadMoreBtn:hover::before {
+    left: 100%;
+}
+
+/* Ripple Effect on Click */
+.load-more-section #loadMoreBtn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+    z-index: 1;
+}
+
+.load-more-section #loadMoreBtn:active::after {
+    width: 200px;
+    height: 200px;
+}
+
+/* Text and Spinner Positioning */
+.load-more-section #loadMoreBtn .load-more-text,
+.load-more-section #loadMoreBtn .load-more-spinner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Enhanced Spinner */
+.load-more-section #loadMoreBtn .spinner-border {
+    border-color: rgba(255, 255, 255, 0.3);
+    border-top-color: rgba(255, 255, 255, 0.8);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Disabled State */
+.load-more-section #loadMoreBtn:disabled {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        rgba(255, 255, 255, 0.05) 100%);
+    
+    backdrop-filter: blur(10px) saturate(100%);
+    color: rgba(255, 255, 255, 0.4);
+    
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.05),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    
+    transform: none;
+    cursor: not-allowed;
+}
+
+.load-more-section #loadMoreBtn:disabled:hover {
+    transform: none;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        rgba(255, 255, 255, 0.05) 100%);
+}
+
+/* Hide old Load More Button in filter section */
+.filters #loadMoreBtn {
+    display: none !important;
+}
+
+/* ===== POKEMON FOOTER ===== */
+.pokemon-footer {
+    background: linear-gradient(135deg, var(--dark) 0%, #34495E 50%, var(--dark) 100%);
+    color: white;
+    padding: 3rem 0 1.5rem;
+    margin-top: 3rem;
+    position: relative;
+    overflow: hidden;
+    border-top: 3px solid var(--primary);
+}
+
+/* Animated Pokemon sprites in background */
+.footer-pokemon-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.footer-pokemon {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: floatPokemon 8s ease-in-out infinite;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Use real Pokemon sprites instead of emojis */
+.footer-pokemon-1 {
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+    background-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png'); /* Pikachu */
+}
+
+.footer-pokemon-2 {
+    top: 60%;
+    left: 80%;
+    animation-delay: 1s;
+    background-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png'); /* Charizard */
+}
+
+.footer-pokemon-3 {
+    top: 40%;
+    left: 5%;
+    animation-delay: 2s;
+    background-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png'); /* Blastoise */
+}
+
+.footer-pokemon-4 {
+    top: 80%;
+    left: 60%;
+    animation-delay: 3s;
+    background-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png'); /* Venusaur */
+}
+
+.footer-pokemon-5 {
+    top: 30%;
+    left: 75%;
+    animation-delay: 4s;
+    background-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/150.png'); /* Mewtwo */
+}
+
+.footer-pokemon-6 {
+    top: 70%;
+    left: 30%;
+    animation-delay: 5s;
+    background-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/144.png'); /* Articuno */
+}
+
+@keyframes floatPokemon {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+        opacity: 0.2;
+    }
+    25% {
+        transform: translateY(-15px) rotate(5deg) scale(1.1);
+        opacity: 0.4;
+    }
+    50% {
+        transform: translateY(-8px) rotate(-3deg) scale(0.9);
+        opacity: 0.3;
+    }
+    75% {
+        transform: translateY(-20px) rotate(3deg) scale(1.05);
+        opacity: 0.5;
+    }
+}
+
+/* Footer Content - higher z-index than background */
+.footer-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Footer headings */
+.footer-heading {
+    font-family: var(--font-title);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Footer text */
+.footer-text {
+    font-family: var(--font-body);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+}
+
+/* Footer links */
+.footer-link {
+    color: var(--secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.footer-link:hover {
+    color: var(--accent);
+    text-decoration: none;
+    text-shadow: 0 0 8px rgba(255, 217, 61, 0.6);
+    transform: translateY(-1px);
+}
+
+.footer-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background: var(--accent);
+    transition: width 0.3s ease;
+}
+
+.footer-link:hover::after {
+    width: 100%;
+}
+
+/* Creator section */
+.footer-creator {
+    text-align: inherit;
+}
+
+.footer-creator-name {
+    font-family: var(--font-title);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.footer-creator-name::before {
+    content: '⚡';
+    margin-right: 0.5rem;
+    color: var(--accent);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+.footer-subtitle {
+    font-family: var(--font-ui);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+/* Divider */
+.footer-divider {
+    border: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--primary) 25%, var(--secondary) 75%, transparent 100%);
+    margin: 1.5rem 0;
+    opacity: 0.6;
+    position: relative;
+}
+
+.footer-divider::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(255, 217, 61, 0.5);
+}
+
+/* Copyright */
+.footer-copyright {
+    font-family: var(--font-body);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8rem;
+    margin-bottom: 0;
+    line-height: 1.4;
+    text-align: center;
+}
+
+/* Image sources grid */
+.footer-sources {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.source-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.source-icon {
+    width: 20px;
+    height: 20px;
+    background: var(--secondary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: white;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .pokemon-footer {
+        padding: 2rem 0 1rem;
+        text-align: center;
+    }
+    
+    .footer-creator {
+        text-align: center !important;
+        margin-top: 1rem;
+    }
+    
+    .footer-pokemon {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .footer-creator-name {
+        font-size: 1.2rem;
+    }
+    
+    .footer-heading {
+        font-size: 1rem;
+    }
+    
+    .load-more-section #loadMoreBtn {
+        padding: 12px 25px;
+        font-size: 1rem;
+        border-radius: 18px;
+    }
+    
+    .load-more-section #loadMoreBtn:hover {
+        border-radius: 22px;
+    }
+    
+    .footer-sources {
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .pokemon-footer {
+        padding: 1.5rem 0 1rem;
+    }
+    
+    .footer-pokemon {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .footer-text {
+        font-size: 0.85rem;
+    }
+    
+    .footer-copyright {
+        font-size: 0.75rem;
+        padding: 0 1rem;
+    }
+    
+    .load-more-section #loadMoreBtn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        border-radius: 16px;
+    }
+    
+    .load-more-section #loadMoreBtn:hover {
+        border-radius: 20px;
+        transform: perspective(1000px) translateZ(5px) scale(1.02);
+    }
+    
+    .footer-creator-name::before {
+        display: none; /* Hide emoji on very small screens */
+    }
+    
+    .source-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.3rem;
+    }
+}
+
+/* Small improvement for hover effect */
+.footer-creator:hover .footer-creator-name {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+/* Subtle glow effect for important elements */
+.footer-heading:hover {
+    text-shadow: 0 0 10px rgba(255, 217, 61, 0.6);
+    transition: text-shadow 0.3s ease;
+}

@@ -276,7 +276,7 @@ function createEvolutionArrowTemplate() {
 
 function navigatePokemon(direction) {
     console.log(`Navigate: ${direction > 0 ? 'Next' : 'Previous'} Pokemon`);
-    // Navigation logic is now in pokemon-detail.js
+    
 }
 
 function createLoadingTemplate(message = 'Loading...') {

@@ -9,7 +9,8 @@ const domElements = {
     pokemonContainer: document.getElementById('pokemonContainer'),
     loadingSpinner: document.querySelector('.loading-spinner'),
     loadMoreButton: document.getElementById('loadMoreBtn'),
-    filterButtons: document.querySelectorAll('.filters .btn[data-type]')
+    filterButtons: document.querySelectorAll('.btn-filter[data-type]'),
+    dropdownItems: document.querySelectorAll('.dropdown-item.type-item[data-type]')
 };
 
 async function loadPokemon() {
@@ -99,8 +100,8 @@ function clearSearchMode() {
 
 function resetAllButtonText() {
     const allButton = document.querySelector('[data-type="all"]');
-    if (allButton && allButton.textContent !== 'All') {
-        allButton.textContent = 'All';
+    if (allButton && allButton.innerHTML !== '<span class="filter-text">All</span>') {
+        allButton.innerHTML = '<span class="filter-text">All</span>';
     }
 }
 
@@ -140,7 +141,6 @@ function createPokemonCard(pokemon) {
 
 function getPokemonCardTemplate(pokemon) {
     const pokemonNumber = formatPokemonNumber(pokemon.id);
-    const typeClasses = getTypeClasses(pokemon.types);
     const typeBadges = createTypeBadges(pokemon.types);
     
     return `
@@ -161,10 +161,6 @@ function getPokemonCardTemplate(pokemon) {
 
 function formatPokemonNumber(id) {
     return `#${id.toString().padStart(3, '0')}`;
-}
-
-function getTypeClasses(types) {
-    return types.map(type => `type-${type}`).join(' ');
 }
 
 function createTypeBadges(types) {
@@ -238,8 +234,8 @@ function hasNewPokemonData(newPokemonDetails) {
 }
 
 function updatePokemonList(newPokemonDetails) {
-    appState.pokemonList = [...appState.pokemonList, ...newPokemonDetails];
-    appendNewPokemon(newPokemonDetails);
+    appState.pokemonList = newPokemonDetails;
+    renderPokemon(newPokemonDetails);  // Macht alles in einem Zug
     appState.nextPageOffset += POKEMON_API_CONFIG.pokemonPerPage;
 }
 
@@ -260,14 +256,43 @@ function initializeFilters() {
             handleFilterClick(button);
         });
     });
+    
+    domElements.dropdownItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleDropdownFilterClick(item);
+        });
+    });
 }
 
 function handleFilterClick(button) {
     appState.selectedType = button.getAttribute('data-type');
     appState.nextPageOffset = 0;
+
+    changeBodyBackground(appState.selectedType);
     
     setActiveFilter(button);
     loadPokemonByType(appState.selectedType);
+}
+
+function handleDropdownFilterClick(item) {
+    const selectedType = item.getAttribute('data-type');
+    appState.selectedType = selectedType;
+    appState.nextPageOffset = 0;
+
+    changeBodyBackground(appState.selectedType);
+    
+    closeDropdown();
+    setActiveDropdownFilter(selectedType);
+    loadPokemonByType(appState.selectedType);
+}
+
+function closeDropdown() {
+    const dropdown = document.querySelector('#moreTypesDropdown');
+    const bsDropdown = bootstrap.Dropdown.getInstance(dropdown);
+    if (bsDropdown) {
+        bsDropdown.hide();
+    }
 }
 
 function setActiveFilter(selectedButton) {
@@ -275,7 +300,47 @@ function setActiveFilter(selectedButton) {
         button.classList.remove('active');
     });
     
+    const dropdownButton = document.querySelector('#moreTypesDropdown');
+    if (dropdownButton) {
+        dropdownButton.classList.remove('active');
+    }
+    
     selectedButton.classList.add('active');
+}
+
+function setActiveDropdownFilter(selectedType) {
+    domElements.filterButtons.forEach(button => {
+        button.classList.remove('active');
+    });
+    
+    const dropdownButton = document.querySelector('#moreTypesDropdown');
+    if (!dropdownButton) return;
+    
+    dropdownButton.classList.add('active');
+    dropdownButton.setAttribute('data-type', selectedType);
+    updateDropdownButtonContent(dropdownButton, selectedType);
+}
+
+function updateDropdownButtonContent(dropdownButton, selectedType) {
+    const selectedItem = document.querySelector(`[data-type="${selectedType}"]`);
+    if (!selectedItem) return;
+    
+    const typeName = selectedType.charAt(0).toUpperCase() + selectedType.slice(1);
+    const icon = selectedItem.querySelector('.type-icon');
+    
+    if (icon) {
+        dropdownButton.innerHTML = `
+            <img src="${icon.src}" alt="${typeName}" class="type-icon">
+            <span class="filter-text">${typeName}</span>
+        `;
+    }
+}
+
+function changeBodyBackground(pokemonType) {
+    document.body.className = document.body.className.replace(/type-\w+/g, '');
+    if (pokemonType && pokemonType !== 'all') {
+        document.body.classList.add(`type-${pokemonType}`);
+    }
 }
 
 function initializeLoadMore() {

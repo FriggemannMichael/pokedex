@@ -12,8 +12,15 @@
     />
 
     <link rel="stylesheet" href="./assets/css/root.css" />
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="./assets/css/base.css" />
+    <link rel="stylesheet" href="./assets/css/components.css" />
+    <link rel="stylesheet" href="./assets/css/hero.css" />
+    <link rel="stylesheet" href="./assets/css/filters.css" />
+    <link rel="stylesheet" href="./assets/css/cards.css" />
     <link rel="stylesheet" href="./assets/css/modal.css" />
+    <link rel="stylesheet" href="./assets/css/responsiv.css" />
+    <link rel="stylesheet" href="./assets/css/footer.css" />
+    <link rel="stylesheet" href="./assets/css/dynamic-main.css" />
   </head>
   <body>
     <header class="hero-section py-5">
@@ -74,39 +81,92 @@
       <div class="container">
         <div class="row">
           <div class="col-12">
-            <div class="d-flex flex-wrap gap-2 justify-content-center">
-              <button class="btn btn-outline-primary active" data-type="all">
-                All
+            <div class="filter-row popular-types mb-3">
+              <button class="btn btn-filter active" data-type="all">
+                <span class="filter-text">All</span>
               </button>
-              <button class="btn btn-outline-danger" data-type="fire">
-                🔥 Fire
+              <button class="btn btn-filter" data-type="fire">
+                <img src="./assets/icon/fire.svg" alt="Fire" class="type-icon">
+                <span class="filter-text">Fire</span>
               </button>
-              <button class="btn btn-outline-primary" data-type="water">
-                💧 Water
+              <button class="btn btn-filter" data-type="water">
+                <img src="./assets/icon/water.svg" alt="Water" class="type-icon">
+                <span class="filter-text">Water</span>
               </button>
-              <button class="btn btn-outline-success" data-type="grass">
-                🌱 Grass
+              <button class="btn btn-filter" data-type="grass">
+                <img src="./assets/icon/grass.svg" alt="Grass" class="type-icon">
+                <span class="filter-text">Grass</span>
               </button>
-              <button class="btn btn-outline-warning" data-type="electric">
-                ⚡ Electric
+              <button class="btn btn-filter" data-type="electric">
+                <img src="./assets/icon/electric.svg" alt="Electric" class="type-icon">
+                <span class="filter-text">Electric</span>
               </button>
-              <button class="btn btn-outline-info" data-type="psychic">
-                🔮 Psychic
+              <button class="btn btn-filter" data-type="psychic">
+                <img src="./assets/icon/psychic.svg" alt="Psychic" class="type-icon">
+                <span class="filter-text">Psychic</span>
               </button>
-              <button class="btn btn-outline-secondary" data-type="dark">
-                🌙 Dark
+              <button class="btn btn-filter" data-type="normal">
+                <img src="./assets/icon/normal.svg" alt="Normal" class="type-icon">
+                <span class="filter-text">Normal</span>
               </button>
-
-              <button id="loadMoreBtn" class="btn btn-outline-success">
-                <span class="load-more-text">⬇️ Load More</span>
-                <span class="load-more-spinner d-none">
-                  <span
-                    class="spinner-border spinner-border-sm me-1"
-                    role="status"
-                  ></span>
-                  Loading...
-                </span>
-              </button>
+            </div>
+            
+            <div class="filter-row secondary-types">
+              <div class="dropdown">
+                <button class="btn btn-filter dropdown-toggle" type="button" id="moreTypesDropdown" data-bs-toggle="dropdown">
+                  <span class="filter-text">More Types</span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="moreTypesDropdown">
+                  <li><button class="dropdown-item type-item" data-type="fighting">
+                    <img src="./assets/icon/fighting.svg" alt="Fighting" class="type-icon">
+                    Fighting
+                  </button></li>
+                  <li><button class="dropdown-item type-item" data-type="poison">
+                    <img src="./assets/icon/poison.svg" alt="Poison" class="type-icon">
+                    Poison
+                  </button></li>
+                  <li><button class="dropdown-item type-item" data-type="ground">
+                    <img src="./assets/icon/ground.svg" alt="Ground" class="type-icon">
+                    Ground
+                  </button></li>
+                  <li><button class="dropdown-item type-item" data-type="flying">
+                    <img src="./assets/icon/flying.svg" alt="Flying" class="type-icon">
+                    Flying
+                  </button></li>
+                  <li><button class="dropdown-item type-item" data-type="bug">
+                    <img src="./assets/icon/bug.svg" alt="Bug" class="type-icon">
+                    Bug
+                  </button></li>
+                  <li><button class="dropdown-item type-item" data-type="rock">
+                    <img src="./assets/icon/rock.svg" alt="Rock" class="type-icon">
+                    Rock
+                  </button></li>
+                  <li><button class="dropdown-item type-item" data-type="ghost">
+                    <img src="./assets/icon/ghost.svg" alt="Ghost" class="type-icon">
+                    Ghost
+                  </button></li>
+                  <li><button class="dropdown-item type-item" data-type="steel">
+                    <img src="./assets/icon/steel.svg" alt="Steel" class="type-icon">
+                    Steel
+                  </button></li>
+                  <li><button class="dropdown-item type-item" data-type="ice">
+                    <img src="./assets/icon/ice.svg" alt="Ice" class="type-icon">
+                    Ice
+                  </button></li>
+                  <li><button class="dropdown-item type-item" data-type="dragon">
+                    <img src="./assets/icon/dragon.svg" alt="Dragon" class="type-icon">
+                    Dragon
+                  </button></li>
+                  <li><button class="dropdown-item type-item" data-type="dark">
+                    <img src="./assets/icon/dark.svg" alt="Dark" class="type-icon">
+                    Dark
+                  </button></li>
+                  <li><button class="dropdown-item type-item" data-type="fairy">
+                    <img src="./assets/icon/fairy.svg" alt="Fairy" class="type-icon">
+                    Fairy
+                  </button></li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -126,6 +186,93 @@
         </div>
       </div>
     </section>
+
+    <!-- Load More Button - repositioned to bottom -->
+    <section class="load-more-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-auto">
+            <button id="loadMoreBtn" class="btn">
+              <span class="load-more-text">⬇️ Load More</span>
+              <span class="load-more-spinner d-none">
+                <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                Loading...
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer with animated Pokemon -->
+    <footer class="pokemon-footer">
+      <!-- Animated Pokemon in background -->
+      <div class="footer-pokemon-bg">
+        <div class="footer-pokemon footer-pokemon-1"></div>
+        <div class="footer-pokemon footer-pokemon-2"></div>
+        <div class="footer-pokemon footer-pokemon-3"></div>
+        <div class="footer-pokemon footer-pokemon-4"></div>
+        <div class="footer-pokemon footer-pokemon-5"></div>
+        <div class="footer-pokemon footer-pokemon-6"></div>
+      </div>
+      
+      <div class="container footer-content">
+        <div class="row">
+          <!-- Image Sources -->
+          <div class="col-md-8 mb-3">
+            <h6 class="footer-heading">Image Sources</h6>
+            <div class="footer-sources">
+              <div class="source-item">
+                <div class="source-icon">🎨</div>
+                <p class="footer-text mb-0">
+                  <strong>Pokémon Images:</strong> 
+                  <a href="https://pokeapi.co/" target="_blank" class="footer-link">PokéAPI</a> & 
+                  <a href="https://github.com/PokeAPI/sprites" target="_blank" class="footer-link">Official Artwork</a>
+                </p>
+              </div>
+              
+              <div class="source-item">
+                <div class="source-icon">🔧</div>
+                <p class="footer-text mb-0">
+                  <strong>Icons & UI:</strong> 
+                  <a href="https://getbootstrap.com/" target="_blank" class="footer-link">Bootstrap</a> & 
+                  <a href="https://fonts.google.com/" target="_blank" class="footer-link">Google Fonts</a>
+                </p>
+              </div>
+              
+              <div class="source-item">
+                <div class="source-icon">⚡</div>
+                <p class="footer-text mb-0">
+                  <strong>API Data:</strong> 
+                  <a href="https://pokeapi.co/docs/v2" target="_blank" class="footer-link">PokéAPI v2 Documentation</a>
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Creator Info -->
+          <div class="col-md-4 mb-3 text-md-end">
+            <div class="footer-creator">
+              <h6 class="footer-heading">Created by</h6>
+              <p class="footer-creator-name">Michael Friggemann</p>
+              <p class="footer-subtitle">Developer Akademie • Module 8</p>
+              <p class="footer-subtitle">Fullstack Web Developer</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="row">
+          <div class="col-12">
+            <hr class="footer-divider">
+            <p class="footer-copyright">
+              © 2025 Pokédex Project • Built with ❤️ and lots of ☕<br>
+              Pokémon and all related characters are trademarks of Nintendo
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./assets/js/api.js"></script>
