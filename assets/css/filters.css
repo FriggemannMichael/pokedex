@@ -242,7 +242,7 @@
 #moreTypesDropdown.active[data-type="dark"] { background: var(--type-dark); }
 #moreTypesDropdown.active[data-type="fairy"] { background: var(--type-fairy); color: #333; }
 
-/* Mobile Responsive - Burger Menu wird sichtbar */
+
 @media (max-width: 768px) {
     .burger-menu-btn {
         display: block !important;

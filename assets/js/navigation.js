@@ -1,21 +1,19 @@
-// navigation.js - Pagination System
 
-// Navigation State erweitern
 const navigationState = {
     currentPage: 1,
     totalPages: 1,
     pokemonPerPage: 20,
     totalPokemon: 0,
-    currentMode: 'pagination' // 'pagination' oder 'loadmore'
+    currentMode: 'pagination' 
 };
 
-// Navigation initialisieren
+
 function initializeNavigation() {
     const prevBtn = document.getElementById('prevPageBtn');
     const nextBtn = document.getElementById('nextPageBtn');
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     
-    // Event Listeners für Pagination
+    
     if (prevBtn) {
         prevBtn.addEventListener('click', () => navigateToPage(navigationState.currentPage - 1));
     }
@@ -24,21 +22,21 @@ function initializeNavigation() {
         nextBtn.addEventListener('click', () => navigateToPage(navigationState.currentPage + 1));
     }
     
-    // Event Listener für Load More
+    
     if (loadMoreBtn) {
         loadMoreBtn.addEventListener('click', loadMorePokemon);
     }
     
-    // Initial Pagination-Controls aktualisieren
+    
     updatePaginationControls();
 }
 
-// Zu bestimmter Seite navigieren
+
 async function navigateToPage(pageNumber) {
     if (appState.isLoading) return;
     if (pageNumber < 1 || pageNumber > navigationState.totalPages) return;
     
-    // Für Such-Modus keine Pagination
+    
     if (appState.selectedType === 'search') return;
     
     setLoadingState(true);
@@ -53,22 +51,22 @@ async function navigateToPage(pageNumber) {
         if (appState.selectedType === 'all') {
             pokemonDetails = await fetchPokemonData(offset, navigationState.pokemonPerPage);
         } else {
-            // Für Typ-Filter alle laden und dann paginieren
+           
             const allTypeData = await fetchPokemonByTypeData(appState.selectedType);
             const startIndex = offset;
             const endIndex = startIndex + navigationState.pokemonPerPage;
             pokemonDetails = allTypeData.slice(startIndex, endIndex);
         }
         
-        // Pokemon-Container leeren und neue laden
+        
         clearPokemonContainer();
         appState.pokemonList = pokemonDetails;
         renderPokemon(pokemonDetails);
         
-        // Pagination-Controls aktualisieren
+        
         updatePaginationControls();
         
-        // Nach oben scrollen für bessere UX
+        
         scrollToTop();
         
     } catch (error) {
@@ -79,7 +77,7 @@ async function navigateToPage(pageNumber) {
     }
 }
 
-// Load More Pokemon (erweitert vorhandene Liste)
+
 async function loadMorePokemon() {
     if (appState.isLoading) return;
     
@@ -90,7 +88,7 @@ async function loadMorePokemon() {
         const newPokemonDetails = await fetchNewPokemonDetails();
         
         if (hasNewPokemonData(newPokemonDetails)) {
-            // Neue Pokemon zur bestehenden Liste hinzufügen
+            
             appendNewPokemon(newPokemonDetails);
             appState.pokemonList = [...appState.pokemonList, ...newPokemonDetails];
             appState.nextPageOffset += navigationState.pokemonPerPage;
@@ -106,7 +104,7 @@ async function loadMorePokemon() {
     }
 }
 
-// Neue Pokemon-Daten für Load More holen
+
 async function fetchNewPokemonDetails() {
     switch (appState.selectedType) {
         case 'all':
@@ -115,7 +113,7 @@ async function fetchNewPokemonDetails() {
                 navigationState.pokemonPerPage
             );
         case 'search':
-            return []; // Kein Load More bei Suche
+            return []; 
         default:
             return await fetchMorePokemonByType(
                 appState.selectedType, 
@@ -124,21 +122,21 @@ async function fetchNewPokemonDetails() {
     }
 }
 
-// Neue Pokemon zur Liste hinzufügen
+
 function appendNewPokemon(pokemonList) {
     pokemonList.forEach(pokemon => {
         appendPokemonCard(pokemon);
     });
 }
 
-// "Keine weiteren Pokemon" anzeigen
+
 function showNoMorePokemon() {
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (loadMoreBtn) {
         loadMoreBtn.innerHTML = '✅ All Pokemon loaded!';
         loadMoreBtn.disabled = true;
         
-        // Nach 3 Sekunden wieder normalen Text
+        
         setTimeout(() => {
             loadMoreBtn.innerHTML = `
                 <span class="load-more-text">⬇️ Load More Pokemon</span>
@@ -151,38 +149,38 @@ function showNoMorePokemon() {
     }
 }
 
-// Pagination-Controls aktualisieren
+
 function updatePaginationControls() {
     const prevBtn = document.getElementById('prevPageBtn');
     const nextBtn = document.getElementById('nextPageBtn');
     const pageInfo = document.getElementById('pageInfo');
     const paginationControls = document.getElementById('paginationControls');
     
-    // Page Info aktualisieren
+    
     if (pageInfo) {
         pageInfo.textContent = `Page ${navigationState.currentPage}`;
     }
     
-    // Previous Button
+    
     if (prevBtn) {
         prevBtn.disabled = navigationState.currentPage <= 1;
     }
     
-    // Next Button - bei "all" Mode mehr Seiten möglich
+    
     if (nextBtn) {
         if (appState.selectedType === 'all') {
-            // Bei "all" immer Next erlauben (API hat >1000 Pokemon)
+            
             nextBtn.disabled = false;
         } else if (appState.selectedType === 'search') {
-            // Bei Suche keine Pagination
+            
             nextBtn.disabled = true;
         } else {
-            // Bei Typ-Filter prüfen ob mehr Pokemon verfügbar
+            
             nextBtn.disabled = navigationState.currentPage >= navigationState.totalPages;
         }
     }
     
-    // Pagination-Controls bei Suche verstecken
+    
     if (paginationControls) {
         if (appState.selectedType === 'search') {
             paginationControls.style.display = 'none';
@@ -192,12 +190,12 @@ function updatePaginationControls() {
     }
 }
 
-// Total Pages für Typ-Filter berechnen
+
 async function calculateTotalPagesForType(type) {
     try {
         if (type === 'all') {
-            // Bei "all" nehmen wir eine große Anzahl an
-            navigationState.totalPages = 50; // 50 Seiten à 20 Pokemon = 1000 Pokemon
+            
+            navigationState.totalPages = 50; 
             return;
         }
         
@@ -206,7 +204,7 @@ async function calculateTotalPagesForType(type) {
             return;
         }
         
-        // Für andere Typen alle Pokemon des Typs zählen
+        
         const typeResponse = await fetchFromPokeAPI(`https://pokeapi.co/api/v2/type/${type}`);
         const totalPokemon = typeResponse.pokemon.length;
         navigationState.totalPages = Math.ceil(totalPokemon / navigationState.pokemonPerPage);
@@ -217,7 +215,7 @@ async function calculateTotalPagesForType(type) {
     }
 }
 
-// Load More Button State setzen
+
 function setLoadMoreButtonState(loading) {
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (!loadMoreBtn) return;
@@ -236,18 +234,18 @@ function setLoadMoreButtonState(loading) {
     }
 }
 
-// Loading State zurücksetzen
+
 function resetLoadingState() {
     setLoadingState(false);
     setLoadMoreButtonState(false);
 }
 
-// Prüfen ob neue Pokemon-Daten vorhanden
+
 function hasNewPokemonData(newPokemonDetails) {
     return newPokemonDetails && newPokemonDetails.length > 0;
 }
 
-// Nach oben scrollen
+
 function scrollToTop() {
     window.scrollTo({
         top: 0,
@@ -255,7 +253,7 @@ function scrollToTop() {
     });
 }
 
-// Navigation für Filter-Wechsel zurücksetzen
+
 function resetNavigation() {
     navigationState.currentPage = 1;
     appState.currentPage = 1;
@@ -263,14 +261,14 @@ function resetNavigation() {
     updatePaginationControls();
 }
 
-// Navigation bei Typ-Wechsel aktualisieren
+
 async function updateNavigationForType(type) {
     await calculateTotalPagesForType(type);
     resetNavigation();
     updatePaginationControls();
 }
 
-// Burger-Menü für Mobile initialisieren
+
 function initializeBurgerMenu() {
     const burgerBtn = document.getElementById('burgerMenuBtn');
     const filterContainer = document.getElementById('filterContainer');
@@ -295,7 +293,7 @@ function initializeBurgerMenu() {
         }
     });
     
-    // Klick außerhalb schließt Menü
+   
     document.addEventListener('click', (event) => {
         if (!burgerBtn.contains(event.target) && 
             !filterContainer.contains(event.target)) {
@@ -308,27 +306,27 @@ function initializeBurgerMenu() {
     });
 }
 
-// Navigation komplett initialisieren
+
 function initializeFullNavigation() {
     initializeNavigation();
     initializeBurgerMenu();
     
-    // Responsive Navigation prüfen
+    
     checkResponsiveNavigation();
     window.addEventListener('resize', checkResponsiveNavigation);
 }
 
-// Responsive Navigation prüfen
+
 function checkResponsiveNavigation() {
     const burgerBtn = document.getElementById('burgerMenuBtn');
     const filterContainer = document.getElementById('filterContainer');
     
     if (window.innerWidth <= 768) {
-        // Mobile: Burger-Menü anzeigen
+        
         burgerBtn?.classList.remove('d-none');
-        filterContainer?.classList.remove('show'); // Menü schließen bei Resize
+        filterContainer?.classList.remove('show'); 
     } else {
-        // Desktop: Filter direkt anzeigen
+        
         burgerBtn?.classList.add('d-none');
         filterContainer?.classList.remove('show');
     }

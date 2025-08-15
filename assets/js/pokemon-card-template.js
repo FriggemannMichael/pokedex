@@ -95,6 +95,7 @@ function createSearchResultItemTemplate(pokemon) {
                 </div>
             </div>
         </div>
+        
     `;
 }
 
