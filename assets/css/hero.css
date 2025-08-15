@@ -1,3 +1,4 @@
+/* Optimierte hero.css */
 .hero-section {
     background: var(--gradient);
     position: relative;
@@ -45,18 +46,22 @@
     z-index: 10;
 }
 
-.header-content {
+/* Neues zentriertes Header-Layout */
+.header-content-centered {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 2rem;
     text-align: center;
     position: relative;
     z-index: 10;
 }
 
-.logo-section {
-    flex-shrink: 0;
+.logo-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .header-logo {
@@ -68,10 +73,6 @@
 
 .header-logo:hover {
     transform: scale(1.05) rotate(5deg);
-}
-
-.title-section {
-    flex-grow: 1;
 }
 
 .pokedex-title {
@@ -86,6 +87,7 @@
     z-index: 10;
 }
 
+/* Search Container Optimierungen */
 .search-container .form-control {
     border: none;
     border-radius: 50px 0 0 50px;
@@ -101,6 +103,86 @@
     font-size: 1.1rem;
 }
 
+/* Search Dropdown */
+.search-group {
+    position: relative;
+}
+
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: none;
+}
+
+.search-results {
+    padding: 0.5rem 0;
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.search-result-item:hover {
+    background: rgba(78, 205, 196, 0.1);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-image {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-right: 0.75rem;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.search-result-info {
+    flex: 1;
+}
+
+.search-result-name {
+    font-weight: 600;
+    color: var(--dark);
+    text-transform: capitalize;
+    margin-bottom: 0.2rem;
+    font-size: 0.9rem;
+}
+
+.search-result-types {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+}
+
+.search-result-type {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 8px;
+    background: var(--secondary);
+    color: white;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+/* Cloud-Animationen bleiben unverändert */
 .hero-section .cloud {
     position: absolute;
     background: rgba(255, 255, 255, 0.1);
@@ -207,6 +289,7 @@
     100% { transform: translateX(calc(100vw + 100px)); }
 }
 
+/* Particle-Animationen bleiben unverändert */
 .hero-section .particle {
     position: absolute;
     background: rgba(255, 255, 255, 0.8);

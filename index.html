@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="./assets/img/9.png" type="image/x-icon">
-    <title>Pokédex</title>
+    <title>Pokédex - Discover all Pokemon</title>
 
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="./assets/css/dynamic-main.css" />
   </head>
   <body>
+    <!-- Header mit optimiertem Layout -->
     <header class="hero-section py-5">
       <div class="cloud cloud-1"></div>
       <div class="cloud cloud-2"></div>
@@ -36,38 +37,44 @@
       <div class="particle particle-6"></div>
       
       <div class="container">
-        <div class="row align-items-center">
-          <div class="col-md-12">
-            <div class="header-content">
-              <div class="logo-section">
+        <div class="row align-items-center justify-content-center">
+          <div class="col-12">
+            <!-- Zentrierter Header-Content -->
+            <div class="header-content-centered">
+              <div class="logo-title-wrapper">
                 <img src="https://raw.githubusercontent.com/PokeAPI/media/master/logo/pokeapi_256.png" 
                      alt="PokeAPI Logo" class="header-logo">
+                <h1 class="pokedex-title">POKÉDX</h1>
               </div>
-              <div class="title-section">
-                <h1 class="pokedex-title mb-4">POKÉDX</h1>
-                <p class="lead text-light">
-                  Discover all Pokemon and their abilities!
-                </p>
-              </div>
+              <p class="lead text-light text-center mt-3">
+                Discover all Pokemon and their abilities!
+              </p>
             </div>
 
+            <!-- Zentrierte Suchleiste -->
             <div class="search-container mt-4">
               <div class="row justify-content-center">
                 <div class="col-md-6">
-                  <div class="input-group">
+                  <div class="input-group search-group">
                     <input
                       type="text"
                       class="form-control form-control-lg"
                       id="searchInput"
-                      placeholder="Search Pokemon..."
+                      placeholder="Search Pokemon... (min. 3 letters)"
+                      autocomplete="off"
                     />
                     <button
                       class="btn btn-light btn-lg"
                       type="button"
                       id="searchBtn"
+                      disabled
                     >
                       🔍
                     </button>
+                  </div>
+                  <!-- Search Results Dropdown -->
+                  <div id="searchDropdown" class="search-dropdown d-none">
+                    <div class="search-results" id="searchResults"></div>
                   </div>
                 </div>
               </div>
@@ -77,95 +84,106 @@
       </div>
     </header>
 
+    <!-- Filter-Sektion mit Burger-Menü -->
     <section class="filters py-4">
       <div class="container">
         <div class="row">
           <div class="col-12">
-            <div class="filter-row popular-types mb-3">
-              <button class="btn btn-filter active" data-type="all">
-                <span class="filter-text">All</span>
-              </button>
-              <button class="btn btn-filter" data-type="fire">
-                <img src="./assets/icon/fire.svg" alt="Fire" class="type-icon">
-                <span class="filter-text">Fire</span>
-              </button>
-              <button class="btn btn-filter" data-type="water">
-                <img src="./assets/icon/water.svg" alt="Water" class="type-icon">
-                <span class="filter-text">Water</span>
-              </button>
-              <button class="btn btn-filter" data-type="grass">
-                <img src="./assets/icon/grass.svg" alt="Grass" class="type-icon">
-                <span class="filter-text">Grass</span>
-              </button>
-              <button class="btn btn-filter" data-type="electric">
-                <img src="./assets/icon/electric.svg" alt="Electric" class="type-icon">
-                <span class="filter-text">Electric</span>
-              </button>
-              <button class="btn btn-filter" data-type="psychic">
-                <img src="./assets/icon/psychic.svg" alt="Psychic" class="type-icon">
-                <span class="filter-text">Psychic</span>
-              </button>
-              <button class="btn btn-filter" data-type="normal">
-                <img src="./assets/icon/normal.svg" alt="Normal" class="type-icon">
-                <span class="filter-text">Normal</span>
-              </button>
-            </div>
+            <!-- Mobile Burger Menu Button -->
+            <button class="btn btn-filter burger-menu-btn d-none" id="burgerMenuBtn">
+              <span class="burger-icon">☰</span>
+              <span class="filter-text">Filters</span>
+            </button>
             
-            <div class="filter-row secondary-types">
-              <div class="dropdown">
-                <button class="btn btn-filter dropdown-toggle" type="button" id="moreTypesDropdown" data-bs-toggle="dropdown">
-                  <span class="filter-text">More Types</span>
+            <!-- Filter Container -->
+            <div class="filter-container" id="filterContainer">
+              <!-- Desktop: Alle Filter sichtbar -->
+              <div class="filter-row popular-types mb-3">
+                <button class="btn btn-filter active" data-type="all">
+                  <span class="filter-text">All</span>
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="moreTypesDropdown">
-                  <li><button class="dropdown-item type-item" data-type="fighting">
-                    <img src="./assets/icon/fighting.svg" alt="Fighting" class="type-icon">
-                    Fighting
-                  </button></li>
-                  <li><button class="dropdown-item type-item" data-type="poison">
-                    <img src="./assets/icon/poison.svg" alt="Poison" class="type-icon">
-                    Poison
-                  </button></li>
-                  <li><button class="dropdown-item type-item" data-type="ground">
-                    <img src="./assets/icon/ground.svg" alt="Ground" class="type-icon">
-                    Ground
-                  </button></li>
-                  <li><button class="dropdown-item type-item" data-type="flying">
-                    <img src="./assets/icon/flying.svg" alt="Flying" class="type-icon">
-                    Flying
-                  </button></li>
-                  <li><button class="dropdown-item type-item" data-type="bug">
-                    <img src="./assets/icon/bug.svg" alt="Bug" class="type-icon">
-                    Bug
-                  </button></li>
-                  <li><button class="dropdown-item type-item" data-type="rock">
-                    <img src="./assets/icon/rock.svg" alt="Rock" class="type-icon">
-                    Rock
-                  </button></li>
-                  <li><button class="dropdown-item type-item" data-type="ghost">
-                    <img src="./assets/icon/ghost.svg" alt="Ghost" class="type-icon">
-                    Ghost
-                  </button></li>
-                  <li><button class="dropdown-item type-item" data-type="steel">
-                    <img src="./assets/icon/steel.svg" alt="Steel" class="type-icon">
-                    Steel
-                  </button></li>
-                  <li><button class="dropdown-item type-item" data-type="ice">
-                    <img src="./assets/icon/ice.svg" alt="Ice" class="type-icon">
-                    Ice
-                  </button></li>
-                  <li><button class="dropdown-item type-item" data-type="dragon">
-                    <img src="./assets/icon/dragon.svg" alt="Dragon" class="type-icon">
-                    Dragon
-                  </button></li>
-                  <li><button class="dropdown-item type-item" data-type="dark">
-                    <img src="./assets/icon/dark.svg" alt="Dark" class="type-icon">
-                    Dark
-                  </button></li>
-                  <li><button class="dropdown-item type-item" data-type="fairy">
-                    <img src="./assets/icon/fairy.svg" alt="Fairy" class="type-icon">
-                    Fairy
-                  </button></li>
-                </ul>
+                <button class="btn btn-filter" data-type="fire">
+                  <img src="./assets/icon/fire.svg" alt="Fire" class="type-icon">
+                  <span class="filter-text">Fire</span>
+                </button>
+                <button class="btn btn-filter" data-type="water">
+                  <img src="./assets/icon/water.svg" alt="Water" class="type-icon">
+                  <span class="filter-text">Water</span>
+                </button>
+                <button class="btn btn-filter" data-type="grass">
+                  <img src="./assets/icon/grass.svg" alt="Grass" class="type-icon">
+                  <span class="filter-text">Grass</span>
+                </button>
+                <button class="btn btn-filter" data-type="electric">
+                  <img src="./assets/icon/electric.svg" alt="Electric" class="type-icon">
+                  <span class="filter-text">Electric</span>
+                </button>
+                <button class="btn btn-filter" data-type="psychic">
+                  <img src="./assets/icon/psychic.svg" alt="Psychic" class="type-icon">
+                  <span class="filter-text">Psychic</span>
+                </button>
+                <button class="btn btn-filter" data-type="normal">
+                  <img src="./assets/icon/normal.svg" alt="Normal" class="type-icon">
+                  <span class="filter-text">Normal</span>
+                </button>
+              </div>
+              
+              <div class="filter-row secondary-types">
+                <div class="dropdown">
+                  <button class="btn btn-filter dropdown-toggle" type="button" id="moreTypesDropdown" data-bs-toggle="dropdown">
+                    <span class="filter-text">More Types</span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="moreTypesDropdown">
+                    <li><button class="dropdown-item type-item" data-type="fighting">
+                      <img src="./assets/icon/fighting.svg" alt="Fighting" class="type-icon">
+                      Fighting
+                    </button></li>
+                    <li><button class="dropdown-item type-item" data-type="poison">
+                      <img src="./assets/icon/poison.svg" alt="Poison" class="type-icon">
+                      Poison
+                    </button></li>
+                    <li><button class="dropdown-item type-item" data-type="ground">
+                      <img src="./assets/icon/ground.svg" alt="Ground" class="type-icon">
+                      Ground
+                    </button></li>
+                    <li><button class="dropdown-item type-item" data-type="flying">
+                      <img src="./assets/icon/flying.svg" alt="Flying" class="type-icon">
+                      Flying
+                    </button></li>
+                    <li><button class="dropdown-item type-item" data-type="bug">
+                      <img src="./assets/icon/bug.svg" alt="Bug" class="type-icon">
+                      Bug
+                    </button></li>
+                    <li><button class="dropdown-item type-item" data-type="rock">
+                      <img src="./assets/icon/rock.svg" alt="Rock" class="type-icon">
+                      Rock
+                    </button></li>
+                    <li><button class="dropdown-item type-item" data-type="ghost">
+                      <img src="./assets/icon/ghost.svg" alt="Ghost" class="type-icon">
+                      Ghost
+                    </button></li>
+                    <li><button class="dropdown-item type-item" data-type="steel">
+                      <img src="./assets/icon/steel.svg" alt="Steel" class="type-icon">
+                      Steel
+                    </button></li>
+                    <li><button class="dropdown-item type-item" data-type="ice">
+                      <img src="./assets/icon/ice.svg" alt="Ice" class="type-icon">
+                      Ice
+                    </button></li>
+                    <li><button class="dropdown-item type-item" data-type="dragon">
+                      <img src="./assets/icon/dragon.svg" alt="Dragon" class="type-icon">
+                      Dragon
+                    </button></li>
+                    <li><button class="dropdown-item type-item" data-type="dark">
+                      <img src="./assets/icon/dark.svg" alt="Dark" class="type-icon">
+                      Dark
+                    </button></li>
+                    <li><button class="dropdown-item type-item" data-type="fairy">
+                      <img src="./assets/icon/fairy.svg" alt="Fairy" class="type-icon">
+                      Fairy
+                    </button></li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -173,6 +191,7 @@
       </div>
     </section>
 
+    <!-- Pokemon Grid -->
     <section class="pokemon-grid py-5">
       <div class="container">
         <div class="loading-spinner text-center d-none">
@@ -182,18 +201,36 @@
           <p class="mt-3">Loading Pokemon...</p>
         </div>
 
-        <div class="row" id="pokemonContainer">
+        <div class="row justify-content-center" id="pokemonContainer">
         </div>
       </div>
     </section>
 
-    <!-- Load More Button - repositioned to bottom -->
-    <section class="load-more-section">
+    <!-- Pagination & Load More Section -->
+    <section class="navigation-section">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-auto">
-            <button id="loadMoreBtn" class="btn">
-              <span class="load-more-text">⬇️ Load More</span>
+            <!-- Pagination Controls -->
+            <div class="pagination-controls mb-3" id="paginationControls">
+              <button id="prevPageBtn" class="nav-control-btn" disabled>
+                <span class="nav-icon">←</span>
+                <span class="nav-text">Previous</span>
+              </button>
+              
+              <div class="page-info">
+                <span id="pageInfo">Page 1</span>
+              </div>
+              
+              <button id="nextPageBtn" class="nav-control-btn">
+                <span class="nav-text">Next</span>
+                <span class="nav-icon">→</span>
+              </button>
+            </div>
+            
+            <!-- Load More Button -->
+            <button id="loadMoreBtn" class="load-more-btn">
+              <span class="load-more-text">⬇️ Load More Pokemon</span>
               <span class="load-more-spinner d-none">
                 <span class="spinner-border spinner-border-sm me-1" role="status"></span>
                 Loading...
@@ -204,9 +241,8 @@
       </div>
     </section>
 
-    <!-- Footer with animated Pokemon -->
+    <!-- Footer bleibt unverändert -->
     <footer class="pokemon-footer">
-      <!-- Animated Pokemon in background -->
       <div class="footer-pokemon-bg">
         <div class="footer-pokemon footer-pokemon-1"></div>
         <div class="footer-pokemon footer-pokemon-2"></div>
@@ -218,7 +254,6 @@
       
       <div class="container footer-content">
         <div class="row">
-          <!-- Image Sources -->
           <div class="col-md-8 mb-3">
             <h6 class="footer-heading">Image Sources</h6>
             <div class="footer-sources">
@@ -250,7 +285,6 @@
             </div>
           </div>
           
-          <!-- Creator Info -->
           <div class="col-md-4 mb-3 text-md-end">
             <div class="footer-creator">
               <h6 class="footer-heading">Created by</h6>
@@ -261,7 +295,6 @@
           </div>
         </div>
         
-        <!-- Copyright -->
         <div class="row">
           <div class="col-12">
             <hr class="footer-divider">
@@ -280,5 +313,6 @@
     <script src="./assets/js/pokemon-detail.js"></script>
     <script src="./assets/js/main.js"></script>
     <script src="./assets/js/search.js"></script>
+    <script src="./assets/js/navigation.js"></script>
   </body>
 </html>

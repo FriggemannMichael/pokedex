@@ -1,0 +1,332 @@
+/* Navigation CSS - Pagination & Load More */
+
+.navigation-section {
+    background: transparent;
+    backdrop-filter: none;
+    margin-top: 2rem;
+    padding: 2rem 0;
+    position: relative;
+}
+
+/* Pagination Controls */
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.nav-control-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 20px;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    
+    /* Liquid Glass Effekt - ähnlich wie Load More */
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.2) 0%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        rgba(255, 255, 255, 0.05) 100%);
+    
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    box-shadow: 
+        0 6px 20px rgba(0, 0, 0, 0.08),
+        0 3px 12px rgba(0, 0, 0, 0.04),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.nav-control-btn:hover:not(:disabled) {
+    transform: translateY(-2px) scale(1.02);
+    
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.3) 0%, 
+        rgba(255, 255, 255, 0.2) 50%, 
+        rgba(255, 255, 255, 0.1) 100%);
+    
+    backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+    
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.12),
+        0 6px 18px rgba(255, 255, 255, 0.08),
+        inset 0 2px 4px rgba(255, 255, 255, 0.4),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.12),
+        0 0 15px rgba(255, 255, 255, 0.15);
+    
+    color: rgba(255, 255, 255, 1);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.nav-control-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 
+        0 3px 10px rgba(0, 0, 0, 0.15),
+        inset 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.nav-control-btn:disabled {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.05) 0%, 
+        rgba(255, 255, 255, 0.02) 100%);
+    
+    backdrop-filter: blur(8px) saturate(100%);
+    color: rgba(255, 255, 255, 0.3);
+    
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.03),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    
+    transform: none;
+    cursor: not-allowed;
+}
+
+.nav-icon {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.nav-text {
+    font-size: 0.9rem;
+}
+
+/* Page Info */
+.page-info {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 8px 16px;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    min-width: 80px;
+    text-align: center;
+}
+
+/* Load More Button - Optimierter Liquid Glass Effekt */
+.load-more-btn {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.25) 0%, 
+        rgba(255, 255, 255, 0.15) 50%, 
+        rgba(255, 255, 255, 0.1) 100%);
+    
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    font-size: 1.1rem;
+    font-family: var(--font-ui);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    padding: 15px 30px;
+    
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        0 4px 16px rgba(0, 0, 0, 0.05),
+        inset 0 1px 2px rgba(255, 255, 255, 0.4),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+    
+    transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+    
+    border: none;
+    cursor: pointer;
+    outline: none;
+    
+    transform: perspective(1000px) translateZ(0);
+    position: relative;
+    overflow: hidden;
+}
+
+.load-more-btn:hover:not(:disabled) {
+    border-radius: 25px;
+    transform: perspective(1000px) translateZ(10px) scale(1.05);
+    
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.35) 0%, 
+        rgba(255, 255, 255, 0.25) 50%, 
+        rgba(255, 255, 255, 0.15) 100%);
+    
+    backdrop-filter: blur(25px) saturate(200%) brightness(1.1);
+    
+    box-shadow: 
+        0 15px 45px rgba(0, 0, 0, 0.15),
+        0 8px 25px rgba(255, 255, 255, 0.1),
+        inset 0 2px 4px rgba(255, 255, 255, 0.5),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.15),
+        0 0 20px rgba(255, 255, 255, 0.2);
+    
+    color: rgba(255, 255, 255, 1);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.load-more-btn:active:not(:disabled) {
+    transform: perspective(1000px) translateZ(5px) scale(0.98);
+    box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.2),
+        inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.load-more-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.4) 50%, 
+        transparent 100%);
+    transition: left 0.6s ease;
+    z-index: 1;
+}
+
+.load-more-btn:hover:not(:disabled)::before {
+    left: 100%;
+}
+
+.load-more-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+    z-index: 1;
+}
+
+.load-more-btn:active:not(:disabled)::after {
+    width: 200px;
+    height: 200px;
+}
+
+.load-more-text,
+.load-more-spinner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.load-more-btn .spinner-border {
+    border-color: rgba(255, 255, 255, 0.3);
+    border-top-color: rgba(255, 255, 255, 0.8);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.load-more-btn:disabled {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        rgba(255, 255, 255, 0.05) 100%);
+    
+    backdrop-filter: blur(10px) saturate(100%);
+    color: rgba(255, 255, 255, 0.4);
+    
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.05),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    
+    transform: none;
+    cursor: not-allowed;
+}
+
+.load-more-btn:disabled:hover {
+    transform: none;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        rgba(255, 255, 255, 0.05) 100%);
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 768px) {
+    .pagination-controls {
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .nav-control-btn {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        border-radius: 18px;
+    }
+    
+    .nav-text {
+        display: none;
+    }
+    
+    .nav-icon {
+        font-size: 1.1rem;
+    }
+    
+    .page-info {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        min-width: 60px;
+    }
+    
+    .load-more-btn {
+        padding: 12px 25px;
+        font-size: 1rem;
+        border-radius: 18px;
+    }
+    
+    .load-more-btn:hover:not(:disabled) {
+        border-radius: 22px;
+        transform: perspective(1000px) translateZ(5px) scale(1.02);
+    }
+}
+
+@media (max-width: 576px) {
+    .nav-control-btn {
+        padding: 8px 12px;
+        border-radius: 16px;
+    }
+    
+    .nav-icon {
+        font-size: 1rem;
+    }
+    
+    .page-info {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+        min-width: 50px;
+    }
+    
+    .load-more-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        border-radius: 16px;
+    }
+    
+    .load-more-btn:hover:not(:disabled) {
+        border-radius: 20px;
+        transform: perspective(1000px) translateZ(3px) scale(1.01);
+    }
+}
