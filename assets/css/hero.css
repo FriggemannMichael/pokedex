@@ -289,7 +289,7 @@
     100% { transform: translateX(calc(100vw + 100px)); }
 }
 
-/* Particle-Animationen bleiben unverändert */
+
 .hero-section .particle {
     position: absolute;
     background: rgba(255, 255, 255, 0.8);

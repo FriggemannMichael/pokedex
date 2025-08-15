@@ -2,7 +2,8 @@ const appState = {
     pokemonList: [],
     isLoading: false,
     selectedType: 'all',
-    nextPageOffset: 0
+    nextPageOffset: 0,
+    currentPage: 1
 };
 
 const domElements = {
@@ -17,7 +18,7 @@ async function loadPokemon() {
     if (appState.isLoading) return;
 
     setLoadingState(true);
-
+    
     try {
         const pokemonDetails = await fetchPokemonData(
             appState.nextPageOffset,
@@ -28,7 +29,7 @@ async function loadPokemon() {
         renderPokemon(pokemonDetails);
         
     } catch (error) {
-        handleError('Error loading Pokemon', error);
+        handleLoadingError('Error loading Pokemon', error);
     } finally {
         setLoadingState(false);
     }
@@ -45,6 +46,8 @@ function setLoadingState(loading) {
 }
 
 function toggleLoadingSpinner(loading) {
+    if (!domElements.loadingSpinner) return;
+    
     if (loading) {
         domElements.loadingSpinner.classList.remove('d-none');
     } else {
@@ -52,8 +55,30 @@ function toggleLoadingSpinner(loading) {
     }
 }
 
-function handleError(message, error) {
-    throw error;
+function handleLoadingError(message, error) {
+    console.error(message, error);
+    showErrorMessage(message);
+}
+
+function showErrorMessage(message) {
+    const container = document.getElementById('pokemonContainer');
+    if (!container) return;
+    
+    container.innerHTML = createErrorTemplate(message);
+}
+
+function createErrorTemplate(message) {
+    return `
+        <div class="col-12">
+            <div class="search-error text-center py-5">
+                <h3>⚠️ Error</h3>
+                <p>${message}. Please try again.</p>
+                <button class="btn btn-primary" onclick="window.location.reload()">
+                    🔄 Reload Page
+                </button>
+            </div>
+        </div>
+    `;
 }
 
 async function loadPokemonByType(type) {
@@ -63,13 +88,13 @@ async function loadPokemonByType(type) {
     clearPokemonContainer();
 
     try {
-        clearSearchMode();
+        resetSearchMode();
         const pokemonDetails = await getPokemonByType(type);
         updateAppStateAfterTypeLoad(pokemonDetails);
         renderPokemon(pokemonDetails);
         
     } catch (error) {
-        handleError('Error loading by type', error);
+        handleLoadingError('Error loading by type', error);
     } finally {
         setLoadingState(false);
     }
@@ -84,15 +109,18 @@ async function getPokemonByType(type) {
 function updateAppStateAfterTypeLoad(pokemonDetails) {
     appState.pokemonList = pokemonDetails;
     appState.nextPageOffset = POKEMON_API_CONFIG.pokemonPerPage;
+    appState.currentPage = 1;
 }
 
 function clearPokemonContainer() {
+    if (!domElements.pokemonContainer) return;
     domElements.pokemonContainer.innerHTML = '';
 }
 
-function clearSearchMode() {
+function resetSearchMode() {
     appState.selectedType = 'all';
     appState.nextPageOffset = 0;
+    appState.currentPage = 1;
     
     resetAllButtonText();
     clearSearchInput();
@@ -100,7 +128,9 @@ function clearSearchMode() {
 
 function resetAllButtonText() {
     const allButton = document.querySelector('[data-type="all"]');
-    if (allButton && allButton.innerHTML !== '<span class="filter-text">All</span>') {
+    if (!allButton) return;
+    
+    if (allButton.innerHTML !== '<span class="filter-text">All</span>') {
         allButton.innerHTML = '<span class="filter-text">All</span>';
     }
 }
@@ -109,22 +139,36 @@ function clearSearchInput() {
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchBtn');
     
-    if (searchInput) {
-        searchInput.value = '';
-        if (typeof updateSearchButtonState === 'function') {
-            updateSearchButtonState(searchButton, false);
-        }
+    if (!searchInput) return;
+    
+    searchInput.value = '';
+    if (typeof updateSearchButtonState === 'function') {
+        updateSearchButtonState(searchButton, false);
     }
 }
 
 function renderPokemon(pokemonList) {
+    if (!pokemonList || pokemonList.length === 0) {
+        showNoPokemonMessage();
+        return;
+    }
+    
     clearPokemonContainer();
     pokemonList.forEach(pokemon => {
         appendPokemonCard(pokemon);
     });
 }
 
+function showNoPokemonMessage() {
+    const container = document.getElementById('pokemonContainer');
+    if (!container) return;
+    
+    container.innerHTML = createErrorTemplate('No Pokemon available');
+}
+
 function appendPokemonCard(pokemon) {
+    if (!domElements.pokemonContainer) return;
+    
     const pokemonCard = createPokemonCard(pokemon);
     domElements.pokemonContainer.appendChild(pokemonCard);
 }
@@ -147,7 +191,7 @@ function getPokemonCardTemplate(pokemon) {
         <div class="pokemon-card h-100 type-${pokemon.types[0]}" data-pokemon-id="${pokemon.id}">
             <div class="pokemon-image-wrapper">
                 <span class="pokemon-number">${pokemonNumber}</span>
-                <img src="${pokemon.image}" alt="${pokemon.name}" class="pokemon-image">
+                <img src="${pokemon.image}" alt="${pokemon.name}" class="pokemon-image" loading="lazy">
             </div>
             <div class="pokemon-card-content">
                 <h5 class="pokemon-name">${pokemon.name}</h5>
@@ -180,6 +224,8 @@ function setLoadMoreButtonState(loading) {
 }
 
 function toggleLoadMoreElements(loading, loadText, loadSpinner) {
+    if (!loadText || !loadSpinner) return;
+    
     if (loading) {
         loadText.classList.add('d-none');
         loadSpinner.classList.remove('d-none');
@@ -199,7 +245,7 @@ async function loadMorePokemon() {
         const newPokemonDetails = await fetchNewPokemonDetails();
         processNewPokemonData(newPokemonDetails);
     } catch (error) {
-        handleError('Error loading more', error);
+        handleLoadingError('Error loading more', error);
     } finally {
         resetLoadingState();
     }
@@ -207,7 +253,9 @@ async function loadMorePokemon() {
 
 function processNewPokemonData(newPokemonDetails) {
     if (hasNewPokemonData(newPokemonDetails)) {
-        updatePokemonList(newPokemonDetails);
+        appendNewPokemonToList(newPokemonDetails);
+    } else {
+        showNoMorePokemonMessage();
     }
 }
 
@@ -232,9 +280,9 @@ function hasNewPokemonData(newPokemonDetails) {
     return newPokemonDetails && newPokemonDetails.length > 0;
 }
 
-function updatePokemonList(newPokemonDetails) {
-    appState.pokemonList = newPokemonDetails;
-    renderPokemon(newPokemonDetails);
+function appendNewPokemonToList(newPokemonDetails) {
+    appendNewPokemon(newPokemonDetails);
+    appState.pokemonList = [...appState.pokemonList, ...newPokemonDetails];
     appState.nextPageOffset += POKEMON_API_CONFIG.pokemonPerPage;
 }
 
@@ -242,6 +290,19 @@ function appendNewPokemon(pokemonList) {
     pokemonList.forEach(pokemon => {
         appendPokemonCard(pokemon);
     });
+}
+
+function showNoMorePokemonMessage() {
+    if (!domElements.loadMoreButton) return;
+    
+    const originalText = domElements.loadMoreButton.innerHTML;
+    domElements.loadMoreButton.innerHTML = '✅ All Pokemon loaded!';
+    domElements.loadMoreButton.disabled = true;
+    
+    setTimeout(() => {
+        domElements.loadMoreButton.innerHTML = originalText;
+        domElements.loadMoreButton.disabled = false;
+    }, 3000);
 }
 
 function resetLoadingState() {
@@ -265,29 +326,34 @@ function initializeFilters() {
 }
 
 function handleFilterClick(button) {
-    appState.selectedType = button.getAttribute('data-type');
-    appState.nextPageOffset = 0;
-
-    changeBodyBackground(appState.selectedType);
+    const selectedType = button.getAttribute('data-type');
+    updateAppStateForFilter(selectedType);
     
+    changeBodyBackground(selectedType);
     setActiveFilter(button);
-    loadPokemonByType(appState.selectedType);
+    loadPokemonByType(selectedType);
 }
 
 function handleDropdownFilterClick(item) {
     const selectedType = item.getAttribute('data-type');
-    appState.selectedType = selectedType;
-    appState.nextPageOffset = 0;
+    updateAppStateForFilter(selectedType);
 
-    changeBodyBackground(appState.selectedType);
-    
+    changeBodyBackground(selectedType);
     closeDropdown();
     setActiveDropdownFilter(selectedType);
-    loadPokemonByType(appState.selectedType);
+    loadPokemonByType(selectedType);
+}
+
+function updateAppStateForFilter(selectedType) {
+    appState.selectedType = selectedType;
+    appState.nextPageOffset = 0;
+    appState.currentPage = 1;
 }
 
 function closeDropdown() {
     const dropdown = document.querySelector('#moreTypesDropdown');
+    if (!dropdown) return;
+    
     const bsDropdown = bootstrap.Dropdown.getInstance(dropdown);
     if (bsDropdown) {
         bsDropdown.hide();
@@ -324,15 +390,23 @@ function updateDropdownButtonContent(dropdownButton, selectedType) {
     const selectedItem = document.querySelector(`[data-type="${selectedType}"]`);
     if (!selectedItem) return;
     
-    const typeName = selectedType.charAt(0).toUpperCase() + selectedType.slice(1);
+    const typeName = capitalizeFirstLetter(selectedType);
     const icon = selectedItem.querySelector('.type-icon');
     
     if (icon) {
-        dropdownButton.innerHTML = `
-            <img src="${icon.src}" alt="${typeName}" class="type-icon">
-            <span class="filter-text">${typeName}</span>
-        `;
+        dropdownButton.innerHTML = createDropdownButtonHTML(icon.src, typeName);
     }
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function createDropdownButtonHTML(iconSrc, typeName) {
+    return `
+        <img src="${iconSrc}" alt="${typeName}" class="type-icon">
+        <span class="filter-text">${typeName}</span>
+    `;
 }
 
 function changeBodyBackground(pokemonType) {
@@ -343,9 +417,52 @@ function changeBodyBackground(pokemonType) {
 }
 
 function initializeLoadMore() {
+    if (!domElements.loadMoreButton) return;
+    
     domElements.loadMoreButton.addEventListener('click', () => {
         loadMorePokemon();
     });
+}
+
+function updatePaginationControls() {
+    const prevBtn = document.getElementById('prevPageBtn');
+    const nextBtn = document.getElementById('nextPageBtn');
+    const pageInfo = document.getElementById('pageInfo');
+    const paginationControls = document.getElementById('paginationControls');
+    
+    updatePageInfo(pageInfo);
+    updatePreviousButton(prevBtn);
+    updateNextButton(nextBtn);
+    togglePaginationVisibility(paginationControls);
+}
+
+function updatePageInfo(pageInfo) {
+    if (!pageInfo) return;
+    pageInfo.textContent = `Page ${appState.currentPage}`;
+}
+
+function updatePreviousButton(prevBtn) {
+    if (!prevBtn) return;
+    prevBtn.disabled = appState.currentPage <= 1;
+}
+
+function updateNextButton(nextBtn) {
+    if (!nextBtn) return;
+    
+    if (appState.selectedType === 'all') {
+        nextBtn.disabled = false;
+    } else if (appState.selectedType === 'search') {
+        nextBtn.disabled = true;
+    } else {
+        nextBtn.disabled = appState.currentPage >= 10;
+    }
+}
+
+function togglePaginationVisibility(paginationControls) {
+    if (!paginationControls) return;
+    
+    const isSearchMode = appState.selectedType === 'search';
+    paginationControls.style.display = isSearchMode ? 'none' : 'flex';
 }
 
 function initializeApp() {
@@ -353,6 +470,14 @@ function initializeApp() {
     initializeFilters();
     initializeLoadMore();
     initializeSearch();
+    
+    if (typeof initializeFullNavigation === 'function') {
+        initializeFullNavigation();
+    }
+    
+    if (typeof updateNavigationForType === 'function') {
+        updateNavigationForType('all');
+    }
 }
 
 document.addEventListener('DOMContentLoaded', initializeApp);

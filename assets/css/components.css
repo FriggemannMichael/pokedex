@@ -8,51 +8,6 @@
     color: var(--primary);
 }
 
-#loadMoreBtn {
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid var(--secondary);
-    color: var(--secondary);
-    font-weight: 600;
-    padding: 12px 25px;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-#loadMoreBtn:hover {
-    background: var(--secondary);
-    border-color: var(--secondary);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.3);
-}
-
-#loadMoreBtn:disabled {
-    background: rgba(255, 255, 255, 0.5);
-    border-color: rgba(108, 117, 125, 0.3);
-    color: rgba(108, 117, 125, 0.6);
-    transform: none;
-    box-shadow: none;
-}
-
-.load-more-special {
-    background: rgba(78, 205, 196, 0.1);
-    border-color: var(--secondary);
-    color: var(--secondary);
-}
-
-.load-more-special:hover {
-    background: var(--secondary);
-    color: white;
-}
-
-.load-more-special:disabled {
-    background: rgba(255, 255, 255, 0.5);
-    border-color: rgba(108, 117, 125, 0.3);
-    color: rgba(108, 117, 125, 0.6);
-    transform: none;
-}
 
 #searchBtn:disabled {
     opacity: 0.5;
