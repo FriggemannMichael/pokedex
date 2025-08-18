@@ -10,55 +10,52 @@ function initializeSearch() {
 }
 
 function addSearchInputListeners(input, button, dropdown) {
-    let searchTimeout;
+  let searchTimeout;
 
-    input.addEventListener('input', (event) => {
-        const query = event.target.value.trim();
-        const isValid = isQueryValid(query);
-        updateSearchButtonState(button, isValid);
-        clearTimeout(searchTimeout);
+  input.addEventListener('input', (event) => handleInput(event, button, dropdown));
+  input.addEventListener('keydown', (event) => handleKeydown(event, input, dropdown));
+  input.addEventListener('focus', () => handleFocus(input, dropdown));
+  button.addEventListener('click', () => handleButtonClick(input, dropdown));
+  document.addEventListener('click', (event) => handleDocumentClick(event, input, button, dropdown));
 
-        if (query.length >= 3) {
-            searchTimeout = setTimeout(() => {
-                performDropdownSearch(query, dropdown);
-            }, 300);
-        } else {
-            hideSearchDropdown(dropdown);
-        }
-    });
+  function handleInput(event, button, dropdown) {
+    const query = event.target.value.trim();
+    updateSearchButtonState(button, isQueryValid(query));
+    clearTimeout(searchTimeout);
+    query.length >= 3
+      ? searchTimeout = setTimeout(() => performDropdownSearch(query, dropdown), 300)
+      : hideSearchDropdown(dropdown);
+  }
 
-    input.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' && isQueryValid(input.value)) {
-            hideSearchDropdown(dropdown);
-            performFullSearch(input.value.trim());
-        }
+  function handleKeydown(event, input, dropdown) {
+    if (event.key === 'Enter' && isQueryValid(input.value)) {
+      hideSearchDropdown(dropdown);
+      performFullSearch(input.value.trim());
+    }
+    if (event.key === 'Escape') {
+      hideSearchDropdown(dropdown);
+      input.blur();
+    }
+  }
 
-        if (event.key === 'Escape') {
-            hideSearchDropdown(dropdown);
-            input.blur();
-        }
-    });
+  function handleButtonClick(input, dropdown) {
+    if (isQueryValid(input.value)) {
+      hideSearchDropdown(dropdown);
+      performFullSearch(input.value.trim());
+    }
+  }
 
-    button.addEventListener('click', () => {
-        if (isQueryValid(input.value)) {
-            hideSearchDropdown(dropdown);
-            performFullSearch(input.value.trim());
-        }
-    });
+  function handleDocumentClick(event, input, button, dropdown) {
+    const outsideClick = !input.contains(event.target) && !dropdown.contains(event.target) && !button.contains(event.target);
+    if (outsideClick) hideSearchDropdown(dropdown);
+  }
 
-    document.addEventListener('click', (event) => {
-        if (!input.contains(event.target) && !dropdown.contains(event.target) && !button.contains(event.target)) {
-            hideSearchDropdown(dropdown);
-        }
-    });
-
-    input.addEventListener('focus', () => {
-        const query = input.value.trim();
-        if (query.length >= 3) {
-            performDropdownSearch(query, dropdown);
-        }
-    });
+  function handleFocus(input, dropdown) {
+    const query = input.value.trim();
+    if (query.length >= 3) performDropdownSearch(query, dropdown);
+  }
 }
+
 
 async function performDropdownSearch(searchQuery, dropdown) {
     try {
@@ -224,38 +221,9 @@ function activateSearchMode() {
     updateFilterButtonsForSearch();
 }
 
-function showNoSearchResults(searchQuery) {
-    const container = document.getElementById('pokemonContainer');
-    container.innerHTML = `
-        <div class="col-12">
-            <div class="no-results text-center py-5">
-                <h3>🔍 No Pokemon Found</h3>
-                <p>No Pokemon found for "<strong>${searchQuery}</strong>".</p>
-                <p class="text-muted">
-                    <small>Make sure to search in English (e.g., "pikachu", "charizard")</small>
-                </p>
-                <button class="btn btn-primary" onclick="clearSearch()">
-                    ← Back to All Pokemon
-                </button>
-            </div>
-        </div>
-    `;
-}
 
-function showSearchError() {
-    const container = document.getElementById('pokemonContainer');
-    container.innerHTML = `
-        <div class="col-12">
-            <div class="search-error text-center py-5">
-                <h3>⚠️ Search Error</h3>
-                <p>An error occurred during the search. Please try again.</p>
-                <button class="btn btn-primary" onclick="clearSearch()">
-                    ← Back to All Pokemon
-                </button>
-            </div>
-        </div>
-    `;
-}
+
+
 
 function updateFilterButtonsForSearch() {
     resetFilterButtons();
