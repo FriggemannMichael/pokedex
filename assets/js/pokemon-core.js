@@ -176,18 +176,7 @@ function showErrorMessage(message) {
   if (container) container.innerHTML = createErrorTemplate(message);
 }
 
-function createErrorTemplate(message) {
-  return `
-    <div class="col-12">
-      <div class="search-error text-center py-5">
-        <h3>⚠️ Error</h3>
-        <p>${message}. Please try again.</p>
-        <button class="btn btn-primary" onclick="window.location.reload()">
-          🔄 Reload Page
-        </button>
-      </div>
-    </div>`;
-}
+
 
 function showNoPokemonMessage() {
   const container = document.getElementById("pokemonContainer");
@@ -195,21 +184,7 @@ function showNoPokemonMessage() {
     container.innerHTML = createErrorTemplate("No Pokemon available");
 }
 
-function getPokemonCardTemplate(pokemon) {
-  const pokemonNumber = formatPokemonNumber(pokemon.id);
-  const typeBadges = createTypeBadges(pokemon.types);
-  return `
-    <div class="pokemon-card h-100 type-${pokemon.types[0]}" data-pokemon-id="${pokemon.id}">
-      <div class="pokemon-image-wrapper">
-        <span class="pokemon-number">${pokemonNumber}</span>
-        <img src="${pokemon.image}" alt="${pokemon.name}" class="pokemon-image" loading="lazy">
-      </div>
-      <div class="pokemon-card-content">
-        <h5 class="pokemon-name">${pokemon.name}</h5>
-        <div class="pokemon-types">${typeBadges}</div>
-      </div>
-    </div>`;
-}
+
 
 function formatPokemonNumber(id) {
   return `#${id.toString().padStart(3, "0")}`;
@@ -257,3 +232,4 @@ function setLoadMoreButtonState(loading) {
   }
   domElements.loadMoreButton.disabled = loading;
 }
+

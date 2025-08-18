@@ -168,3 +168,92 @@ function addEscapeListener() {
         isEscapeListenerActive = true;
     }
 }
+
+function createErrorTemplate(message) {
+  return `
+    <div class="col-12">
+      <div class="search-error text-center py-5">
+        <h3>⚠️ Error</h3>
+        <p>${message}. Please try again.</p>
+        <button class="btn btn-primary" onclick="window.location.reload()">
+          🔄 Reload Page
+        </button>
+      </div>
+    </div>`;
+}
+
+function createStatItemTemplate(label, value) {
+    return `
+        <div class="stat-item">
+            <div class="stat-label">${label}</div>
+            <div class="stat-value">${value}</div>
+        </div>
+    `;
+}
+
+function createEvolutionItemTemplate(pokemon, isCurrent = false) {
+    return `
+        <div class="evolution-item ${isCurrent ? 'current' : ''}" data-pokemon-id="${pokemon.id}">
+            <img src="${pokemon.image}" alt="${pokemon.name}" class="evolution-image">
+            <div class="evolution-name">${pokemon.name}</div>
+        </div>
+    `;
+}
+
+function createEvolutionArrowTemplate() {
+    return `<div class="evolution-arrow">→</div>`;
+}
+
+function getPokemonCardTemplate(pokemon) {
+  const pokemonNumber = formatPokemonNumber(pokemon.id);
+  const typeBadges = createTypeBadges(pokemon.types);
+  return `
+    <div class="pokemon-card h-100 type-${pokemon.types[0]}" data-pokemon-id="${pokemon.id}">
+      <div class="pokemon-image-wrapper">
+        <span class="pokemon-number">${pokemonNumber}</span>
+        <img src="${pokemon.image}" alt="${pokemon.name}" class="pokemon-image" loading="lazy">
+      </div>
+      <div class="pokemon-card-content">
+        <h5 class="pokemon-name">${pokemon.name}</h5>
+        <div class="pokemon-types">${typeBadges}</div>
+      </div>
+    </div>`;
+}
+
+function createLoadingTemplate(message = 'Loading...') {
+    return `
+        <div class="detail-loading text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">${message}</p>
+        </div>
+    `;
+}
+
+function createErrorTemplate(message = 'Error loading') {
+    return `
+        <div class="detail-error text-center">
+            <h6>⚠️ ${message}</h6>
+            <p>Please try again.</p>
+        </div>
+    `;
+}
+
+function showNoSearchResults(searchQuery) {
+    const container = document.getElementById('pokemonContainer');
+    container.innerHTML = `
+        <div class="col-12">
+            <div class="no-results text-center py-5">
+                <h3>🔍 No Pokemon Found</h3>
+                <p>No Pokemon found for "<strong>${searchQuery}</strong>".</p>
+                <p class="text-muted">
+                    <small>Make sure to search in English (e.g., "pikachu", "charizard")</small>
+                </p>
+                <button class="btn btn-primary" onclick="clearSearch()">
+                    ← Back to All Pokemon
+                </button>
+            </div>
+        </div>
+    `;
+}
