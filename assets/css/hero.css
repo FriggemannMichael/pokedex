@@ -4,7 +4,7 @@
     position: relative;
     overflow: hidden;
     min-height: 25vh;
-    max-height: 30vh;
+    max-height: 33vh;
 }
 
 .hero-section::before {
@@ -109,19 +109,21 @@
 }
 
 .search-dropdown {
-    position: absolute;
+    
     top: 100%;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0);
     backdrop-filter: blur(10px);
-    border-radius: 0 0 15px 15px;
+    border-radius: 15px 15px 15px 15px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     max-height: 300px;
     overflow-y: auto;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 3px solid rgba(251, 250, 250, 0);
     border-top: none;
+    margin-top: 12px;
+    overflow-x: hidden;
 }
 
 .search-results {

@@ -756,7 +756,7 @@
     grid-template-columns: 1fr auto auto;
     gap: 10px;
     align-items: flex-start;
-    position: absolute;
+    
     top: 15px;
     left: 15px;
     right: 15px;

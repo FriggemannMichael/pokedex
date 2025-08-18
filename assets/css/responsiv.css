@@ -41,8 +41,6 @@
         height: 16px;
     }
     
-   
-    
     .search-container .form-control,
     .search-container .btn {
         font-size: 1rem;
@@ -63,7 +61,7 @@
     }
     
     .footer-creator {
-        text-align: center !important;
+        text-align: center;
         margin-top: 1rem;
     }
     
@@ -159,6 +157,87 @@
     
     .progress-value {
         align-self: flex-end;
+    }
+    
+    .filters .burger-menu-btn.btn.btn-filter {
+        background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.25) 0%, 
+            rgba(255, 255, 255, 0.15) 50%, 
+            rgba(255, 255, 255, 0.1) 100%);
+        
+        backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        
+        color: #333;
+        text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+        
+        box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.1),
+            0 4px 16px rgba(0, 0, 0, 0.05),
+            inset 0 1px 2px rgba(255, 255, 255, 0.4),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+        
+        transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+        
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto;
+        display: block;
+        padding: 12px 20px;
+        font-weight: 600;
+    }
+    
+    .filters .burger-menu-btn.btn.btn-filter:hover {
+        transform: perspective(1000px) translateZ(10px) scale(1.05);
+        border-radius: 25px;
+        
+        background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.35) 0%, 
+            rgba(255, 255, 255, 0.25) 50%, 
+            rgba(255, 255, 255, 0.15) 100%);
+        
+        box-shadow: 
+            0 15px 45px rgba(0, 0, 0, 0.15),
+            0 8px 25px rgba(255, 255, 255, 0.1),
+            inset 0 2px 4px rgba(255, 255, 255, 0.5),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.15);
+    }
+    
+    .filters .filter-container {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 200;
+        
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px) saturate(180%);
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+    }
+    
+    .filters .filter-container.show {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+        animation: slideDownFilter 0.3s ease-out;
+    }
+    
+    @keyframes slideDownFilter {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 }
 
@@ -278,8 +357,18 @@
     }
 }
 
-
 @media (max-width: 480px) {
+    .hero-section .search-container .col-md-6 {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    
+    .hero-section .search-container .form-control,
+    .hero-section .search-container .btn {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+    
     .logo-title-wrapper {
         gap: 1rem;
     }
@@ -292,17 +381,6 @@
     .header-logo {
         width: 45px;
         height: 45px;
-    }
-    
-    .search-container .col-md-6 {
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-    
-    .search-container .form-control,
-    .search-container .btn {
-        font-size: 0.9rem;
-        padding: 10px 15px;
     }
     
     .pokemon-grid .container {
@@ -334,10 +412,32 @@
         font-size: 0.75rem;
     }
     
-        
     .type-icon {
         width: 16px;
         height: 16px;
+    }
+    
+    .search-group .search-dropdown {
+        max-height: 250px;
+    }
+    
+    .search-dropdown .search-result-item {
+        padding: 0.6rem 0.8rem;
+    }
+    
+    .search-dropdown .search-result-image {
+        width: 35px;
+        height: 35px;
+        margin-right: 0.6rem;
+    }
+    
+    .search-dropdown .search-result-name {
+        font-size: 0.85rem;
+    }
+    
+    .search-dropdown .search-result-type {
+        font-size: 0.65rem;
+        padding: 1px 6px;
     }
 }
 
@@ -375,6 +475,93 @@
     }
 }
 
+@media (max-width: 320px) {
+    .hero-section .search-container .col-md-6 {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    
+    .hero-section .search-container .form-control {
+        font-size: 0.8rem;
+        padding: 8px 12px;
+    }
+    
+    .hero-section .search-container .btn {
+        font-size: 0.8rem;
+        padding: 8px 12px;
+        min-width: 40px;
+    }
+    
+    .btn-filter {
+        min-width: 40px;
+        padding: 5px 8px;
+        font-size: 0.7rem;
+    }
+    
+    .type-icon {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .pokemon-card {
+        max-width: 260px;
+    }
+    
+    .pokemon-name {
+        font-size: 1.2rem;
+    }
+    
+    .pokedex-title {
+        font-size: 1.6rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .header-logo {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .logo-title-wrapper {
+        gap: 0.8rem;
+    }
+    
+    .filters .burger-menu-btn.btn.btn-filter {
+        max-width: 180px;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .search-group .search-dropdown {
+        max-height: 200px;
+        margin: 0 2px;
+        left: 2px;
+        right: 2px;
+    }
+    
+    .search-dropdown .search-result-item {
+        padding: 0.5rem 0.6rem;
+    }
+    
+    .search-dropdown .search-result-image {
+        width: 30px;
+        height: 30px;
+        margin-right: 0.5rem;
+    }
+    
+    .search-dropdown .search-result-name {
+        font-size: 0.8rem;
+    }
+    
+    .search-dropdown .search-result-types {
+        gap: 0.2rem;
+    }
+    
+    .search-dropdown .search-result-type {
+        font-size: 0.6rem;
+        padding: 1px 5px;
+    }
+}
+
 @media (max-width: 768px) and (orientation: landscape) {
     .hero-section {
         min-height: 20vh;
@@ -401,20 +588,100 @@
     }
 }
 
-@media (max-width: 768px) {
-    .filter-container.show {
-        max-height: 70vh;
-        overflow-y: auto;
-        background: rgba(255, 255, 255, 0.98);
-        border-radius: 0 0 20px 20px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    }
+.search-group .search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
     
-    .burger-menu-btn {
-        width: 100%;
-        max-width: 200px;
-        margin: 0 auto;
-        display: block;
-    }
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(15px) saturate(150%);
+    
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0 0 15px 15px;
+    border-top: none;
+    
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+    
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+    
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: all 0.2s ease;
+    pointer-events: none;
 }
 
+.search-group .search-dropdown:not(.d-none) {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.search-dropdown .search-results {
+    padding: 0.25rem 0;
+    border-radius: 8px;
+}
+
+.search-dropdown .search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    background: transparent;
+}
+
+.search-dropdown .search-result-item:hover {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    transform: translateX(3px);
+}
+
+.search-dropdown .search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-dropdown .search-result-image {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-right: 0.75rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 2px;
+}
+
+.search-dropdown .search-result-info {
+    flex: 1;
+}
+
+.search-dropdown .search-result-name {
+    font-weight: 600;
+    color: rgba(44, 62, 80, 0.9);
+    text-transform: capitalize;
+    margin-bottom: 0.2rem;
+    font-size: 0.9rem;
+}
+
+.search-dropdown .search-result-types {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+}
+
+.search-dropdown .search-result-type {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(78, 205, 196, 0.8);
+    color: white;
+    text-transform: uppercase;
+    font-weight: 500;
+    backdrop-filter: blur(5px);
+}
