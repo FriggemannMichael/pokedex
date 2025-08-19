@@ -1,17 +1,12 @@
-function createPokemonModalTemplate() {
+   function createPokemonModalTemplate() {
     return `
         <div id="pokemonOverlay" class="pokemon-overlay d-none">
             <div class="overlay-background"></div>
             <div class="overlay-content">
-                ${createModalHeaderTemplate()}
                 ${createPokemonDetailCardTemplate()}
             </div>
         </div>
     `;
-}
-
-function createModalHeaderTemplate() {
-    return ``;
 }
 
 function createPokemonDetailCardTemplate() {
@@ -79,11 +74,21 @@ function createTabContentTemplate() {
     `;
 }
 
+function createInfoTabTemplate() {
+    return `
+        <div class="tab-panel active" id="tab-info">
+            <div id="detailTypes" class="pokemon-types-display"></div>
+            <div class="pokemon-stats">
+                <div id="detailStats" class="stats-grid"></div>
+            </div>
+        </div>
+    `;
+}
+
 function createStatsTabTemplate() {
     return `
         <div class="tab-panel" id="tab-stats">
-            <div id="detailBaseStats" class="base-stats-container">
-            </div>
+            <div id="detailBaseStats" class="base-stats-container"></div>
         </div>
     `;
 }
@@ -91,8 +96,7 @@ function createStatsTabTemplate() {
 function createBreedingTabTemplate() {
     return `
         <div class="tab-panel" id="tab-breeding">
-            <div id="detailBreeding" class="breeding-info">
-            </div>
+            <div id="detailBreeding" class="breeding-info"></div>
         </div>
     `;
 }
@@ -100,22 +104,7 @@ function createBreedingTabTemplate() {
 function createMovesTabTemplate() {
     return `
         <div class="tab-panel" id="tab-moves">
-            <div id="detailMoves" class="moves-container">
-            </div>
-        </div>
-    `;
-}
-
-function createInfoTabTemplate() {
-    return `
-        <div class="tab-panel active" id="tab-info">
-            <div id="detailTypes" class="pokemon-types-display">
-            </div>
-            
-            <div class="pokemon-stats">
-                <div id="detailStats" class="stats-grid">
-                </div>
-            </div>
+            <div id="detailMoves" class="moves-container"></div>
         </div>
     `;
 }
@@ -123,8 +112,7 @@ function createInfoTabTemplate() {
 function createEvolutionTabTemplate() {
     return `
         <div class="tab-panel" id="tab-evolution">
-            <div id="detailEvolutions" class="evolution-display">
-            </div>
+            <div id="detailEvolutions" class="evolution-display"></div>
         </div>
     `;
 }
@@ -133,53 +121,90 @@ function createDescriptionTabTemplate() {
     return `
         <div class="tab-panel" id="tab-description">
             <div class="description-container">
-                <p id="detailDescription" class="pokemon-description">
-                    Loading description...
-                </p>
+                <p id="detailDescription" class="pokemon-description">Loading description...</p>
             </div>
         </div>
     `;
 }
 
-function createProgressStatHTML(stat, percentage) {
+function getPokemonCardTemplate(pokemon) {
+    const pokemonNumber = formatPokemonNumber(pokemon.id);
+    const typeBadges = createTypeBadges(pokemon.types);
+    
     return `
-        <div class="progress-stat-item">
-            <div class="progress-header">
-                <span class="progress-label">${stat.name}</span>
-                <span class="progress-value">${stat.value}</span>
+        <div class="pokemon-card h-100 type-${pokemon.types[0]}" data-pokemon-id="${pokemon.id}">
+            <div class="pokemon-image-wrapper">
+                <span class="pokemon-number">${pokemonNumber}</span>
+                <img src="${pokemon.image}" alt="${pokemon.name}" class="pokemon-image" loading="lazy">
             </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: ${percentage}%"></div>
+            <div class="pokemon-card-content">
+                <h5 class="pokemon-name">${pokemon.name}</h5>
+                <div class="pokemon-types">${typeBadges}</div>
             </div>
         </div>
     `;
 }
 
-function createMoveBadgeTemplate(moveName) {
-    const cleanName = moveName.replace('-', ' ');
-    return `<span class="move-badge">${cleanName}</span>`;
+function createNoResultsTemplate(searchQuery) {
+    return `
+        <div class="col-12">
+            <div class="no-results text-center py-5">
+                <h3>🔍 No Pokemon Found</h3>
+                <p>No Pokemon found for "<strong>${searchQuery}</strong>".</p>
+                <p class="text-muted">
+                    <small>Make sure to search in English (e.g., "pikachu", "charizard")</small>
+                </p>
+                <button class="btn btn-primary" onclick="clearSearch()">
+                    ← Back to All Pokemon
+                </button>
+            </div>
+        </div>
+    `;
 }
 
-let isEscapeListenerActive = false;
-
-function addEscapeListener() {
-    if (!isEscapeListenerActive) {
-        document.addEventListener('keydown', handleEscapeKey);
-        isEscapeListenerActive = true;
-    }
+function createErrorTemplate(message = 'An error occurred') {
+    return `
+        <div class="col-12">
+            <div class="search-error text-center py-5">
+                <h3>⚠️ Error</h3>
+                <p>${message}. Please try again.</p>
+                <button class="btn btn-primary" onclick="window.location.reload()">
+                    🔄 Reload Page
+                </button>
+            </div>
+        </div>
+    `;
 }
 
-function createErrorTemplate(message) {
-  return `
-    <div class="col-12">
-      <div class="search-error text-center py-5">
-        <h3>⚠️ Error</h3>
-        <p>${message}. Please try again.</p>
-        <button class="btn btn-primary" onclick="window.location.reload()">
-          🔄 Reload Page
-        </button>
-      </div>
-    </div>`;
+function createSearchResultItemTemplate(pokemon) {
+    return `
+        <div class="search-result-item" onclick="selectPokemonFromDropdown(${pokemon.id})">
+            <img src="${pokemon.image}" alt="${pokemon.name}" class="search-result-image" loading="lazy">
+            <div class="search-result-info">
+                <div class="search-result-name">${pokemon.name}</div>
+                <div class="search-result-types">
+                    ${pokemon.types.map(type => `<span class="search-result-type">${type}</span>`).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function createNoSearchResultsTemplate(query) {
+    return `
+        <div class="search-result-item">
+            <div class="search-result-info">
+                <div class="search-result-name">No results for "${query}"</div>
+                <div style="font-size: 0.8rem; color: #666; margin-top: 0.2rem;">
+                    Try searching in English (e.g., "pikachu", "charizard")
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function createTypeBadgeTemplate(type) {
+    return `<span class="detail-type-badge type-${type}">${type.toUpperCase()}</span>`;
 }
 
 function createStatItemTemplate(label, value) {
@@ -204,39 +229,56 @@ function createEvolutionArrowTemplate() {
     return `<div class="evolution-arrow">→</div>`;
 }
 
-function getPokemonCardTemplate(pokemon) {
-  const pokemonNumber = formatPokemonNumber(pokemon.id);
-  const typeBadges = createTypeBadges(pokemon.types);
-  return `
-    <div class="pokemon-card h-100 type-${pokemon.types[0]}" data-pokemon-id="${pokemon.id}">
-      <div class="pokemon-image-wrapper">
-        <span class="pokemon-number">${pokemonNumber}</span>
-        <img src="${pokemon.image}" alt="${pokemon.name}" class="pokemon-image" loading="lazy">
-      </div>
-      <div class="pokemon-card-content">
-        <h5 class="pokemon-name">${pokemon.name}</h5>
-        <div class="pokemon-types">${typeBadges}</div>
-      </div>
-    </div>`;
+function createProgressStatTemplate(stat) {
+    const percentage = calculateStatPercentage(stat);
+    return createProgressStatHTML(stat, percentage);
 }
 
-function createLoadingTemplate(message = 'Loading...') {
+function calculateStatPercentage(stat) {
+    return Math.min((stat.value / stat.maxValue) * 100, 100);
+}
+
+function createProgressStatHTML(stat, percentage) {
     return `
-        <div class="detail-loading text-center">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+        <div class="progress-stat-item">
+            <div class="progress-header">
+                <span class="progress-label">${stat.name}</span>
+                <span class="progress-value">${stat.value}</span>
             </div>
-            <p class="mt-3">${message}</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: ${percentage}%"></div>
+            </div>
         </div>
     `;
 }
 
-function createErrorTemplate(message = 'Error loading') {
+function createMoveBadgeTemplate(moveName) {
+    const cleanName = moveName.replace('-', ' ');
+    return `<span class="move-badge">${cleanName}</span>`;
+}
+
+function getLoadMoreButtonHTML() {
     return `
-        <div class="detail-error text-center">
-            <h6>⚠️ ${message}</h6>
-            <p>Please try again.</p>
-        </div>
+        <span class="load-more-text">⬇️ Load More Pokemon</span>
+        <span class="load-more-spinner d-none">
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+            Loading...
+        </span>
+    `;
+}
+
+function getBurgerMenuOpenHTML() {
+    return createBurgerMenuHTML("☰", "Filters");
+}
+
+function getBurgerMenuCloseHTML() {
+    return createBurgerMenuHTML("✕", "Close");
+}
+
+function createBurgerMenuHTML(icon, text) {
+    return `
+        <span class="burger-icon">${icon}</span>
+        <span class="filter-text">${text}</span>
     `;
 }
 
@@ -256,4 +298,13 @@ function showNoSearchResults(searchQuery) {
             </div>
         </div>
     `;
+}
+
+let isEscapeListenerActive = false;
+
+function addEscapeListener() {
+    if (!isEscapeListenerActive) {
+        document.addEventListener('keydown', handleEscapeKey);
+        isEscapeListenerActive = true;
+    }
 }

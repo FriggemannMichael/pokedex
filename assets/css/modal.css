@@ -110,7 +110,7 @@
 .tab-content {
     min-height: 300px;
     max-height: 400px;
-    overflow-y: auto;
+    
 }
 
 .pokemon-description {
@@ -796,3 +796,17 @@
     color: white;
 }
 
+.detail-pokemon-image {
+  max-width: 100%;
+  height: 280px;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.15));
+  
+  transform: scale(0.5) translateZ(-200px); 
+  transition: transform 5.9s cubic-bezier(0.4, 0, 0.2, 1), opacity .9s ease;
+  transform-origin: center center;
+}
+
+.detail-pokemon-image.show {
+  transform: scale(1) translateZ(0); 
+}

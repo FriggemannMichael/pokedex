@@ -1,3 +1,4 @@
+
 function initializeSearch() {
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchBtn');
@@ -10,94 +11,71 @@ function initializeSearch() {
 }
 
 function addSearchInputListeners(input, button, dropdown) {
-  let searchTimeout;
+    let searchTimeout;
 
-  input.addEventListener('input', (event) => handleInput(event, button, dropdown));
-  input.addEventListener('keydown', (event) => handleKeydown(event, input, dropdown));
-  input.addEventListener('focus', () => handleFocus(input, dropdown));
-  button.addEventListener('click', () => handleButtonClick(input, dropdown));
-  document.addEventListener('click', (event) => handleDocumentClick(event, input, button, dropdown));
+    input.addEventListener('input', (event) => handleInput(event, button, dropdown, searchTimeout));
+    input.addEventListener('keydown', (event) => handleKeydown(event, input, dropdown));
+    input.addEventListener('focus', () => handleFocus(input, dropdown));
+    button.addEventListener('click', () => handleButtonClick(input, dropdown));
+    document.addEventListener('click', (event) => handleDocumentClick(event, input, button, dropdown));
+}
 
-  function handleInput(event, button, dropdown) {
+function handleInput(event, button, dropdown, searchTimeout) {
     const query = event.target.value.trim();
     updateSearchButtonState(button, isQueryValid(query));
     clearTimeout(searchTimeout);
-    query.length >= 3
-      ? searchTimeout = setTimeout(() => performDropdownSearch(query, dropdown), 300)
-      : hideSearchDropdown(dropdown);
-  }
-
-  function handleKeydown(event, input, dropdown) {
-    if (event.key === 'Enter' && isQueryValid(input.value)) {
-      hideSearchDropdown(dropdown);
-      performFullSearch(input.value.trim());
-    }
-    if (event.key === 'Escape') {
-      hideSearchDropdown(dropdown);
-      input.blur();
-    }
-  }
-
-  function handleButtonClick(input, dropdown) {
-    if (isQueryValid(input.value)) {
-      hideSearchDropdown(dropdown);
-      performFullSearch(input.value.trim());
-    }
-  }
-
-  function handleDocumentClick(event, input, button, dropdown) {
-    const outsideClick = !input.contains(event.target) && !dropdown.contains(event.target) && !button.contains(event.target);
-    if (outsideClick) hideSearchDropdown(dropdown);
-  }
-
-  function handleFocus(input, dropdown) {
-    const query = input.value.trim();
-    if (query.length >= 3) performDropdownSearch(query, dropdown);
-  }
-}
-
-
-async function performDropdownSearch(searchQuery, dropdown) {
-    try {
-        const results = await searchPokemonByName(searchQuery, 5);
-        displaySearchDropdown(results, dropdown, searchQuery);
-    } catch (error) {
-        console.error('Dropdown search error:', error);
+    
+    if (query.length >= 3) {
+        searchTimeout = setTimeout(() => performDropdownSearch(query, dropdown), 300);
+    } else {
         hideSearchDropdown(dropdown);
     }
+}
+
+function handleKeydown(event, input, dropdown) {
+    if (event.key === 'Enter' && isQueryValid(input.value)) {
+        hideSearchDropdown(dropdown);
+        performFullSearch(input.value.trim());
+    }
+    
+    if (event.key === 'Escape') {
+        hideSearchDropdown(dropdown);
+        input.blur();
+    }
+}
+
+function handleButtonClick(input, dropdown) {
+    if (isQueryValid(input.value)) {
+        hideSearchDropdown(dropdown);
+        performFullSearch(input.value.trim());
+    }
+}
+
+function handleDocumentClick(event, input, button, dropdown) {
+    const outsideClick = !input.contains(event.target) && 
+                        !dropdown.contains(event.target) && 
+                        !button.contains(event.target);
+    
+    if (outsideClick) hideSearchDropdown(dropdown);
+}
+
+function handleFocus(input, dropdown) {
+    const query = input.value.trim();
+    if (query.length >= 3) performDropdownSearch(query, dropdown);
+}
+
+async function performDropdownSearch(searchQuery, dropdown) {
+    const results = await searchPokemonByName(searchQuery, 5);
+    displaySearchDropdown(results, dropdown, searchQuery);
 }
 
 function displaySearchDropdown(results, dropdown, query) {
     const resultsContainer = dropdown.querySelector('#searchResults');
     
     if (results.length === 0) {
-        resultsContainer.innerHTML = `
-            <div class="search-result-item">
-                <div class="search-result-info">
-                    <div class="search-result-name">No results for "${query}"</div>
-                    <div style="font-size: 0.8rem; color: #666; margin-top: 0.2rem;">
-                        Try searching in English (e.g., "pikachu", "charizard")
-                    </div>
-                </div>
-            </div>
-        `;
+        resultsContainer.innerHTML = createNoSearchResultsTemplate(query);
     } else {
-        resultsContainer.innerHTML = results.map(pokemon => `
-            <div class="search-result-item" onclick="selectPokemonFromDropdown(${pokemon.id})">
-                <img src="${pokemon.image}" 
-                     alt="${pokemon.name}" 
-                     class="search-result-image"
-                     loading="lazy">
-                <div class="search-result-info">
-                    <div class="search-result-name">${pokemon.name}</div>
-                    <div class="search-result-types">
-                        ${pokemon.types.map(type => 
-                            `<span class="search-result-type">${type}</span>`
-                        ).join('')}
-                    </div>
-                </div>
-            </div>
-        `).join('');
+        resultsContainer.innerHTML = results.map(pokemon => createSearchResultItemTemplate(pokemon)).join('');
     }
     
     showSearchDropdown(dropdown);
@@ -106,6 +84,7 @@ function displaySearchDropdown(results, dropdown, query) {
 function selectPokemonFromDropdown(pokemonId) {
     const dropdown = document.getElementById('searchDropdown');
     hideSearchDropdown(dropdown);
+    
     let pokemon = appState.pokemonList.find(p => p.id === pokemonId);
     
     if (pokemon) {
@@ -116,25 +95,17 @@ function selectPokemonFromDropdown(pokemonId) {
 }
 
 async function loadSinglePokemon(pokemonId) {
-    try {
-        const pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${pokemonId}`;
-        const pokemon = await loadPokemonDetails(pokemonUrl);
-        openPokemonDetail(pokemon);
-    } catch (error) {
-        console.error('Error loading single pokemon:', error);
-    }
+    const pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${pokemonId}`;
+    const pokemon = await loadPokemonDetails(pokemonUrl);
+    openPokemonDetail(pokemon);
 }
 
 function showSearchDropdown(dropdown) {
-    if (dropdown) {
-        dropdown.classList.remove('d-none');
-    }
+    if (dropdown) dropdown.classList.remove('d-none');
 }
 
 function hideSearchDropdown(dropdown) {
-    if (dropdown) {
-        dropdown.classList.add('d-none');
-    }
+    if (dropdown) dropdown.classList.add('d-none');
 }
 
 async function performFullSearch(searchQuery) {
@@ -143,19 +114,14 @@ async function performFullSearch(searchQuery) {
     setLoadingState(true);
     clearPokemonContainer();
 
-    try {
-        const searchResults = await searchPokemonByName(searchQuery, 50);
-        handleSearchResults(searchResults, searchQuery);
-    } catch (error) {
-        handleError('Search error', error);
-        showSearchError();
-    } finally {
-        setLoadingState(false);
-    }
+    const searchResults = await searchPokemonByName(searchQuery, 50);
+    handleSearchResults(searchResults, searchQuery);
+    setLoadingState(false);
 }
 
 async function searchPokemonByName(searchQuery, limit = 50) {
     const localResults = findPokemonLocally(searchQuery);
+    
     if (localResults.length > 0) {
         return localResults.slice(0, limit);
     }
@@ -171,14 +137,9 @@ function findPokemonLocally(query) {
 }
 
 async function fetchPokemonFromAPI(query, limit) {
-    try {
-        const searchResponse = await fetchFromPokeAPI(`${POKEMON_API_CONFIG.baseUrl}?offset=0&limit=1000`);
-        const matchingPokemon = filterMatchingPokemon(searchResponse, query);
-        return await loadLimitedPokemonDetails(matchingPokemon, limit);
-    } catch (error) {
-        console.error('API search error:', error);
-        return [];
-    }
+    const searchResponse = await fetchFromPokeAPI(`${POKEMON_API_CONFIG.baseUrl}?offset=0&limit=1000`);
+    const matchingPokemon = filterMatchingPokemon(searchResponse, query);
+    return await loadLimitedPokemonDetails(matchingPokemon, limit);
 }
 
 function filterMatchingPokemon(searchResponse, query) {
@@ -221,10 +182,6 @@ function activateSearchMode() {
     updateFilterButtonsForSearch();
 }
 
-
-
-
-
 function updateFilterButtonsForSearch() {
     resetFilterButtons();
     updateAllButtonForSearch();
@@ -232,14 +189,10 @@ function updateFilterButtonsForSearch() {
 
 function resetFilterButtons() {
     const filterButtons = document.querySelectorAll('.btn-filter[data-type]');
-    filterButtons.forEach(button => {
-        button.classList.remove('active');
-    });
+    filterButtons.forEach(button => button.classList.remove('active'));
     
     const dropdownButton = document.querySelector('#moreTypesDropdown');
-    if (dropdownButton) {
-        dropdownButton.classList.remove('active');
-    }
+    if (dropdownButton) dropdownButton.classList.remove('active');
 }
 
 function updateAllButtonForSearch() {
@@ -277,9 +230,7 @@ function resetToAllFilter() {
 
 function resetAllButtonText() {
     const allButton = document.querySelector('[data-type="all"]');
-    if (allButton) {
-        allButton.innerHTML = '<span class="filter-text">All</span>';
-    }
+    if (allButton) allButton.innerHTML = '<span class="filter-text">All</span>';
 }
 
 function isQueryValid(query) {
@@ -297,7 +248,5 @@ function updateSearchButtonState(button, isEnabled) {
 
 function clearPokemonContainer() {
     const container = document.getElementById('pokemonContainer');
-    if (container) {
-        container.innerHTML = '';
-    }
+    if (container) container.innerHTML = '';
 }

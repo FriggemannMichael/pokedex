@@ -1,4 +1,3 @@
-
 function initializePokemonModal() {
     const existingModal = document.getElementById('pokemonOverlay');
     if (existingModal) return;
@@ -49,11 +48,18 @@ function handleEscapeKey(event) {
 function openPokemonModal() {
     const overlay = document.getElementById('pokemonOverlay');
     if (!overlay) return;
-    
+
     showModal(overlay);
     disableBodyScroll();
     initializeTabsDelayed();
+
+    const img = overlay.querySelector(".detail-pokemon-image");
+    if (img) {
+        img.classList.remove("show");  
+        setTimeout(() => img.classList.add("show"), 40);
+    }
 }
+
 
 function showModal(overlay) {
     overlay.classList.remove('d-none');
@@ -133,57 +139,4 @@ function activateSelectedTab(targetTab) {
     if (activePanel) activePanel.classList.add('active');
 }
 
-function createTypeBadgeTemplate(type) {
-    return `<span class="detail-type-badge type-${type}">${type.toUpperCase()}</span>`;
-}
 
-function createStatItemTemplate(label, value) {
-    return `
-        <div class="stat-item">
-            <div class="stat-label">${label}</div>
-            <div class="stat-value">${value}</div>
-        </div>
-    `;
-}
-
-function createEvolutionItemTemplate(pokemon, isCurrent = false) {
-    return `
-        <div class="evolution-item ${isCurrent ? 'current' : ''}" data-pokemon-id="${pokemon.id}">
-            <img src="${pokemon.image}" alt="${pokemon.name}" class="evolution-image">
-            <div class="evolution-name">${pokemon.name}</div>
-        </div>
-    `;
-}
-
-function createEvolutionArrowTemplate() {
-    return `<div class="evolution-arrow">→</div>`;
-}
-
-function createLoadingTemplate(message = 'Loading...') {
-    return `
-        <div class="detail-loading text-center">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p class="mt-3">${message}</p>
-        </div>
-    `;
-}
-
-function createErrorTemplate(message = 'Error loading') {
-    return `
-        <div class="detail-error text-center">
-            <h6>⚠️ ${message}</h6>
-            <p>Please try again.</p>
-        </div>
-    `;
-}
-
-function createProgressStatTemplate(stat) {
-    const percentage = calculateStatPercentage(stat);
-    return createProgressStatHTML(stat, percentage);
-}
-
-function calculateStatPercentage(stat) {
-    return Math.min((stat.value / stat.maxValue) * 100, 100);
-}

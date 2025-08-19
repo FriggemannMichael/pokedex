@@ -185,21 +185,11 @@ async function displayEvolutionChain(evolutions, currentPokemonId) {
     return;
   }
 
-  let html = '<div class="evolution-chain">';
-  evolutions.forEach((evolution, index) => {
-    const isCurrent = evolution.id === currentPokemonId;
+  container.innerHTML = generateEvolutionChainTemplate(evolutions, currentPokemonId);
+  addClickEventsToEvolutionItems(container, currentPokemonId);
+}
 
-    html += createEvolutionItemTemplate(evolution, isCurrent);
-
-    if (index < evolutions.length - 1) {
-      html += createEvolutionArrowTemplate();
-    }
-  });
-  html += "</div>";
-
-  container.innerHTML = html;
-
-  // Click Events für Evolution Items
+function addClickEventsToEvolutionItems(container, currentPokemonId) {
   container.querySelectorAll(".evolution-item").forEach((item) => {
     item.addEventListener("click", async () => {
       const pokemonId = item.dataset.pokemonId;
@@ -211,6 +201,21 @@ async function displayEvolutionChain(evolutions, currentPokemonId) {
       }
     });
   });
+}
+
+function generateEvolutionChainTemplate(evolutions, currentPokemonId) {
+  let html = '<div class="evolution-chain">';
+  evolutions.forEach((evolution, index) => {
+    const isCurrent = evolution.id === currentPokemonId;
+
+    html += createEvolutionItemTemplate(evolution, isCurrent);
+
+    if (index < evolutions.length - 1) {
+      html += createEvolutionArrowTemplate();
+    }
+  });
+  html += "</div>";
+  return html;
 }
 
 // === UTILITY FUNKTIONEN ===
@@ -290,32 +295,20 @@ async function loadPokemonByType(type) {
   pokemonContainer.innerHTML = "";
 
   try {
-    if (type === "all") {
-      const response = await fetch(
-        `${POKEMON_API_BASE}?offset=0&limit=${POKEMON_PER_PAGE}`
-      );
-      const data = await response.json();
+    let url = type === "all" ? `${POKEMON_API_BASE}?offset=0&limit=${POKEMON_PER_PAGE}` :  `https://pokeapi.co/api/v2/type/${type}`;
+    const response = await fetch(url);
+    const data = await response.json();
 
-      const pokemonPromises = data.results.map((pokemon) =>
-        loadPokemonDetails(pokemon.url)
-      );
-      const pokemonDetails = await Promise.all(pokemonPromises);
+    let pokemonUrls = [];
+    
+    if (type === "all")pokemonUrls = data.pokemon.slice(0, 20);
 
-      allPokemon = pokemonDetails;
+    pokemonUrls = pokemonUrls.map((p) => p.pokemon.url);
+    
+    const pokemonPromises = pokemonUrls.map((url) => loadPokemonDetails(url));
+    const pokemonDetails = await Promise.all(pokemonPromises);
+    allPokemon = pokemonDetails;
       renderPokemon(pokemonDetails);
-    } else {
-      const response = await fetch(`https://pokeapi.co/api/v2/type/${type}`);
-      const typeData = await response.json();
-
-      const pokemonUrls = typeData.pokemon
-        .slice(0, 20)
-        .map((p) => p.pokemon.url);
-      const pokemonPromises = pokemonUrls.map((url) => loadPokemonDetails(url));
-      const pokemonDetails = await Promise.all(pokemonPromises);
-
-      allPokemon = pokemonDetails;
-      renderPokemon(pokemonDetails);
-    }
   } catch (error) {
     console.error("Fehler beim Laden nach Typ:", error);
   } finally {
