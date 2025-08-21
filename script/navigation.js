@@ -1,4 +1,3 @@
-
 const navigationState = {
     currentPage: 1,
     totalPages: 1,
@@ -54,7 +53,7 @@ async function fetchPokemonDetails(pageNumber) {
         return await fetchPokemonData(offset, navigationState.pokemonPerPage);
     }
     
-    return await fetchPokemonByType(appState.selectedType, offset);
+    return await fetchMorePokemonByType(appState.selectedType, offset);
 }
 
 function calculateOffset(pageNumber) {
@@ -96,6 +95,10 @@ function processNewPokemonData(newPokemonDetails) {
 function updateAppStateWithNewPokemon(newPokemonDetails) {
     appState.pokemonList = [...appState.pokemonList, ...newPokemonDetails];
     appState.nextPageOffset += navigationState.pokemonPerPage;
+    
+    if (appState.selectedType === "all") {
+        appState.allPokemonList = [...appState.pokemonList];  // <- Fix
+    }
 }
 
 function appendNewPokemon(pokemonList) {
@@ -106,7 +109,7 @@ function showNoMorePokemon() {
     const loadMoreBtn = document.getElementById("loadMoreBtn");
     if (!loadMoreBtn) return;
     
-    loadMoreBtn.innerHTML = "✅ All Pokemon loaded!";
+    loadMoreBtn.innerHTML = " All Pokemon loaded!";
     loadMoreBtn.disabled = true;
     resetLoadMoreButtonAfterDelay(loadMoreBtn);
 }
@@ -259,3 +262,4 @@ function handleError(message, error) {
     console.error(message, error);
     alert(message);
 }
+

@@ -67,3 +67,4 @@ function extractMorePokemonUrls(typeApiResponse, offset) {
         .slice(offset, offset + POKEMON_API_CONFIG.pokemonPerPage)
         .map(pokemonData => pokemonData.pokemon.url);
 }
+
