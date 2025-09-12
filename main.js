@@ -1,53 +1,61 @@
+window.toggleDropdown = function (className) {
+  const section = document.querySelector("." + className);
+  if (!section) return console.warn("Section not found:", className);
+  section.classList.toggle("d-none");
+  section.classList.toggle("d-flex");
+};
+
 let loadedCount = 0;
 
 async function loadAllScripts(scripts) {
-    for (const path of scripts) {
-        await loadScript(path);
-    }
-    startApp();
+  for (const path of scripts) {
+    await loadScript(path);
+  }
+  startApp();
 }
 
 function loadScript(path) {
-    return new Promise((resolve, reject) => {
-        if (isAlreadyLoaded(path)) {
-            resolve();
-            return;
-        }
+  return new Promise((resolve, reject) => {
+    if (isAlreadyLoaded(path)) {
+      resolve();
+      return;
+    }
 
-        const script = createScriptElement(path);
-        script.onload = () => {
-            loadedCount++;
-            resolve();
-        };
-        script.onerror = () => reject(new Error(`Failed to load ${path}`));
+    const script = createScriptElement(path);
+    script.onload = () => {
+      loadedCount++;
+      resolve();
+    };
+    script.onerror = () => reject(new Error(`Failed to load ${path}`));
 
-        document.head.appendChild(script);
-    });
+    document.head.appendChild(script);
+  });
 }
 
 function isAlreadyLoaded(path) {
-    return Boolean(document.querySelector(`script[src="${path}"]`));
+  return Boolean(document.querySelector(`script[src="${path}"]`));
 }
 
 function createScriptElement(path) {
-    const script = document.createElement('script');
-    script.src = path;
-    return script;
+  const script = document.createElement("script");
+  script.src = path;
+  return script;
 }
 
 function startApp() {
-    setTimeout(() => {
-        if (typeof initializeApp === 'function') {
-            initializeApp();
-        } else {
-            showError();
-        }
-    }, 100);
+  setTimeout(() => {
+    if (typeof initializeApp === "function") {
+      initializeApp();
+    } else {
+      showError();
+    }
+  }, 100);
 }
 
 function showError() {
-    const container = document.getElementById('pokemonContainer') || document.body;
-    container.innerHTML = `
+  const container =
+    document.getElementById("pokemonContainer") || document.body;
+  container.innerHTML = `
         <div class="error-container text-center py-5">
             <h2>App Loading Failed</h2>
             <p>Could not initialize the Pokemon app.</p>
@@ -59,26 +67,26 @@ function showError() {
 }
 
 function startPokemonApp() {
-    const scripts = [
-        './script/api.js',
-        './script/template.js',
-        './script/pokemon-core.js',
-        './script/navigation.js',
-        './script/search.js',
-        './script/pokemon-detail.js',
-        './script/pokemon-modal.js',
-        './script/pokemon-ui.js'
-        
-    ];
+  const scripts = [
+    "./script/api.js",
+    "./script/template.js",
+    "./script/pokemon-core.js",
+    "./script/navigation.js",
+    "./script/search.js",
+    "./script/pokemon-detail.js",
+    "./script/pokemon-modal.js",
+    "./script/pokemon-ui.js",
+    "./script/mypokedex-section.js",
+  ];
 
-    loadAllScripts(scripts).catch(error => {
-        console.error('Script loading failed:', error);
-        showError();
-    });
+  loadAllScripts(scripts).catch((error) => {
+    console.error("Script loading failed:", error);
+    showError();
+  });
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', startPokemonApp);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", startPokemonApp);
 } else {
-    startPokemonApp();
+  startPokemonApp();
 }

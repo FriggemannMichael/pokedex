@@ -246,8 +246,3 @@ function updateSearchButtonState(button, isEnabled) {
     button.title = isEnabled ? 'Search Pokemon' : 'Enter at least 3 letters';
 }
 
-function clearPokemonContainer() {
-    const container = document.getElementById('pokemonContainer');
-    if (container) container.innerHTML = '';
-}
-

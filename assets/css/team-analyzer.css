@@ -1,0 +1,428 @@
+/* Team-Analyse-Komponente */
+
+.team-analysis-results {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.analysis-section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--primary-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.analysis-section h6 {
+    color: var(--text-color);
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Team-Übersicht */
+.team-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.team-member {
+    position: relative;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.team-member:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.team-position {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--text-color);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.team-member-image {
+    margin: 8px 0 12px;
+}
+
+.team-member-image img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.team-member-info {
+    margin-top: 12px;
+}
+
+.team-member-number {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    margin-bottom: 4px;
+}
+
+.team-member-name {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    text-transform: capitalize;
+}
+
+.team-member-types {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+/* Typ-basierte Hintergründe für Team-Member */
+.team-member.type-fire { background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 70%, #FF6B47 100%); }
+.team-member.type-water { background: linear-gradient(135deg, #3498DB 0%, #5DADE2 70%, #2E86C1 100%); }
+.team-member.type-grass { background: linear-gradient(135deg, #2ECC71 0%, #58D68D 70%, #27AE60 100%); }
+.team-member.type-electric { background: linear-gradient(135deg, #F1C40F 0%, #F7DC6F 70%, #D4AC0D 100%); }
+.team-member.type-psychic { background: linear-gradient(135deg, #E74C3C 0%, #EC7063 70%, #CB4335 100%); }
+.team-member.type-ice { background: linear-gradient(135deg, #85C1E9 0%, #AED6F1 70%, #5DADE2 100%); }
+.team-member.type-dragon { background: linear-gradient(135deg, #8E44AD 0%, #A569BD 70%, #7D3C98 100%); }
+.team-member.type-dark { background: linear-gradient(135deg, #34495E 0%, #5D6D7E 70%, #2C3E50 100%); }
+.team-member.type-fighting { background: linear-gradient(135deg, #E67E22 0%, #F0B27A 70%, #D35400 100%); }
+.team-member.type-poison { background: linear-gradient(135deg, #9B59B6 0%, #BB8FCE 70%, #8E44AD 100%); }
+.team-member.type-normal { background: linear-gradient(135deg, #A8A878 0%, #C5C5A0 70%, #8A8A5E 100%); }
+.team-member.type-flying { background: linear-gradient(135deg, #A890F0 0%, #C8B5F7 70%, #9373E8 100%); }
+.team-member.type-ground { background: linear-gradient(135deg, #E0C068 0%, #E8D084 70%, #C9A352 100%); }
+.team-member.type-rock { background: linear-gradient(135deg, #B8A038 0%, #C9B65A 70%, #9E8A31 100%); }
+.team-member.type-bug { background: linear-gradient(135deg, #A8B820 0%, #B8C842 70%, #8FA31A 100%); }
+.team-member.type-ghost { background: linear-gradient(135deg, #705898 0%, #8A7AAD 70%, #5E4A82 100%); }
+.team-member.type-steel { background: linear-gradient(135deg, #B8B8D0 0%, #D0D0E0 70%, #A0A0B8 100%); }
+.team-member.type-fairy { background: linear-gradient(135deg, #EE99AC 0%, #F4B5C4 70%, #E67E95 100%); }
+
+/* Schwächen-Analyse */
+.weaknesses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.weakness-item {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    padding: 12px;
+    border: 2px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.weakness-item.severity-critical {
+    border-color: #dc3545;
+    background: rgba(220, 53, 69, 0.1);
+}
+
+.weakness-item.severity-high {
+    border-color: #fd7e14;
+    background: rgba(253, 126, 20, 0.1);
+}
+
+.weakness-item.severity-medium {
+    border-color: #ffc107;
+    background: rgba(255, 193, 7, 0.1);
+}
+
+.weakness-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.severity-badge {
+    padding: 4px 8px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+}
+
+.severity-badge.critical { background: #dc3545; }
+.severity-badge.high { background: #fd7e14; }
+.severity-badge.medium { background: #ffc107; color: #000; }
+.severity-badge.low { background: #28a745; }
+
+.affected-pokemon {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Stärken-Analyse */
+.strengths-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.strength-item {
+    background: rgba(40, 167, 69, 0.1);
+    border: 1px solid #28a745;
+    border-radius: 20px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.strength-item.immunity {
+    background: rgba(23, 162, 184, 0.1);
+    border-color: #17a2b8;
+}
+
+.strength-count {
+    font-size: 12px;
+    font-weight: 600;
+    color: #28a745;
+}
+
+.strength-item.immunity .strength-count {
+    color: #17a2b8;
+}
+
+/* Coverage-Analyse */
+.coverage-stats {
+    margin-bottom: 16px;
+}
+
+.coverage-percentage {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.percentage {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.coverage-text {
+    font-size: 14px;
+    color: #666;
+}
+
+.progress {
+    height: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(45deg, var(--primary-color), var(--accent));
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.coverage-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.coverage-item {
+    background: rgba(108, 117, 125, 0.1);
+    border-radius: 16px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.effectiveness {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Empfehlungen */
+.recommendations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.recommendation-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #6c757d;
+    background: rgba(108, 117, 125, 0.05);
+}
+
+.recommendation-item.priority-high {
+    border-left-color: #dc3545;
+    background: rgba(220, 53, 69, 0.05);
+}
+
+.recommendation-item.priority-medium {
+    border-left-color: #ffc107;
+    background: rgba(255, 193, 7, 0.05);
+}
+
+.recommendation-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.recommendation-text {
+    flex: 1;
+    color: var(--text-color);
+    line-height: 1.4;
+}
+
+/* Typ-Badges in der Analyse */
+.analysis-section .type-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+    margin: 1px;
+}
+
+/* Loading-Animation */
+.analysis-loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.analysis-loading .spinner-border {
+    margin-bottom: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .team-overview {
+        grid-template-columns: 1fr;
+    }
+    
+    .weakness-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .coverage-percentage {
+        flex-direction: column;
+        text-align: center;
+        gap: 4px;
+    }
+    
+    .recommendation-item {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+/* Modal-Anpassungen */
+#teamAnalysisModal .modal-dialog {
+    max-width: 90vw;
+    margin: 1.75rem auto;
+}
+
+#teamAnalysisModal .modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+#teamAnalysisModal .modal-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent));
+    color: white;
+    border-radius: 16px 16px 0 0;
+    border-bottom: none;
+}
+
+#teamAnalysisModal .modal-title {
+    font-weight: 600;
+}
+
+#teamAnalysisModal .btn-close {
+    filter: invert(1);
+}
+
+/* Animation für Schwächen-Items */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.weakness-item,
+.recommendation-item {
+    animation: slideInLeft 0.3s ease-out;
+}
+
+/* Hover-Effekte */
+.weakness-item:hover,
+.strength-item:hover,
+.coverage-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Team-Analyse-Button im Droppoint */
+.drop-point .btn-info {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.drop-point .btn-info::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.drop-point .btn-info:hover::before {
+    left: 100%;
+}
+
+.drop-point .btn-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(23, 162, 184, 0.4);
+}

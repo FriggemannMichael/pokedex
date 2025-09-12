@@ -1,0 +1,320 @@
+/* Pokemon Go-inspirierte Features */
+
+/* Favoriten-Button */
+.favorite-btn {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.favorite-btn.active {
+    background: rgba(255, 69, 0, 0.9);
+    color: white;
+}
+
+/* Rating-System */
+.rating-container {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0;
+    gap: 2px;
+}
+
+.rating-star {
+    cursor: pointer;
+    font-size: 14px;
+    opacity: 0.3;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.rating-star:hover,
+.rating-star.active {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.rating-star:hover {
+    filter: drop-shadow(0 0 4px gold);
+}
+
+/* Automatische Rating-Sterne */
+.rating-container.auto-rating .rating-star {
+    cursor: default;
+    pointer-events: none;
+}
+
+.rating-container.auto-rating .rating-star.auto {
+    position: relative;
+}
+
+.rating-container.auto-rating .rating-star.auto::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 2px;
+    background: #ffd700;
+    border-radius: 1px;
+    opacity: 0.8;
+}
+
+/* Power Level System */
+.power-level {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 8px;
+    font-size: 11px;
+    position: relative;
+    overflow: hidden;
+}
+
+.power-level::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.power-label {
+    font-size: 9px;
+    opacity: 0.8;
+    margin-bottom: 2px;
+}
+
+.power-value {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.iv-info {
+    font-size: 8px;
+    opacity: 0.7;
+    margin-bottom: 2px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.performance-rating {
+    font-size: 9px;
+    opacity: 0.9;
+}
+
+/* Power Level Varianten */
+.power-level.excellent {
+    background: linear-gradient(135deg, #00ff88, #00cc70);
+}
+
+.power-level.great {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+.power-level.good {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.power-level.average {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+}
+
+.power-level.poor {
+    background: linear-gradient(135deg, #ffecd2, #fcb69f);
+    color: #333;
+}
+
+/* Filter-Verbesserungen */
+#filterContainer .btn-outline-primary {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+#filterContainer .btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#filterContainer .form-select {
+    min-width: 140px;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    padding: 8px 16px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+#filterContainer .form-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+    transform: scale(1.02);
+}
+
+/* Pokemon Card Responsive Anpassungen */
+@media (max-width: 768px) {
+    .power-level {
+        padding: 6px;
+        font-size: 10px;
+    }
+    
+    .power-value {
+        font-size: 12px;
+    }
+    
+    .favorite-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+    
+    .rating-star {
+        font-size: 12px;
+    }
+}
+
+/* Erweiterte Such-Filter */
+.advanced-filters {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.filter-group {
+    margin-bottom: 16px;
+}
+
+.filter-label {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filter-chip {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-chip:hover,
+.filter-chip.active {
+    background: var(--primary-color);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Animationen für Pokemon Cards */
+.pokemon-card {
+    transition: all 0.3s ease;
+}
+
+.pokemon-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.pokemon-card.favorited {
+    border: 2px solid gold;
+    background: linear-gradient(145deg, rgba(255, 215, 0, 0.1), rgba(255, 255, 255, 0.9));
+}
+
+/* Favorite und Rating Overlay für bessere UX */
+.pokemon-image-wrapper {
+    position: relative;
+}
+
+.pokemon-rating-overlay {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Improved Button Styles */
+.btn-filter-extended {
+    background: linear-gradient(145deg, var(--secondary-color), var(--primary-color));
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-filter-extended::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-filter-extended:hover::before {
+    left: 100%;
+}
+
+.btn-filter-extended:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}

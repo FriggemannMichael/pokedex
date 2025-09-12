@@ -132,15 +132,29 @@ function getPokemonCardTemplate(pokemon) {
     const pokemonNumber = formatPokemonNumber(pokemon.id);
     const typeBadges = createTypeBadges(pokemon.types);
     
+    // Pokemon Go Features
+    const favoriteBtn = window.pokemonGoFeatures ? 
+        window.pokemonGoFeatures.getFavoriteButtonHTML(pokemon.id) : '';
+    const ratingStars = window.pokemonGoFeatures ? 
+        window.pokemonGoFeatures.getRatingStarsHTML(pokemon.id, pokemon) : '';
+    const powerLevel = window.pokemonGoFeatures ? 
+        window.pokemonGoFeatures.getPowerLevelHTML(pokemon) : '';
+    
     return `
-        <div class="pokemon-card h-100 type-${pokemon.types[0]}" data-pokemon-id="${pokemon.id}">
+        <div class="pokemon-card h-100 type-${pokemon.types[0]}" 
+             data-pokemon-id="${pokemon.id}" 
+             draggable="true" 
+             ondragstart="handlePokemonDragStart(event)">
             <div class="pokemon-image-wrapper">
+                ${favoriteBtn}
                 <span class="pokemon-number">${pokemonNumber}</span>
                 <img src="${pokemon.image}" alt="${pokemon.name}" class="pokemon-image" loading="lazy">
             </div>
             <div class="pokemon-card-content">
                 <h5 class="pokemon-name">${pokemon.name}</h5>
                 <div class="pokemon-types">${typeBadges}</div>
+                ${ratingStars}
+                ${powerLevel}
             </div>
         </div>
     `;
