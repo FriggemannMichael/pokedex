@@ -298,7 +298,7 @@ function createBurgerMenuHTML(icon, text) {
 }
 
 function showNoSearchResults(searchQuery) {
-    const container = document.getElementById('pokemonContainer');
+    const container = domCache.getPokemonContainer();
     container.innerHTML = `
         <div class="col-12">
             <div class="no-results text-center py-5">

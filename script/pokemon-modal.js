@@ -1,5 +1,5 @@
 function initializePokemonModal() {
-    const existingModal = document.getElementById('pokemonOverlay');
+    const existingModal = domCache.getPokemonOverlay();
     if (existingModal) return;
     
     createModal();
@@ -12,7 +12,7 @@ function createModal() {
 }
 
 function setupModalEventListeners() {
-    const overlay = document.getElementById('pokemonOverlay');
+    const overlay = domCache.getPokemonOverlay();
     if (!overlay) return;
     
     setupBackgroundListener(overlay);
@@ -38,7 +38,7 @@ function setupNavigationListeners(overlay) {
 
 function handleEscapeKey(event) {
     if (event.key === 'Escape') {
-        const overlay = document.getElementById('pokemonOverlay');
+        const overlay = domCache.getPokemonOverlay();
         if (overlay && overlay.classList.contains('show')) {
             closePokemonModal();
         }
@@ -46,7 +46,7 @@ function handleEscapeKey(event) {
 }
 
 function openPokemonModal() {
-    const overlay = document.getElementById('pokemonOverlay');
+    const overlay = domCache.getPokemonOverlay();
     if (!overlay) return;
 
     showModal(overlay);
@@ -75,7 +75,7 @@ function initializeTabsDelayed() {
 }
 
 function closePokemonModal() {
-    const overlay = document.getElementById('pokemonOverlay');
+    const overlay = domCache.getPokemonOverlay();
     if (!overlay) return;
     
     hideModal(overlay);
@@ -95,7 +95,7 @@ function scheduleModalCleanup(overlay) {
 }
 
 function resetModalCard() {
-    const overlay = document.getElementById('pokemonOverlay');
+    const overlay = domCache.getPokemonOverlay();
     if (!overlay) return;
     
     const card = overlay.querySelector('.pokemon-detail-card');

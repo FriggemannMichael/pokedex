@@ -8,9 +8,9 @@ const appState = {
 };
 
 const domElements = {
-  pokemonContainer: document.getElementById("pokemonContainer"),
+  pokemonContainer: () => domCache.getPokemonContainer(),
   loadingSpinner: document.querySelector(".loading-spinner"),
-  loadMoreButton: document.getElementById("loadMoreBtn"),
+  loadMoreButton: () => domCache.getLoadMoreBtn(),
   filterButtons: document.querySelectorAll(".btn-filter[data-type]"),
   dropdownItems: document.querySelectorAll(
     ".dropdown-item.type-item[data-type]"
@@ -136,9 +136,10 @@ function renderPokemon(pokemonList) {
 }
 
 function appendPokemonCard(pokemon) {
-  if (!domElements.pokemonContainer) return;
+  const pokemonContainer = domElements.pokemonContainer();
+  if (!pokemonContainer) return;
   const pokemonCard = createPokemonCard(pokemon);
-  domElements.pokemonContainer.appendChild(pokemonCard);
+  pokemonContainer.appendChild(pokemonCard);
 
   const card = pokemonCard.querySelector(".pokemon-card");
   if (card) {
@@ -156,11 +157,13 @@ function createPokemonCard(pokemon) {
   const cardElement = document.createElement("div");
   cardElement.className = "col-md-4 col-lg-3 mb-4";
   cardElement.innerHTML = getPokemonCardTemplate(pokemon);
-  
+
   cardElement.addEventListener("click", (event) => {
     // Verhindere das Öffnen der Detail-Ansicht wenn auf Favorite-Button geklickt wird
-    if (event.target.classList.contains('favorite-btn') || 
-        event.target.closest('.favorite-btn')) {
+    if (
+      event.target.classList.contains("favorite-btn") ||
+      event.target.closest(".favorite-btn")
+    ) {
       return;
     }
     openPokemonDetail(pokemon);
@@ -170,8 +173,9 @@ function createPokemonCard(pokemon) {
 }
 
 function clearPokemonContainer() {
-  if (!domElements.pokemonContainer) return;
-  domElements.pokemonContainer.innerHTML = "";
+  const pokemonContainer = domElements.pokemonContainer();
+  if (!pokemonContainer) return;
+  pokemonContainer.innerHTML = "";
 }
 
 function resetSearchMode() {
@@ -188,8 +192,8 @@ function resetAllButtonText() {
 }
 
 function clearSearchInput() {
-  const searchInput = document.getElementById("searchInput");
-  const searchButton = document.getElementById("searchBtn");
+  const searchInput = domCache.getSearchInput();
+  const searchButton = domCache.getSearchBtn();
 
   if (!searchInput) return;
 
@@ -206,12 +210,12 @@ function handleLoadingError(message, error) {
 }
 
 function showErrorMessage(message) {
-  const container = document.getElementById("pokemonContainer");
+  const container = domCache.getPokemonContainer();
   if (container) container.innerHTML = createErrorTemplate(message);
 }
 
 function showNoPokemonMessage() {
-  const container = document.getElementById("pokemonContainer");
+  const container = domCache.getPokemonContainer();
   if (container)
     container.innerHTML = createErrorTemplate("No Pokemon available");
 }

@@ -284,6 +284,18 @@ class PokemonTeamAnalyzer {
     }
 
     getCurrentTeam() {
+        // Nutze das neue TeamOffcanvas-System
+        if (window.teamOffcanvas && typeof window.teamOffcanvas.getTeam === 'function') {
+            const team = window.teamOffcanvas.getTeam();
+            return team.map(pokemon => ({
+                id: pokemon.id,
+                name: pokemon.name,
+                types: pokemon.types,
+                image: pokemon.image
+            }));
+        }
+        
+        // Fallback: Alte Drop-Point Methode (falls noch verwendet)
         const dropPoint = document.querySelector('.drop-point');
         if (!dropPoint) return [];
 

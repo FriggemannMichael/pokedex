@@ -245,38 +245,19 @@ class PokemonGoFeatures {
     }
 
     addFilterToggles() {
-        const filterContainer = document.getElementById('filterContainer');
-        if (!filterContainer) return;
-
-        const favoritesToggle = this.createFavoritesFilter();
-        const ratingFilter = this.createRatingFilter();
+        const favoritesToggle = document.getElementById('favoritesToggle');
+        const ratingFilter = document.getElementById('ratingFilter');
         
-        filterContainer.appendChild(favoritesToggle);
-        filterContainer.appendChild(ratingFilter);
+        if (favoritesToggle) {
+            favoritesToggle.addEventListener('click', () => this.filterFavorites());
+        }
+        
+        if (ratingFilter) {
+            ratingFilter.addEventListener('change', (e) => this.filterByRating(e.target.value));
+        }
     }
 
-    createFavoritesFilter() {
-        const toggle = document.createElement('button');
-        toggle.className = 'btn btn-outline-primary me-2';
-        toggle.innerHTML = '⭐ Favorites Only';
-        toggle.addEventListener('click', () => this.filterFavorites());
-        return toggle;
-    }
 
-    createRatingFilter() {
-        const select = document.createElement('select');
-        select.className = 'form-select me-2';
-        select.innerHTML = `
-            <option value="">All Ratings</option>
-            <option value="5">5 Stars</option>
-            <option value="4">4+ Stars</option>
-            <option value="3">3+ Stars</option>
-            <option value="2">2+ Stars</option>
-            <option value="1">1+ Stars</option>
-        `;
-        select.addEventListener('change', (e) => this.filterByRating(e.target.value));
-        return select;
-    }
 
     filterFavorites() {
         const pokemonCards = document.querySelectorAll('.pokemon-card');

@@ -68,6 +68,7 @@ function showError() {
 
 function startPokemonApp() {
   const scripts = [
+    "./script/dom-cache.js",
     "./script/api.js",
     "./script/template.js",
     "./script/pokemon-core.js",

@@ -66,13 +66,13 @@ async function loadMorePokemon() {
     setLoadingState(true);
     setLoadMoreButtonState(true);
     
-    const newPokemonDetails = await fetchNewPokemonDetails();
+    const newPokemonDetails = await fetchMorePokemonForNavigation();
     processNewPokemonData(newPokemonDetails);
     
     resetLoadingState();
 }
 
-async function fetchNewPokemonDetails() {
+async function fetchMorePokemonForNavigation() {
     switch (appState.selectedType) {
         case "all":
             return await fetchPokemonData(appState.nextPageOffset, navigationState.pokemonPerPage);

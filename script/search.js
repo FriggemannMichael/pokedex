@@ -1,8 +1,8 @@
 
 function initializeSearch() {
-    const searchInput = document.getElementById('searchInput');
-    const searchButton = document.getElementById('searchBtn');
-    const searchDropdown = document.getElementById('searchDropdown');
+    const searchInput = domCache.getSearchInput();
+    const searchButton = domCache.getSearchBtn();
+    const searchDropdown = domCache.getSearchDropdown();
 
     if (!searchInput || !searchButton) return;
 
@@ -210,9 +210,9 @@ function clearSearch() {
 }
 
 function resetSearchInput() {
-    const searchInput = document.getElementById('searchInput');
-    const searchButton = document.getElementById('searchBtn');
-    const searchDropdown = document.getElementById('searchDropdown');
+    const searchInput = domCache.getSearchInput();
+    const searchButton = domCache.getSearchBtn();
+    const searchDropdown = domCache.getSearchDropdown();
 
     if (searchInput) {
         searchInput.value = '';

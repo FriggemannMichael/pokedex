@@ -93,16 +93,17 @@ function changeBodyBackground(pokemonType) {
 }
 
 function initializeLoadMore() {
-    if (domElements.loadMoreButton) {
-        domElements.loadMoreButton.addEventListener("click", () => loadMorePokemon());
+    const loadMoreButton = domElements.loadMoreButton();
+    if (loadMoreButton) {
+        loadMoreButton.addEventListener("click", () => loadMorePokemon());
     }
 }
 
 function updatePaginationControls() {
-    const prevBtn = document.getElementById("prevPageBtn");
-    const nextBtn = document.getElementById("nextPageBtn");
-    const pageInfo = document.getElementById("pageInfo");
-    const paginationControls = document.getElementById("paginationControls");
+    const prevBtn = domCache.get("prevPageBtn");
+    const nextBtn = domCache.get("nextPageBtn");
+    const pageInfo = domCache.get("pageInfo");
+    const paginationControls = domCache.get("paginationControls");
 
     if (pageInfo) pageInfo.textContent = `Page ${appState.currentPage}`;
     if (prevBtn) prevBtn.disabled = appState.currentPage <= 1;

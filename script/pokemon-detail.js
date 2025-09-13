@@ -69,7 +69,7 @@ function displayPokemonDetails(pokemon, pokemonDetails, speciesData) {
 }
 
 function setPokemonModalType(primaryType) {
-    const overlay = document.getElementById('pokemonOverlay');
+    const overlay = domCache.getPokemonOverlay();
     if (!overlay) return;
     
     const card = overlay.querySelector('.pokemon-detail-card');
@@ -254,7 +254,7 @@ async function loadNewEvolutionPokemon(pokemonId) {
 }
 
 function setDetailLoadingState(loading) {
-    const overlay = document.getElementById('pokemonOverlay');
+    const overlay = domCache.getPokemonOverlay();
     if (!overlay) return;
     
     const card = overlay.querySelector('.pokemon-detail-card');

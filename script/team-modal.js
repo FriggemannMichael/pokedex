@@ -52,9 +52,7 @@ class PokemonTeamModal {
 
     attachEventListeners() {
         document.addEventListener('click', (e) => {
-            if (e.target.id === 'analyzeTeamBtn') {
-                this.analyzeCurrentTeam();
-            }
+            // Entfernt: 'analyzeTeamBtn' Event Listener (jetzt in mypokedex-section.js)
             if (e.target.id === 'exportTeamBtn') {
                 this.exportTeam();
             }
@@ -300,8 +298,21 @@ class PokemonTeamModal {
 
     analyzeCurrentTeam() {
         const modal = document.getElementById('pokemonTeamModal');
-        const bootstrap_modal = bootstrap.Modal.getInstance(modal);
-        bootstrap_modal.hide();
+        if (modal) {
+            const bootstrap_modal = bootstrap.Modal.getInstance(modal);
+            if (bootstrap_modal) {
+                bootstrap_modal.hide();
+            }
+        }
+        
+        // Alternativ: Versuche das neue teamModal zu schließen
+        const teamModal = document.getElementById('teamModal');
+        if (teamModal) {
+            const teamBootstrapModal = bootstrap.Modal.getInstance(teamModal);
+            if (teamBootstrapModal) {
+                teamBootstrapModal.hide();
+            }
+        }
         
         // Öffne Team-Analyse
         setTimeout(() => {
